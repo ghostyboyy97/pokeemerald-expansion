@@ -1613,8 +1613,10 @@ bool32 IsConfusionMoveEffect(u32 moveEffect)
     }
 }
 
-bool32 IsHazardMoveEffect(u32 moveEffect)
+bool32 IsHazardMove(u32 move)
 {
+    // Hazard setting moves like Stealth Rock, Spikes, etc.
+    u32 moveEffect = gMovesInfo[move].effect;
     switch (moveEffect)
     {
     case EFFECT_SPIKES:
@@ -1622,9 +1624,51 @@ bool32 IsHazardMoveEffect(u32 moveEffect)
     case EFFECT_STICKY_WEB:
     case EFFECT_STEALTH_ROCK:
         return TRUE;
-    default:
-        return FALSE;
     }
+
+    if (gMovesInfo[move].argument == MAX_EFFECT_STEELSURGE)
+        return TRUE;
+
+    // u32 additionalEffectCount = gMovesInfo[move].numAdditionalEffects;
+    // for (i = 0; i < additionalEffectCount; i++)
+    // {
+    //     switch (gMovesInfo[move].additionalEffects[i].moveEffect)
+    //     {
+    //     case MOVE_EFFECT_STEELSURGE:
+    //         return TRUE;
+    //     }
+    // }
+    return FALSE;
+}
+
+bool32 IsHazardClearingMove(u32 move)
+{
+    // Hazard clearing effects like Rapid Spin, Tidy Up, etc.
+    u32 i, moveEffect = gMovesInfo[move].effect;
+    switch (moveEffect)
+    {
+    case EFFECT_TIDY_UP:
+        return TRUE;
+    case EFFECT_DEFOG:
+        if (B_DEFOG_EFFECT_CLEARING >= GEN_6)
+            return TRUE;
+        break;
+    }
+
+    u32 additionalEffectCount = gMovesInfo[move].numAdditionalEffects;
+    for (i = 0; i < additionalEffectCount; i++)
+    {
+        switch (gMovesInfo[move].additionalEffects[i].moveEffect)
+        {
+        case MOVE_EFFECT_RAPID_SPIN:
+            return TRUE;
+        }
+    }
+
+    if (gMovesInfo[move].argument == MAX_EFFECT_DEFOG)
+        return TRUE;
+
+    return FALSE;
 }
 
 bool32 IsMoveRedirectionPrevented(u32 move, u32 atkAbility)
@@ -3196,7 +3240,7 @@ bool32 IsBattlerIncapacitated(u32 battler, u32 ability)
     if ((gBattleMons[battler].status1 & STATUS1_FREEZE) && !HasThawingMove(battler))
         return TRUE;    // if battler has thawing move we assume they will definitely use it, and thus being frozen should be neglected
 
-    if (gBattleMons[battler].status1 & STATUS1_SLEEP)
+    if (gBattleMons[battler].status1 & STATUS1_SLEEP && !HasMoveEffect(battler, EFFECT_SLEEP_TALK))
         return TRUE;
 
     if (gBattleMons[battler].status2 & STATUS2_RECHARGE || (ability == ABILITY_TRUANT && gDisableStructs[battler].truantCounter != 0))
@@ -4065,6 +4109,20 @@ static const u16 sRecycleEncouragedItems[] =
     ITEM_CUSTAP_BERRY,
     ITEM_MENTAL_HERB,
     ITEM_FOCUS_SASH,
+    ITEM_SALAC_BERRY,
+    ITEM_LIECHI_BERRY,
+    ITEM_AGUAV_BERRY,
+    ITEM_FIGY_BERRY,
+    ITEM_IAPAPA_BERRY,
+    ITEM_MAGO_BERRY,
+    ITEM_WIKI_BERRY,
+    ITEM_MENTAL_HERB,
+    ITEM_POWER_HERB,
+    ITEM_BERRY_JUICE,
+    ITEM_WEAKNESS_POLICY,
+    ITEM_BLUNDER_POLICY,
+    ITEM_KEE_BERRY,
+    ITEM_MARANGA_BERRY,
     // TODO expand this
 };
 
@@ -4484,6 +4542,7 @@ bool32 AI_ShouldCopyStatChanges(u32 battlerAtk, u32 battlerDef)
             case STAT_SPATK:
                 return (HasMoveWithCategory(battlerAtk, DAMAGE_CATEGORY_SPECIAL));
             case STAT_ACC:
+                return (HasLowAccuracyMove(battlerAtk, battlerDef));
             case STAT_EVASION:
             case STAT_SPEED:
                 return TRUE;
@@ -4502,6 +4561,8 @@ bool32 AI_ShouldSetUpHazards(u32 battlerAtk, u32 battlerDef, struct AiLogicData 
 {
     if (aiData->abilities[battlerDef] == ABILITY_MAGIC_BOUNCE
      || CountUsablePartyMons(battlerDef) == 0
+     || HasMoveEffect(battlerDef, EFFECT_TIDY_UP)
+     || HasMoveEffect(battlerDef, EFFECT_MAGIC_COAT)
      || HasMoveWithAdditionalEffect(battlerDef, MOVE_EFFECT_RAPID_SPIN)
      || HasMoveEffect(battlerDef, EFFECT_DEFOG))
         return FALSE;
@@ -4626,5 +4687,16 @@ bool32 HasBattlerSideAbility(u32 battler, u32 ability, struct AiLogicData *aiDat
         return TRUE;
     if (IsDoubleBattle() && AI_DATA->abilities[BATTLE_PARTNER(battler)] == ability)
         return TRUE;
+    return FALSE;
+}
+
+bool32 HasLowAccuracyMove(u32 battlerAtk, u32 battlerDef)
+{
+    int i;
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (AI_DATA->moveAccuracy[battlerAtk][battlerDef][i] <= LOW_ACCURACY_THRESHOLD)
+            return TRUE;
+    }
     return FALSE;
 }

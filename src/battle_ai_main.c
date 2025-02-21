@@ -1996,7 +1996,7 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
 
             if (isDoubleBattle)
             {
-                if (IsHazardMoveEffect(gMovesInfo[aiData->partnerMove].effect) // partner is going to set up hazards
+                if (IsHazardMove(aiData->partnerMove) // partner is going to set up hazards
                   && AI_IsFaster(BATTLE_PARTNER(battlerAtk), battlerAtk, aiData->partnerMove)) // partner is going to set up before the potential Defog
                 {
                     ADJUST_SCORE(-10);
@@ -3976,7 +3976,7 @@ static u32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move)
         {
             if (isDoubleBattle)
             {
-                if (IsHazardMoveEffect(gMovesInfo[aiData->partnerMove].effect) // Partner is going to set up hazards
+                if (IsHazardMove(aiData->partnerMove) // Partner is going to set up hazards
                     && AI_IsSlower(battlerAtk, BATTLE_PARTNER(battlerAtk), move)) // Partner going first
                     break; // Don't use Defog if partner is going to set up hazards
             }
