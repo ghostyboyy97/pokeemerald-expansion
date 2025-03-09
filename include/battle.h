@@ -839,6 +839,7 @@ struct BattleStruct
     u8 usedMicleBerry:4;
     u16 prevTurnSpecies[MAX_BATTLERS_COUNT]; // Stores species the AI has in play at start of turn
     u8 hasBattleInputStarted:1; // Speed up battle
+    u8 noTargetPresent:1;
 };
 
 // The palaceFlags member of struct BattleStruct contains 1 flag per move to indicate which moves the AI should consider,
