@@ -250,6 +250,38 @@ static bool32 ShouldSwitchIfTruant(u32 battler)
     return FALSE;
 }
 
+static u32 FindMonWithMoveOfEffectiveness(u32 battler, u32 opposingBattler, uq4_12_t effectiveness)
+{
+    u32 move, i, j;
+    s32 firstId;
+    s32 lastId; // + 1
+    struct Pokemon *party = NULL;
+
+    // Get party information.
+    GetAIPartyIndexes(battler, &firstId, &lastId);
+    party = GetBattlerParty(battler);
+
+    // Find a Pokémon in the party that has a super effective move.
+    for (i = firstId; i < lastId; i++)
+    {
+        if (!IsValidForBattle(&party[i]))
+            continue;
+        if (i == gBattlerPartyIndexes[battler])
+            continue;
+        if (IsAceMon(battler, i))
+            continue;
+
+        for (j = 0; j < MAX_MON_MOVES; j++)
+        {
+            move = GetMonData(&party[i], MON_DATA_MOVE1 + j);
+            if (move != MOVE_NONE && AI_GetMoveEffectiveness(move, battler, opposingBattler) >= effectiveness && gMovesInfo[move].power != 0)
+                return SetSwitchinAndSwitch(battler, i);
+        }
+    }
+
+    return FALSE; // There is not a single Pokémon in the party that has a move with this effectiveness threshold
+}
+
 static bool32 ShouldSwitchIfAllMovesBad(u32 battler)
 {
     u32 moveIndex;
@@ -274,22 +306,24 @@ static bool32 ShouldSwitchIfAllMovesBad(u32 battler)
         for (moveIndex = 0; moveIndex < MAX_MON_MOVES; moveIndex++)
         {
             aiMove = gBattleMons[battler].moves[moveIndex];
-            if (AI_GetMoveEffectiveness(aiMove, battler, opposingBattler) > UQ_4_12(0.0) && aiMove != MOVE_NONE)
+            if (AI_GetMoveEffectiveness(aiMove, battler, opposingBattler) > UQ_4_12(0.0) && aiMove != MOVE_NONE
+                && gMovesInfo[aiMove].power != 0)
                 return FALSE;
         }
     }
 
-    return SetSwitchinAndSwitch(battler, PARTY_SIZE);
+    if (AI_DATA->mostSuitableMonId[battler] == PARTY_SIZE) // No good candidate mons, find any one that can deal damage
+        return FindMonWithMoveOfEffectiveness(battler, opposingBattler, UQ_4_12(1.0));
+    else // Good candidate mon, send that in
+        return SetSwitchinAndSwitch(battler, PARTY_SIZE);
+
+    return FALSE;
 }
 
 static bool32 FindMonThatHitsWonderGuard(u32 battler)
 {
     u32 opposingBattler = GetBattlerAtPosition(BATTLE_OPPOSITE(GetBattlerPosition(battler)));
-    s32 i, j;
-    s32 firstId;
-    s32 lastId; // + 1
-    struct Pokemon *party = NULL;
-    u16 move;
+    u32 i, move;
 
     if (IsDoubleBattle())
         return FALSE;
@@ -307,34 +341,7 @@ static bool32 FindMonThatHitsWonderGuard(u32 battler)
                 return FALSE;
         }
     }
-
-    // Get party information.
-    GetAIPartyIndexes(battler, &firstId, &lastId);
-    party = GetBattlerParty(battler);
-
-    // Find a Pokémon in the party that has a super effective move.
-    for (i = firstId; i < lastId; i++)
-    {
-        if (!IsValidForBattle(&party[i]))
-            continue;
-        if (i == gBattlerPartyIndexes[battler])
-            continue;
-        if (IsAceMon(battler, i))
-            continue;
-
-        for (j = 0; j < MAX_MON_MOVES; j++)
-        {
-            move = GetMonData(&party[i], MON_DATA_MOVE1 + j);
-            if (move != MOVE_NONE)
-            {
-                // Found a mon
-                if (AI_GetMoveEffectiveness(move, battler, opposingBattler) >= UQ_4_12(2.0))
-                    return SetSwitchinAndSwitch(battler, i);
-            }
-        }
-    }
-
-    return FALSE; // There is not a single Pokémon in the party that has a super effective move against a mon with Wonder Guard.
+    return FindMonWithMoveOfEffectiveness(battler, opposingBattler, UQ_4_12(2.0));
 }
 
 static bool32 FindMonThatAbsorbsOpponentsMove(u32 battler)
