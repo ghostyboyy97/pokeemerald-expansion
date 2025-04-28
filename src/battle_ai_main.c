@@ -740,6 +740,13 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
     if (gBattleStruct->commandingDondozo & (1u << battlerDef))
         RETURN_SCORE_MINUS(20);
 
+    // Don't setup into expected Focus Punch. Revisit alongside predictedMove with move prediction
+    if (gMovesInfo[move].category == DAMAGE_CATEGORY_STATUS && moveEffect != EFFECT_SLEEP 
+        && gMovesInfo[GetBestDmgMoveFromBattler(battlerDef, battlerAtk, AI_DEFENDING_NORMAL)].effect == EFFECT_FOCUS_PUNCH)
+    {
+        RETURN_SCORE_MINUS(20);
+    }
+
     // Don't use anything but super effective thawing moves if target is frozen if any other attack available
     if (((GetMoveType(move) == TYPE_FIRE && gMovesInfo[move].power != 0) || CanBurnHitThaw(move)) && effectiveness < UQ_4_12(2.0) && (gBattleMons[battlerDef].status1 & (STATUS1_FROSTBITE | STATUS1_FREEZE)))
     {

@@ -54,7 +54,7 @@
 #define LOW_ACCURACY_THRESHOLD                                  75 // Moves with accuracy equal OR below this value are considered low accuracy 
 
 // AI move scoring
-#define STATUS_MOVE_FOCUS_PUNCH_CHANCE                          50 // Chance the AI will use a status move if the player's best move is Focus Punch
+#define CONSIDER_FOCUS_PUNCH_CHANCE                             50 // Chance the AI will consider Focus Punch as a damaging move from the player
 
 // AI damage calc considerations
 #define RISKY_AI_CRIT_STAGE_THRESHOLD                           2   // Stat stages at which Risky will assume it gets a crit

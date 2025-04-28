@@ -476,7 +476,8 @@ bool32 IsDamageMoveUnusable(u32 battlerAtk, u32 battlerDef, u32 move, u32 moveTy
     case EFFECT_FOCUS_PUNCH:
         if (HasDamagingMove(battlerDef) && !((gBattleMons[battlerAtk].status2 & STATUS2_SUBSTITUTE)
          || IsBattlerIncapacitated(battlerDef, aiData->abilities[battlerDef])
-         || gBattleMons[battlerDef].status2 & (STATUS2_INFATUATION | STATUS2_CONFUSION)))
+         || gBattleMons[battlerDef].status2 & (STATUS2_INFATUATION | STATUS2_CONFUSION)
+         || RandomPercentage(RNG_AI_CONSIDER_FOCUS_PUNCH, CONSIDER_FOCUS_PUNCH_CHANCE)))
          // TODO: || IsPredictedToSwitch(battlerDef, battlerAtk)
             return TRUE;
         // If AI could Sub and doesn't have a Sub, don't Punch yet

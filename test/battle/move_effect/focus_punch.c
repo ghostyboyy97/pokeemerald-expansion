@@ -99,3 +99,17 @@ AI_SINGLE_BATTLE_TEST("AI will Incapacitate -> Substitute -> Focus Punch if able
         TURN { MOVE(player, MOVE_DISCHARGE); EXPECT_MOVE(opponent, MOVE_FOCUS_PUNCH); }
     }
 }
+
+AI_SINGLE_BATTLE_TEST("AI won't use status moves if the player's best attacking move is Focus Punch")
+{
+    PASSES_RANDOMLY(CONSIDER_FOCUS_PUNCH_CHANCE, 100, RNG_AI_CONSIDER_FOCUS_PUNCH);
+    GIVEN {
+        ASSUME(gMovesInfo[MOVE_FOCUS_PUNCH].effect == EFFECT_FOCUS_PUNCH);
+        ASSUME(gMovesInfo[MOVE_SWORDS_DANCE].category == DAMAGE_CATEGORY_STATUS);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_OMNISCIENT);
+        PLAYER(SPECIES_SNORLAX) { Moves(MOVE_FOCUS_PUNCH, MOVE_TACKLE); }
+        OPPONENT(SPECIES_CLEFABLE) {  Moves(MOVE_PLAY_ROUGH, MOVE_SWORDS_DANCE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_FOCUS_PUNCH); EXPECT_MOVE(opponent, MOVE_PLAY_ROUGH); }
+    }
+}
