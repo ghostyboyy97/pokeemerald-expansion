@@ -4319,6 +4319,7 @@ static void HandleTurnActionSelectionState(void)
 
                 // Do scoring
                 gBattleStruct->aiMoveOrAction[battler] = BattleAI_ChooseMoveOrAction();
+                ModifySwitchAfterMoveScoring(battler);
                 AI_DATA->aiCalcInProgress = FALSE;
             }
             // fallthrough

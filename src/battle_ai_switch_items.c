@@ -38,6 +38,76 @@ static void InitializeSwitchinCandidate(struct Pokemon *mon)
     AI_DATA->switchinCandidate.hypotheticalStatus = FALSE;
 }
 
+u32 GetSwitchChance(u32 shouldSwitchScenario)
+{
+    // Modify these cases if you want unique behaviour based on other data (trainer class, difficulty, etc.)
+    switch(shouldSwitchScenario)
+    {
+        case SHOULD_SWITCH_WONDER_GUARD:
+            return SHOULD_SWITCH_WONDER_GUARD_PERCENTAGE;
+        case SHOULD_SWITCH_ABSORBS_MOVE:
+            return SHOULD_SWITCH_ABSORBS_MOVE_PERCENTAGE;
+        case SHOULD_SWITCH_TRAPPER:
+            return SHOULD_SWITCH_TRAPPER_PERCENTAGE;
+        case SHOULD_SWITCH_FREE_TURN:
+            return SHOULD_SWITCH_FREE_TURN_PERCENTAGE;
+        case SHOULD_SWITCH_TRUANT:
+            return SHOULD_SWITCH_TRUANT_PERCENTAGE;
+        case SHOULD_SWITCH_ALL_MOVES_BAD:
+            return SHOULD_SWITCH_ALL_MOVES_BAD_PERCENTAGE;
+        case SHOULD_SWITCH_PERISH_SONG:
+            return SHOULD_SWITCH_PERISH_SONG_PERCENTAGE;
+        case SHOULD_SWITCH_YAWN:
+            return SHOULD_SWITCH_YAWN_PERCENTAGE;
+        case SHOULD_SWITCH_BADLY_POISONED:
+            return SHOULD_SWITCH_BADLY_POISONED_PERCENTAGE;
+        case SHOULD_SWITCH_BADLY_POISONED_STATS_RAISED:
+            return SHOULD_SWITCH_BADLY_POISONED_STATS_RAISED_PERCENTAGE;
+        case SHOULD_SWITCH_CURSED:
+            return SHOULD_SWITCH_CURSED_PERCENTAGE;
+        case SHOULD_SWITCH_CURSED_STATS_RAISED:
+            return SHOULD_SWITCH_CURSED_STATS_RAISED_PERCENTAGE;
+        case SHOULD_SWITCH_NIGHTMARE:
+            return SHOULD_SWITCH_NIGHTMARE_PERCENTAGE;
+        case SHOULD_SWITCH_NIGHTMARE_STATS_RAISED:
+            return SHOULD_SWITCH_NIGHTMARE_STATS_RAISED_PERCENTAGE;
+        case SHOULD_SWITCH_SEEDED:
+            return SHOULD_SWITCH_SEEDED_PERCENTAGE;
+        case SHOULD_SWITCH_SEEDED_STATS_RAISED:
+            return SHOULD_SWITCH_SEEDED_STATS_RAISED_PERCENTAGE;
+        case SHOULD_SWITCH_INFATUATION:
+            return SHOULD_SWITCH_INFATUATION_PERCENTAGE;
+        case SHOULD_SWITCH_HASBADODDS:
+            return SHOULD_SWITCH_HASBADODDS_PERCENTAGE;
+        case SHOULD_SWITCH_NATURAL_CURE_STRONG:
+            return SHOULD_SWITCH_NATURAL_CURE_STRONG_PERCENTAGE;
+        case SHOULD_SWITCH_NATURAL_CURE_STRONG_STATS_RAISED:
+            return SHOULD_SWITCH_NATURAL_CURE_STRONG_STATS_RAISED_PERCENTAGE;
+        case SHOULD_SWITCH_NATURAL_CURE_WEAK:
+            return SHOULD_SWITCH_NATURAL_CURE_WEAK_PERCENTAGE;
+        case SHOULD_SWITCH_NATURAL_CURE_WEAK_STATS_RAISED:
+            return SHOULD_SWITCH_NATURAL_CURE_WEAK_STATS_RAISED_PERCENTAGE;
+        case SHOULD_SWITCH_REGENERATOR:
+            return SHOULD_SWITCH_REGENERATOR_PERCENTAGE;
+        case SHOULD_SWITCH_REGENERATOR_STATS_RAISED:
+            return SHOULD_SWITCH_REGENERATOR_STATS_RAISED_PERCENTAGE;
+        case SHOULD_SWITCH_ENCORE_STATUS:
+            return SHOULD_SWITCH_ENCORE_STATUS_PERCENTAGE;
+        case SHOULD_SWITCH_ENCORE_DAMAGE:
+            return SHOULD_SWITCH_ENCORE_DAMAGE_PERCENTAGE;
+        case SHOULD_SWITCH_CHOICE_LOCKED:
+            return SHOULD_SWITCH_CHOICE_LOCKED_PERCENTAGE;
+        case SHOULD_SWITCH_ATTACKING_STAT_MINUS_TWO:
+            return SHOULD_SWITCH_ATTACKING_STAT_MINUS_TWO_PERCENTAGE;
+        case SHOULD_SWITCH_ATTACKING_STAT_MINUS_THREE_PLUS:
+            return SHOULD_SWITCH_ATTACKING_STAT_MINUS_THREE_PLUS_PERCENTAGE;
+        case SHOULD_SWITCH_ALL_SCORES_BAD:
+            return SHOULD_SWITCH_ALL_SCORES_BAD_PERCENTAGE;
+        default:
+            return 100;
+    }
+}
+
 static bool32 IsAceMon(u32 battler, u32 monPartyId)
 {
     if (AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_ACE_POKEMON
@@ -969,24 +1039,6 @@ static bool32 ShouldSwitchIfAttackingStatsLowered(u32 battler)
     return FALSE;
 }
 
-static bool32 HasGoodSubstituteMove(u32 battler)
-{
-    int i;
-    u32 aiMove, aiMoveEffect;
-    u32 opposingBattler = GetBattlerAtPosition(BATTLE_OPPOSITE(GetBattlerPosition(battler)));
-    for (i = 0; i < MAX_MON_MOVES; i++)
-    {
-        aiMove = gBattleMons[battler].moves[i];
-        aiMoveEffect = gMovesInfo[aiMove].effect;
-        if (IsSubstituteEffect(aiMoveEffect))
-        {
-            if (IncreaseSubstituteMoveScore(battler, opposingBattler, aiMove) > 0)
-                return TRUE;
-        }
-    }
-    return FALSE;
-}
-
 bool32 ShouldSwitch(u32 battler)
 {
     u32 battlerIn1, battlerIn2;
@@ -1060,8 +1112,6 @@ bool32 ShouldSwitch(u32 battler)
         return TRUE;
     if ((AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_SMART_SWITCHING) && (CanMonSurviveHazardSwitchin(battler) == FALSE))
         return FALSE;
-    if (HasGoodSubstituteMove(battler))
-        return FALSE;
     if (ShouldSwitchIfTrapperInParty(battler))
         return TRUE;
     if (FindMonThatAbsorbsOpponentsMove(battler))
@@ -1102,6 +1152,111 @@ bool32 ShouldSwitch(u32 battler)
         return TRUE;
 
     return FALSE;
+}
+
+bool32 ShouldSwitchIfAllScoresBad(u32 battler)
+{
+    u32 i, score;
+    u32 opposingBattler = GetBattlerAtPosition(BATTLE_OPPOSITE(GetBattlerPosition(battler)));
+    if (!(AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_SMART_SWITCHING))
+        return FALSE;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        score = gBattleStruct->aiFinalScore[battler][opposingBattler][i];
+        if (score > AI_BAD_SCORE_THRESHOLD)
+            return FALSE;
+    }
+    if (RandomPercentage(RNG_AI_SWITCH_ALL_SCORES_BAD, GetSwitchChance(SHOULD_SWITCH_ALL_SCORES_BAD)))
+        return TRUE;
+    return FALSE;
+}
+
+bool32 ShouldStayInToUseMove(u32 battler)
+{
+    u32 i, aiMove, aiMoveEffect;
+    u32 opposingBattler = GetBattlerAtPosition(BATTLE_OPPOSITE(GetBattlerPosition(battler)));
+    
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        aiMove = gBattleMons[battler].moves[i];
+        aiMoveEffect = gMovesInfo[aiMove].effect;
+        if (aiMoveEffect == EFFECT_REVIVAL_BLESSING || IsSwitchOutEffect(aiMoveEffect))
+        {
+            if (gBattleStruct->aiFinalScore[battler][opposingBattler][i] > AI_GOOD_SCORE_THRESHOLD)
+                return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+void ModifySwitchAfterMoveScoring(u32 battler)
+{
+    u32 battlerIn1, battlerIn2;
+    s32 firstId;
+    s32 lastId; // + 1
+    struct Pokemon *party;
+    s32 i;
+    s32 availableToSwitch;
+
+    if (gBattleMons[battler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION))
+        return;
+    if (gStatuses3[battler] & STATUS3_ROOTED)
+        return;
+    if (IsAbilityPreventingEscape(battler))
+        return;
+    if (gBattleTypeFlags & BATTLE_TYPE_ARENA)
+        return;
+
+    // Sequence Switching AI never switches mid-battle
+    if (AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_SEQUENCE_SWITCHING)
+        return;
+
+    availableToSwitch = 0;
+
+    if (IsDoubleBattle())
+    {
+        u32 partner = GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerAtPosition(battler)));
+        battlerIn1 = battler;
+        if (gAbsentBattlerFlags & (1u << partner))
+            battlerIn2 = battler;
+        else
+            battlerIn2 = partner;
+    }
+    else
+    {
+        battlerIn1 = battler;
+        battlerIn2 = battler;
+    }
+
+    GetAIPartyIndexes(battler, &firstId, &lastId);
+    party = GetBattlerParty(battler);
+
+    for (i = firstId; i < lastId; i++)
+    {
+        if (!IsValidForBattle(&party[i]))
+            continue;
+        if (i == gBattlerPartyIndexes[battlerIn1])
+            continue;
+        if (i == gBattlerPartyIndexes[battlerIn2])
+            continue;
+        if (i == gBattleStruct->monToSwitchIntoId[battlerIn1])
+            continue;
+        if (i == gBattleStruct->monToSwitchIntoId[battlerIn2])
+            continue;
+        if (IsAceMon(battler, i))
+            continue;
+
+        availableToSwitch++;
+    }
+
+    if (availableToSwitch == 0)
+        return;
+
+    if (ShouldSwitchIfAllScoresBad(battler))
+        AI_DATA->shouldSwitch |= (1u << battler);
+    else if (ShouldStayInToUseMove(battler))
+        AI_DATA->shouldSwitch &= ~(1u << battler);
 }
 
 bool32 IsSwitchinValid(u32 battler)
