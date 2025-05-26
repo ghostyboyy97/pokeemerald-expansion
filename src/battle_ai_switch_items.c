@@ -165,6 +165,7 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
     u32 aiMove, playerMove, aiBestMove = MOVE_NONE, aiAbility = AI_DATA->abilities[battler], opposingBattler;
     bool32 getsOneShot = FALSE, hasStatusMove = FALSE, hasSuperEffectiveMove = FALSE;
     u16 typeEffectiveness = UQ_4_12(1.0), aiMoveEffect; //baseline typing damage
+    u32 hitsToKoPlayer = 0, hitsToKoAI = 0;
 
     // Only use this if AI_FLAG_SMART_SWITCHING is set for the trainer
     if (!(AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_SMART_SWITCHING))
@@ -218,6 +219,8 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
         }
     }
 
+    hitsToKoPlayer = GetNoOfHitsToKOBattlerDmg(maxDamageDealt, opposingBattler);
+
     // Calculate type advantage
     typeEffectiveness = uq4_12_multiply(typeEffectiveness, (GetTypeModifier(atkType1, defType1)));
     if (atkType2 != atkType1)
@@ -246,6 +249,8 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
         }
     }
 
+    hitsToKoAI = GetNoOfHitsToKOBattlerDmg(maxDamageTaken, battler);
+
     // Check if mon gets one shot
     if(maxDamageTaken > gBattleMons[battler].hp
         && !(gItemsInfo[gBattleMons[battler].item].holdEffect == HOLD_EFFECT_FOCUS_SASH || (!IsMoldBreakerTypeAbility(opposingBattler, gBattleMons[opposingBattler].ability) && B_STURDY >= GEN_5 && aiAbility == ABILITY_STURDY)))
@@ -253,12 +258,9 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
         getsOneShot = TRUE;
     }
 
-    // Check if current mon can outspeed and KO in spite of bad matchup, and don't switch out if it can
-    if(damageDealt > gBattleMons[opposingBattler].hp)
-    {
-        if (AI_IsFaster(battler, opposingBattler, aiBestMove))
-            return FALSE;
-    }
+    // Check if current mon can 1v1 in spite of bad matchup, and don't switch out if it can
+    if(hitsToKoPlayer < hitsToKoAI || (hitsToKoPlayer == hitsToKoAI && AI_IsFaster(battler, opposingBattler, aiBestMove)))
+        return FALSE;
 
     // If we don't have any other viable options, don't switch out
     if (AI_DATA->mostSuitableMonId[battler] == PARTY_SIZE)
@@ -2051,14 +2053,6 @@ static u32 GetBestMonIntegrated(struct Pokemon *party, int firstId, int lastId, 
         hitsToKOAI = GetSwitchinHitsToKO(GetMaxDamagePlayerCouldDealToSwitchin(battler, opposingBattler, AI_DATA->switchinCandidate.battleMon), battler);
         typeMatchup = GetSwitchinTypeMatchup(opposingBattler, AI_DATA->switchinCandidate.battleMon);
 
-        // Track max hits to KO and set defensive mon
-        if(hitsToKOAI > maxHitsToKO)
-        {
-            maxHitsToKO = hitsToKOAI;
-            if(maxHitsToKO > defensiveMonHitKOThreshold)
-                defensiveMonId = i;
-        }
-
         // Check through current mon's moves
         for (j = 0; j < MAX_MON_MOVES; j++)
         {
@@ -2088,6 +2082,14 @@ static u32 GetBestMonIntegrated(struct Pokemon *party, int firstId, int lastId, 
                     bestResist = typeMatchup;
                     typeMatchupId = i;
                 }
+            }
+
+            // Track max hits to KO and set defensive mon
+            if(hitsToKOAI > maxHitsToKO && (canSwitchinWin1v1 || AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_STALL))
+            {
+                maxHitsToKO = hitsToKOAI;
+                if(maxHitsToKO > defensiveMonHitKOThreshold)
+                    defensiveMonId = i;
             }
 
             // Check for mon with resistance and super effective move for best type matchup mon with effective move
