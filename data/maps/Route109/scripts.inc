@@ -1533,196 +1533,198 @@ Route109_EventScript_Badge7Options::
 # 844 "data/maps/Route109/scripts.pory"
 	dynmultipush Route109_EventScript_Badge7Options_Text_0, 16
 # 845 "data/maps/Route109/scripts.pory"
+	dynmultipush Route109_EventScript_Badge7Options_Text_1, 17
+# 846 "data/maps/Route109/scripts.pory"
 	dynmultipush Route109_EventScript_Badge2Options_Text_4, MULTI_B_PRESSED
-# 850 "data/maps/Route109/scripts.pory"
+# 851 "data/maps/Route109/scripts.pory"
 	dynmultistack 0, 0, FALSE, 6, FALSE, 16, DYN_MULTICHOICE_CB_NONE
-# 852 "data/maps/Route109/scripts.pory"
+# 853 "data/maps/Route109/scripts.pory"
 	compare VAR_RESULT, MULTI_B_PRESSED
 	goto_if_eq Route109_EventScript_Badge7Options_2
 Route109_EventScript_Badge7Options_1:
-# 858 "data/maps/Route109/scripts.pory"
-	copyvar VAR_0x8004, VAR_RESULT
 # 859 "data/maps/Route109/scripts.pory"
+	copyvar VAR_0x8004, VAR_RESULT
+# 860 "data/maps/Route109/scripts.pory"
 	goto Route109_EventScript_ConfirmAndEnterHotHouse
 	return
 
 Route109_EventScript_Badge7Options_2:
-# 854 "data/maps/Route109/scripts.pory"
+# 855 "data/maps/Route109/scripts.pory"
 	goto Route109_EventScript_WhichRewardMenu
 	goto Route109_EventScript_Badge7Options_1
 
 
 Route109_EventScript_ConfirmAndEnterHotHouse::
-# 864 "data/maps/Route109/scripts.pory"
+# 865 "data/maps/Route109/scripts.pory"
 	msgbox Route109_Text_EnterCantLeave, MSGBOX_YESNO
-# 866 "data/maps/Route109/scripts.pory"
+# 867 "data/maps/Route109/scripts.pory"
 	compare VAR_RESULT, NO
 	goto_if_eq Route109_EventScript_ConfirmAndEnterHotHouse_2
 Route109_EventScript_ConfirmAndEnterHotHouse_1:
-# 872 "data/maps/Route109/scripts.pory"
-	copyvar VAR_HOT_HOUSE_STATE, VAR_0x8004
 # 873 "data/maps/Route109/scripts.pory"
+	copyvar VAR_HOT_HOUSE_STATE, VAR_0x8004
+# 874 "data/maps/Route109/scripts.pory"
 	setvar VAR_ENTERING_HOT_HOUSE, 1
-# 875 "data/maps/Route109/scripts.pory"
-	msgbox Route109_Text_GoodLuckTrainer, MSGBOX_DEFAULT
 # 876 "data/maps/Route109/scripts.pory"
+	msgbox Route109_Text_GoodLuckTrainer, MSGBOX_DEFAULT
+# 877 "data/maps/Route109/scripts.pory"
 	closemessage
-# 878 "data/maps/Route109/scripts.pory"
+# 879 "data/maps/Route109/scripts.pory"
 	switch VAR_FACING
-# 880 "data/maps/Route109/scripts.pory"
+# 881 "data/maps/Route109/scripts.pory"
 	case DIR_EAST, Route109_EventScript_ConfirmAndEnterHotHouse_6
-# 885 "data/maps/Route109/scripts.pory"
+# 886 "data/maps/Route109/scripts.pory"
 	case DIR_NORTH, Route109_EventScript_ConfirmAndEnterHotHouse_7
-# 890 "data/maps/Route109/scripts.pory"
+# 891 "data/maps/Route109/scripts.pory"
 	case DIR_WEST, Route109_EventScript_ConfirmAndEnterHotHouse_8
-# 896 "data/maps/Route109/scripts.pory"
-	applymovement LOCALID_LITTLE_GIRL, HotHouseGirlUnblockStepWest
 # 897 "data/maps/Route109/scripts.pory"
-	waitmovement 0
+	applymovement LOCALID_LITTLE_GIRL, HotHouseGirlUnblockStepWest
 # 898 "data/maps/Route109/scripts.pory"
-	applymovement OBJ_EVENT_ID_PLAYER, PlayerEnterHotHouseStepNorth
+	waitmovement 0
 # 899 "data/maps/Route109/scripts.pory"
+	applymovement OBJ_EVENT_ID_PLAYER, PlayerEnterHotHouseStepNorth
+# 900 "data/maps/Route109/scripts.pory"
 	waitmovement 0
 Route109_EventScript_ConfirmAndEnterHotHouse_4:
-# 903 "data/maps/Route109/scripts.pory"
-	warp MAP_ROUTE109_SEASHORE_HOUSE, 6, 9
 # 904 "data/maps/Route109/scripts.pory"
-	waitstate
+	warp MAP_ROUTE109_SEASHORE_HOUSE, 6, 9
 # 905 "data/maps/Route109/scripts.pory"
+	waitstate
+# 906 "data/maps/Route109/scripts.pory"
 	release
 	end
 
 Route109_EventScript_ConfirmAndEnterHotHouse_2:
-# 868 "data/maps/Route109/scripts.pory"
+# 869 "data/maps/Route109/scripts.pory"
 	goto Route109_EventScript_HotHouseNo
 	goto Route109_EventScript_ConfirmAndEnterHotHouse_1
 
 Route109_EventScript_ConfirmAndEnterHotHouse_6:
-# 881 "data/maps/Route109/scripts.pory"
-	applymovement LOCALID_LITTLE_GIRL, HotHouseGirlUnblockStepEast
 # 882 "data/maps/Route109/scripts.pory"
-	waitmovement 0
+	applymovement LOCALID_LITTLE_GIRL, HotHouseGirlUnblockStepEast
 # 883 "data/maps/Route109/scripts.pory"
-	applymovement OBJ_EVENT_ID_PLAYER, PlayerEnterHotHouseStepEast
+	waitmovement 0
 # 884 "data/maps/Route109/scripts.pory"
+	applymovement OBJ_EVENT_ID_PLAYER, PlayerEnterHotHouseStepEast
+# 885 "data/maps/Route109/scripts.pory"
 	waitmovement 0
 	goto Route109_EventScript_ConfirmAndEnterHotHouse_4
 
 Route109_EventScript_ConfirmAndEnterHotHouse_7:
-# 886 "data/maps/Route109/scripts.pory"
-	applymovement LOCALID_LITTLE_GIRL, HotHouseGirlUnblockStepWest
 # 887 "data/maps/Route109/scripts.pory"
-	waitmovement 0
+	applymovement LOCALID_LITTLE_GIRL, HotHouseGirlUnblockStepWest
 # 888 "data/maps/Route109/scripts.pory"
-	applymovement OBJ_EVENT_ID_PLAYER, PlayerEnterHotHouseStepNorth
+	waitmovement 0
 # 889 "data/maps/Route109/scripts.pory"
+	applymovement OBJ_EVENT_ID_PLAYER, PlayerEnterHotHouseStepNorth
+# 890 "data/maps/Route109/scripts.pory"
 	waitmovement 0
 	goto Route109_EventScript_ConfirmAndEnterHotHouse_4
 
 Route109_EventScript_ConfirmAndEnterHotHouse_8:
-# 891 "data/maps/Route109/scripts.pory"
-	applymovement LOCALID_LITTLE_GIRL, HotHouseGirlUnblockStepWest
 # 892 "data/maps/Route109/scripts.pory"
-	waitmovement 0
+	applymovement LOCALID_LITTLE_GIRL, HotHouseGirlUnblockStepWest
 # 893 "data/maps/Route109/scripts.pory"
-	applymovement OBJ_EVENT_ID_PLAYER, PlayerEnterHotHouseStepWest
+	waitmovement 0
 # 894 "data/maps/Route109/scripts.pory"
+	applymovement OBJ_EVENT_ID_PLAYER, PlayerEnterHotHouseStepWest
+# 895 "data/maps/Route109/scripts.pory"
 	waitmovement 0
 	goto Route109_EventScript_ConfirmAndEnterHotHouse_4
 
 
 Route109_EventScript_SeashoreHouseGirlNoBadge::
-# 910 "data/maps/Route109/scripts.pory"
-	msgbox Route109_Text_PapasSpotGettingFixed
 # 911 "data/maps/Route109/scripts.pory"
+	msgbox Route109_Text_PapasSpotGettingFixed
+# 912 "data/maps/Route109/scripts.pory"
 	release
 	end
 
 
 Route109_EventScript_HotHouseNo::
-# 916 "data/maps/Route109/scripts.pory"
-	msgbox Route109_Text_HotHouseNo
 # 917 "data/maps/Route109/scripts.pory"
-	setvar VAR_HOT_HOUSE_STATE, 0
+	msgbox Route109_Text_HotHouseNo
 # 918 "data/maps/Route109/scripts.pory"
-	setvar VAR_ENTERING_HOT_HOUSE, 0
+	setvar VAR_HOT_HOUSE_STATE, 0
 # 919 "data/maps/Route109/scripts.pory"
+	setvar VAR_ENTERING_HOT_HOUSE, 0
+# 920 "data/maps/Route109/scripts.pory"
 	release
 	end
 
 
 Route109_EventScript_SorryNotEnoughBadges::
-# 924 "data/maps/Route109/scripts.pory"
-	msgbox Route109_Text_SorryNotEnoughBadges
 # 925 "data/maps/Route109/scripts.pory"
-	setvar VAR_HOT_HOUSE_STATE, 0
+	msgbox Route109_Text_SorryNotEnoughBadges
 # 926 "data/maps/Route109/scripts.pory"
-	setvar VAR_ENTERING_HOT_HOUSE, 0
+	setvar VAR_HOT_HOUSE_STATE, 0
 # 927 "data/maps/Route109/scripts.pory"
+	setvar VAR_ENTERING_HOT_HOUSE, 0
+# 928 "data/maps/Route109/scripts.pory"
 	release
 	end
 
 
 HotHouseGirlUnblockStepWest::
-# 933 "data/maps/Route109/scripts.pory"
-	walk_left
 # 934 "data/maps/Route109/scripts.pory"
-	face_right
+	walk_left
 # 935 "data/maps/Route109/scripts.pory"
+	face_right
+# 936 "data/maps/Route109/scripts.pory"
 	step_end
 	return
 
 
 HotHouseGirlUnblockStepEast::
-# 940 "data/maps/Route109/scripts.pory"
-	walk_right
 # 941 "data/maps/Route109/scripts.pory"
-	face_left
+	walk_right
 # 942 "data/maps/Route109/scripts.pory"
+	face_left
+# 943 "data/maps/Route109/scripts.pory"
 	step_end
 	return
 
 
 PlayerEnterHotHouseStepEast::
-# 947 "data/maps/Route109/scripts.pory"
-	walk_right
 # 948 "data/maps/Route109/scripts.pory"
-	walk_up
+	walk_right
 # 949 "data/maps/Route109/scripts.pory"
+	walk_up
+# 950 "data/maps/Route109/scripts.pory"
 	step_end
 	return
 
 
 PlayerEnterHotHouseStepWest::
-# 954 "data/maps/Route109/scripts.pory"
-	walk_left
 # 955 "data/maps/Route109/scripts.pory"
-	walk_up
+	walk_left
 # 956 "data/maps/Route109/scripts.pory"
+	walk_up
+# 957 "data/maps/Route109/scripts.pory"
 	step_end
 	return
 
 
 PlayerEnterHotHouseStepNorth::
-# 961 "data/maps/Route109/scripts.pory"
-	walk_up
 # 962 "data/maps/Route109/scripts.pory"
 	walk_up
 # 963 "data/maps/Route109/scripts.pory"
+	walk_up
+# 964 "data/maps/Route109/scripts.pory"
 	step_end
 	return
 
 
 PlayerEnteredHotHouse::
-# 968 "data/maps/Route109/scripts.pory"
-	walk_up
 # 969 "data/maps/Route109/scripts.pory"
+	walk_up
+# 970 "data/maps/Route109/scripts.pory"
 	step_end
 	return
 
 
 SetHotHouseGirlPermLoc::
-# 973 "data/maps/Route109/scripts.pory"
+# 974 "data/maps/Route109/scripts.pory"
 	setobjectxyperm LOCALID_LITTLE_GIRL, 11, 6
 	end
 
@@ -1843,8 +1845,12 @@ Route109_EventScript_Badge7Options_Text_0:
 # 844 "data/maps/Route109/scripts.pory"
 	.string "Charcadet$"
 
+Route109_EventScript_Badge7Options_Text_1:
+# 845 "data/maps/Route109/scripts.pory"
+	.string "Aerodactyl$"
+
 Route109_Text_PapasSpotGettingFixed::
-# 977 "data/maps/Route109/scripts.pory"
+# 978 "data/maps/Route109/scripts.pory"
 	.string "Yo, trainer!\p"
 	.string "Sorry, my papa's spot is getting fixed\n"
 	.string "up right now.\p"
@@ -1852,7 +1858,7 @@ Route109_Text_PapasSpotGettingFixed::
 	.string "the hottest spot in town, though!$"
 
 Route109_Text_HotHouseFullIntro::
-# 985 "data/maps/Route109/scripts.pory"
+# 986 "data/maps/Route109/scripts.pory"
 	.string "Yo, trainer!\n"
 	.string "Looks like you've got the right stuff\l"
 	.string "to enter the new Hot House!\p"
@@ -1867,17 +1873,17 @@ Route109_Text_HotHouseFullIntro::
 	.string "portable PC!{COLOR DARK_GRAY}{SHADOW LIGHT_GRAY}$"
 
 Route109_Text_IntroQuestion::
-# 1000 "data/maps/Route109/scripts.pory"
+# 1001 "data/maps/Route109/scripts.pory"
 	.string "Which reward level do you want to\n"
 	.string "compete for?$"
 
 Route109_Text_BadgeRewardsQuestion::
-# 1005 "data/maps/Route109/scripts.pory"
+# 1006 "data/maps/Route109/scripts.pory"
 	.string "Which Badge {STR_VAR_1} reward Pokémon do you\n"
 	.string "want to compete for?$"
 
 Route109_Text_EnterCantLeave::
-# 1010 "data/maps/Route109/scripts.pory"
+# 1011 "data/maps/Route109/scripts.pory"
 	.string "You got it, trainer!\n"
 	.string "Papa said I have to warn everyone again\l"
 	.string "before they go inside:\p"
@@ -1886,18 +1892,18 @@ Route109_Text_EnterCantLeave::
 	.string "or beat all the trainers; {COLOR DARK_GRAY}{SHADOW LIGHT_GRAY}is that okay?$"
 
 Route109_Text_GoodLuckTrainer::
-# 1019 "data/maps/Route109/scripts.pory"
+# 1020 "data/maps/Route109/scripts.pory"
 	.string "That's what I'm talking about, yeah!\n"
 	.string "You got this, trainer, good luck in\l"
 	.string "there!$"
 
 Route109_Text_HotHouseNo::
-# 1026 "data/maps/Route109/scripts.pory"
+# 1027 "data/maps/Route109/scripts.pory"
 	.string "No worries! The Hot House is open if you\n"
 	.string "change your mind!$"
 
 Route109_Text_SorryNotEnoughBadges::
-# 1031 "data/maps/Route109/scripts.pory"
+# 1032 "data/maps/Route109/scripts.pory"
 	.string "It looks like you don't have enough\n"
 	.string "Badges to compete for that reward yet.\l"
 	.string "Come back once you have more Badges!$"

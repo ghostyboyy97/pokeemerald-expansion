@@ -49,7 +49,7 @@ Route109_SeashoreHouse_EventScript_Johanna::
 	end
 
 Route109_SeashoreHouse_EventScript_Brian::
-	goto_if_eq VAR_HOT_HOUSE_STATE, 16, Route109_SeashoreHouse_EventScript_BrianDouble
+	goto_if_ge VAR_HOT_HOUSE_STATE, 16, Route109_SeashoreHouse_EventScript_BrianDouble
 	trainerbattle_single TRAINER_BRIAN, Route109_SeashoreHouse_Text_BrianIntro, Route109_SeashoreHouse_Text_BrianDefeated, Route109_SeashoreHouse_EventScript_CheckTrainersCompletion
 	msgbox Route109_SeashoreHouse_Text_BrianPostBattle, MSGBOX_AUTOCLOSE
 	end
@@ -62,7 +62,7 @@ Route109_SeashoreHouse_EventScript_BrianDouble::
 Route109_SeashoreHouse_EventScript_CheckTrainersCompletion::
 	goto_if_not_defeated TRAINER_DWAYNE, Route109_SeashoreHouse_EventScript_TrainersNotCompleted
 	goto_if_not_defeated TRAINER_JOHANNA, Route109_SeashoreHouse_EventScript_TrainersNotCompleted
-	call_if_eq VAR_HOT_HOUSE_STATE, 16, Route109_SeashoreHouse_EventScript_CheckBrianDoubleBattle
+	call_if_ge VAR_HOT_HOUSE_STATE, 16, Route109_SeashoreHouse_EventScript_CheckBrianDoubleBattle
 	call_if_lt VAR_HOT_HOUSE_STATE, 16, Route109_SeashoreHouse_EventScript_CheckBrianSingleBattle
 	setflag FLAG_DEFEATED_HOT_HOUSE
 	release
@@ -210,6 +210,10 @@ script Route109_SeashoreHouse_EventScript_DefeatedTrainers {
 			setvar(VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_CHARCADET)
 			givemonrandom(SPECIES_CHARCADET, 25)
 			bufferspeciesname(STR_VAR_1, SPECIES_CHARCADET)
+		case 17:
+			setvar(VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_AERODACTYL)
+			givemonrandom(SPECIES_AERODACTYL, 25)
+			bufferspeciesname(STR_VAR_1, SPECIES_AERODACTYL)
 		default:
 			setvar(VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_TYROGUE)
 			givemonrandom(SPECIES_TYROGUE, 25)

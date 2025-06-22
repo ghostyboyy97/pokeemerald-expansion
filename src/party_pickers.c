@@ -69,6 +69,7 @@ u32 HotHousePartyPicker(const struct Trainer *trainer)
     case 15:
         return BADGE_6_PARTY;
     case 16:
+    case 17:
         return BADGE_7_PARTY;
     }
     return BADGE_2_PARTY;

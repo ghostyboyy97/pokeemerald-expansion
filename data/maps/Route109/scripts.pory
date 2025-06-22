@@ -842,6 +842,7 @@ script Route109_EventScript_Badge7Options {
 	msgbox(Route109_Text_BadgeRewardsQuestion)
 
 	dynmultipush("Charcadet", 16)
+	dynmultipush("Aerodactyl", 17)
 	dynmultipush("Back", MULTI_B_PRESSED)
 	
 	
