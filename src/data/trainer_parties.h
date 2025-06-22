@@ -469,7 +469,7 @@ static const struct TrainerMon sParty_ShellyWeatherInstitute[] = {
     .nature = NATURE_JOLLY,
     .ev = TRAINER_PARTY_EVS_JOLLY(),
     .heldItem = ITEM_WHITE_HERB,
-    .ability = ABILITY_INTIMIDATE,
+    .ability = ABILITY_DEFIANT,
     .moves = {MOVE_SHELL_SMASH, MOVE_ICE_FANG, MOVE_CRUNCH, MOVE_WAVE_CRASH}
     },
     {
