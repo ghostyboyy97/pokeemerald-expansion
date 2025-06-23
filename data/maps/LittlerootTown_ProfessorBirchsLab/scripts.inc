@@ -137,7 +137,7 @@ LittlerootTown_ProfessorBirchsLab_OnWarp:
 # 69 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
 NewBirchsLab_OnWarp::
 # 70 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
-	map_script_2 VAR_GIVE_BIRTH_ISLAND_TICKET, 1, NewBirchsLab_EventScript_SetObjectPosBirthIsland
+	map_script_2 VAR_GIVE_NAVEL_ISLAND_TICKET, 1, NewBirchsLab_EventScript_SetObjectPosBirthIsland
 # 71 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
 	.2byte 0
 # 72 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
@@ -233,7 +233,7 @@ LittlerootTown_ProfessorBirchsLab_OnFrame:
 # 117 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
 	map_script_2 VAR_BIRCH_LAB_STATE, 4, LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedexEvent
 # 118 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
-	map_script_2 VAR_GIVE_BIRTH_ISLAND_TICKET, 1, LittlerootTown_ProfessorBirchsLab_EventScript_GiveBirthIslandTicket
+	map_script_2 VAR_GIVE_NAVEL_ISLAND_TICKET, 1, LittlerootTown_ProfessorBirchsLab_EventScript_GiveBirthIslandTicket
 # 119 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
 	map_script_2 VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 1, LittlerootTown_ProfessorBirchsLab_EventScript_UpgradeToNationalDex
 # 120 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
@@ -455,11 +455,11 @@ LittlerootTown_ProfessorBirchsLab_EventScript_GiveBirthIslandTicket::
 # 228 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_TakeTicket, MSGBOX_DEFAULT
 # 229 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
-	giveitem ITEM_AURORA_TICKET
+	giveitem ITEM_MYSTIC_TICKET
 # 230 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
-	setflag FLAG_ENABLE_SHIP_BIRTH_ISLAND
+	setflag FLAG_ENABLE_SHIP_NAVEL_ROCK
 # 231 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
-	setvar VAR_GIVE_BIRTH_ISLAND_TICKET, 2
+	setvar VAR_GIVE_NAVEL_ISLAND_TICKET, 2
 # 232 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_HeadToLilyCove, MSGBOX_DEFAULT
 # 233 "data/maps/LittlerootTown_ProfessorBirchsLab/scripts.pory"

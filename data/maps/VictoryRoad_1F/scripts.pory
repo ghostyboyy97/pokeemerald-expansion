@@ -51,6 +51,11 @@ VictoryRoad_1F_EventScript_WallyEntranceBattle::
 	giveitem ITEM_SALAMENCITE
 	giveitem ITEM_GARCHOMPITE
 	giveitem ITEM_METAGROSSITE
+	msgbox VictoryRoad_1F_Text_WallyTicketsFromDad, MSGBOX_DEFAULT
+	giveitem ITEM_EON_TICKET
+	giveitem ITEM_AURORA_TICKET
+	setflag FLAG_ENABLE_SHIP_BIRTH_ISLAND
+	setflag FLAG_ENABLE_SHIP_SOUTHERN_ISLAND
 	msgbox VictoryRoad_1F_Text_WallyPostEntranceBattle, MSGBOX_DEFAULT
 	closemessage
 	clearflag FLAG_HIDE_VICTORY_ROAD_ENTRANCE_WALLY
@@ -182,6 +187,14 @@ VictoryRoad_1F_Text_WallyGiftFromDad:
 	.string "when you defeated him, so he threw in\l"
 	.string "some extras to make up for it.\p"
 	.string "Here you go, {PLAYER}.$"
+
+VictoryRoad_1F_Text_WallyTicketsFromDad:
+	.string "Oh I almost forgot, he gave me these to\n"
+	.string "give to you too.\p"
+	.string "I'm not sure where these tickets will\n"
+	.string "take you, but your dad said you can go\l"
+	.string "to the ferry in Lilycove City and use\l"
+	.string "the tickets there.$"
 
 VictoryRoad_1F_Text_WallyIntro:
 	.string "Hi! {PLAYER}!\p"
