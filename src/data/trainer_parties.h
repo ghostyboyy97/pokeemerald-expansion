@@ -7921,7 +7921,7 @@ static const struct TrainerMon sParty_Madeline1[] = {
     .ev = TRAINER_PARTY_EVS_BOLD(),
     .ability = ABILITY_WATER_COMPACTION,
     .heldItem = ITEM_YACHE_BERRY,
-    .moves = {MOVE_EARTH_POWER, MOVE_SHADOW_BALL, MOVE_SHORE_UP, MOVE_TOXIC}
+    .moves = {MOVE_EARTH_POWER, MOVE_SHADOW_BALL, MOVE_SHORE_UP, MOVE_PSYCHIC}
     },
     {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
@@ -11427,7 +11427,7 @@ static const struct TrainerMon sParty_Trent1[] = {
     .ev = TRAINER_PARTY_EVS_IMPISH(),
     .ability = ABILITY_SHADOW_SHIELD,
     .heldItem = ITEM_LEFTOVERS,
-    .moves = {MOVE_SHADOW_CLAW, MOVE_EARTHQUAKE, MOVE_SHADOW_SNEAK, MOVE_WILL_O_WISP}
+    .moves = {MOVE_SHADOW_CLAW, MOVE_EARTHQUAKE, MOVE_SHADOW_SNEAK, MOVE_STONE_EDGE}
     },
     {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
@@ -16291,7 +16291,7 @@ static const struct TrainerMon sParty_Fantina[] = {
     .ev = TRAINER_PARTY_EVS_TIMID(),
     .ability = ABILITY_LEVITATE,
     .heldItem = ITEM_WISE_GLASSES,
-    .moves = {MOVE_MAGICAL_LEAF, MOVE_SHADOW_BALL, MOVE_DAZZLING_GLEAM, MOVE_POWER_GEM}
+    .moves = {MOVE_MYSTICAL_FIRE, MOVE_SHADOW_BALL, MOVE_DAZZLING_GLEAM, MOVE_THUNDERBOLT}
     },
     {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
@@ -16301,7 +16301,7 @@ static const struct TrainerMon sParty_Fantina[] = {
     .ev = TRAINER_PARTY_EVS_MODEST(),
     .ability = ABILITY_UNBURDEN,
     .heldItem = ITEM_SITRUS_BERRY,
-    .moves = {MOVE_SHADOW_BALL, MOVE_CALM_MIND, MOVE_STRENGTH_SAP, MOVE_EARTH_POWER}
+    .moves = {MOVE_SHADOW_BALL, MOVE_POWER_GEM, MOVE_STRENGTH_SAP, MOVE_EARTH_POWER}
     },
     {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
