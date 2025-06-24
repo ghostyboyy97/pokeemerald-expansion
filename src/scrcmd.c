@@ -2788,7 +2788,7 @@ bool8 ScrCmd_bufferstarterinfo(struct ScriptContext *ctx)
         { SPECIES_TINKATINK, SPECIES_ARON, SPECIES_KLINK },
         
         // Electric
-        { SPECIES_MAGNEMITE, SPECIES_SHINX,  SPECIES_MAREEP},
+        { SPECIES_PICHU, SPECIES_SHINX,  SPECIES_MAREEP},
         
         // Psychic
         { SPECIES_ABRA, SPECIES_SOLOSIS, SPECIES_GOTHITA },
