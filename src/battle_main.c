@@ -5974,9 +5974,7 @@ u32 GetDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler, u8 *ateBoost)
     switch (moveEffect)
     {
     case EFFECT_WEATHER_BALL:
-        if (monInBattle)
-        {
-            if(WEATHER_HAS_EFFECT)
+        if (gMain.inBattle && WEATHER_HAS_EFFECT)
             {
                 if (gBattleWeather & B_WEATHER_RAIN && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA)
                     return TYPE_WATER;
@@ -5989,7 +5987,6 @@ u32 GetDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler, u8 *ateBoost)
                 else
                     return moveType;
             }
-        }
         
         else
         {
