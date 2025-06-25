@@ -1266,8 +1266,8 @@
 #define FLAG_RECEIVED_DNA_SPLICERS                                  0x4BC
 #define FLAG_RECEIVED_REINS_OF_UNITY                                0x4BD
 #define FLAG_RECEIVED_NECROZMA_FUSION                               0x4BE
-#define FLAG_UNUSED_0x4BF                                           0x4BF // Unused Flag
-#define FLAG_UNUSED_0x4C0                                           0x4C0 // Unused Flag
+#define FLAG_HIDE_HEATRAN                                           0x4BF
+#define FLAG_DEFEATED_HEATRAN                                       0x4C0
 #define FLAG_UNUSED_0x4C1                                           0x4C1 // Unused Flag
 #define FLAG_UNUSED_0x4C2                                           0x4C2 // Unused Flag
 #define FLAG_UNUSED_0x4C3                                           0x4C3 // Unused Flag
