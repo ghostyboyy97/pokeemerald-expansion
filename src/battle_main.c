@@ -5975,18 +5975,18 @@ u32 GetDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler, u8 *ateBoost)
     {
     case EFFECT_WEATHER_BALL:
         if (gMain.inBattle && WEATHER_HAS_EFFECT)
-            {
-                if (gBattleWeather & B_WEATHER_RAIN && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA)
-                    return TYPE_WATER;
-                else if (gBattleWeather & B_WEATHER_SANDSTORM)
-                    return TYPE_ROCK;
-                else if (gBattleWeather & B_WEATHER_SUN && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA)
-                    return TYPE_FIRE;
-                else if (gBattleWeather & (B_WEATHER_SNOW | B_WEATHER_HAIL))
-                    return TYPE_ICE;
-                else
-                    return moveType;
-            }
+        {
+            if (gBattleWeather & B_WEATHER_RAIN && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA)
+                return TYPE_WATER;
+            else if (gBattleWeather & B_WEATHER_SANDSTORM)
+                return TYPE_ROCK;
+            else if (gBattleWeather & B_WEATHER_SUN && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA)
+                return TYPE_FIRE;
+            else if (gBattleWeather & (B_WEATHER_SNOW | B_WEATHER_HAIL))
+                return TYPE_ICE;
+            else
+                return moveType;
+        }
         
         else
         {
@@ -6067,6 +6067,8 @@ u32 GetDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler, u8 *ateBoost)
         case SPECIES_TAUROS_PALDEA_COMBAT:
         case SPECIES_TAUROS_PALDEA_BLAZE:
         case SPECIES_TAUROS_PALDEA_AQUA:
+        case SPECIES_BOUFFALANT:
+        case SPECIES_GRANBULL:
             return type1;
         }
         break;
@@ -6140,8 +6142,8 @@ u32 GetDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler, u8 *ateBoost)
         return TYPE_DARK;
     }
     else if (moveType == TYPE_NORMAL
-          && ((!gMain.inBattle || TrySetAteType(move, battler, ability))
-          && GetActiveGimmick(battler) != GIMMICK_DYNAMAX))
+     && ((!gMain.inBattle || TrySetAteType(move, battler, ability))
+     && GetActiveGimmick(battler) != GIMMICK_DYNAMAX))
     {
         if (gMain.inBattle && ateBoost != NULL)
             *ateBoost = TRUE;
