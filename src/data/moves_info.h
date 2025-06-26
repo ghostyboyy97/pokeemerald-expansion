@@ -15610,8 +15610,8 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_DYNAMAX] =
     {
         .name = COMPOUND_STRING("Ice Hammer"),
         .description = COMPOUND_STRING(
-            "Swings the fist to strike.\n"
-            "Lowers the user's Speed."),
+            "Swings the fist to strike\n"
+            "with ice."),
         .effect = EFFECT_HIT,
         .power = 100,
         .type = TYPE_ICE,
