@@ -112,14 +112,10 @@
 #define METATILE_BrendansMaysHouse_MovingBox_Open    0x270
 
 // gTileset_Building
-#define METATILE_Building_PC_Off          0x004
-#define METATILE_Building_PC_On           0x005
-#define METATILE_Building_TV_Off          0x002
-#define METATILE_Building_TV_On           0x003
-#define METATILE_BuildingWarpLeft         0x216
-#define METATILE_BuildingWarpRight        0x217
-#define METATILE_BuildingNormalFloor      0x225
-
+#define METATILE_Building_PC_Off  0x004
+#define METATILE_Building_PC_On   0x005
+#define METATILE_Building_TV_Off  0x002
+#define METATILE_Building_TV_On   0x003
 
 // gTileset_Cave
 #define METATILE_Cave_CrackedFloor                       0x22F
@@ -781,12 +777,16 @@
 #define METATILE_TrickHousePuzzle_RedDoorV_Open1              0x242
 #define METATILE_TrickHousePuzzle_RedDoorV_Retracted          0x24A
 #define METATILE_TrickHousePuzzle_Stairs_Down                 0x20B
+#define METATILE_TrickHousePuzzle_TrickHouseEncounterTile     0x28F
 
 // gTileset_Underwater
 #define METATILE_Underwater_FloorShadow  0x228
 #define METATILE_Underwater_RockWall     0x21E
 
 // Other
+#define METATILE_BuildingNormalFloor           0x225
+#define METATILE_BuildingWarpLeft              0x216
+#define METATILE_BuildingWarpRight             0x217
 #define METATILE_RSMossdeepGym_RedArrow_Down   0x205
 #define METATILE_RSMossdeepGym_RedArrow_Left   0x20C
 #define METATILE_RSMossdeepGym_RedArrow_Right  0x204

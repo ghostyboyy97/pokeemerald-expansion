@@ -12950,6 +12950,213 @@
               }
             ]
           }
+        },
+        {
+          "map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1",
+          "base_label": "gRoute110_TrickHousePuzzle1",
+          "land_mons": {
+            "encounter_rate": 10,
+            "mons": [
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_DELIBIRD"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_ZORUA"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_SPINDA"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_SPINDA"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_MINIOR"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_MINIOR"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_WIMPOD"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_WIMPOD"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_MIMIKYU"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_MIMIKYU"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_MIMIKYU"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_MIMIKYU"
+              }
+            ]
+          }
+        },
+        {
+          "map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE2",
+          "base_label": "gRoute110_TrickHousePuzzle2",
+          "land_mons": {
+            "encounter_rate": 10,
+            "mons": [
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_WYNAUT"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_PUMPKABOO"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_CHATOT"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_CHATOT"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_DITTO"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_DITTO"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_EISCUE"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_EISCUE"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_CASTFORM"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_CASTFORM"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_CASTFORM"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_CASTFORM"
+              }
+            ]
+          }
+        },
+        {
+          "map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE3",
+          "base_label": "gRoute110_TrickHousePuzzle3",
+          "land_mons": {
+            "encounter_rate": 10,
+            "mons": [
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_MIME_JR"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_MR_RIME"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_ZORUA_HISUI"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_ZORUA_HISUI"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_TAROUNTULA"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_TAROUNTULA"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_MORPEKO"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_MORPEKO"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_ROTOM"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_ROTOM"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_ROTOM"
+              },
+              {
+                "min_level": 27,
+                "max_level": 30,
+                "species": "SPECIES_ROTOM"
+              }
+            ]
+          }
         }
       ]
     },
