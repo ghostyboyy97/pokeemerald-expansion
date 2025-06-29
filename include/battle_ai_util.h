@@ -18,8 +18,11 @@ enum DamageRollType
 
 enum DamageCalcContext
 {
-    AI_DEFENDING,
-    AI_ATTACKING,
+    AI_DEFENDING_NORMAL,
+    AI_DEFENDING_SETUP,
+    AI_ATTACKING_ON_FIELD,
+    AI_ATTACKING_IN_SWITCHIN_CALC,
+    AI_ATTACKING_PARTNER
 };
 
 enum AIPivot
