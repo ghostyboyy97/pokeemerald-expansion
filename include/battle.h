@@ -353,8 +353,9 @@ struct SwitchinCandidate
 
 struct SimulatedDamage
 {
-    s32 highestRoll;
-    s32 averageRoll;
+    u16 minimum;
+    u16 median;
+    u16 maximum;
 };
 
 // Ai Data used when deciding which move to use, computed only once before each turn's start.
