@@ -2636,8 +2636,11 @@ static s32 AI_TryToFaint(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
 
     if (CanIndexMoveFaintTarget(battlerAtk, battlerDef, movesetIndex, AI_ATTACKING_ON_FIELD) && gMovesInfo[move].effect != EFFECT_EXPLOSION)
     {
-        if (CanIndexMoveGuaranteeFaintTarget(battlerAtk, battlerDef, movesetIndex))
-            ADJUST_SCORE(1); // Bonus point if the KO is guaranteed
+        //if (CanIndexMoveGuaranteeFaintTarget(battlerAtk, battlerDef, movesetIndex))
+        //    ADJUST_SCORE(1); // Bonus point if the KO is guaranteed
+        
+        ADJUST_SCORE(IncreaseIndexMoveScoreBasedOnRolls(battlerAtk, battlerDef, movesetIndex));
+
         if (AI_IsFaster(battlerAtk, battlerDef, move))
             ADJUST_SCORE(FAST_KILL);
         else
