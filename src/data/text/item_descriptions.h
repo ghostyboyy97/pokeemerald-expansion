@@ -3347,9 +3347,9 @@ static const u8 sTM63Desc[] = _(
     "is poisoned.");
 
 static const u8 sTM64Desc[] = _( 
-    "Hit everything and\n"
-    "faint. Powers up on\n"
-    "Misty Terrain.");
+    "Inflicts severe\n"
+    "damage but makes\n"
+    "the user faint.");
 
 static const u8 sTM65Desc[] = _( 
     "Strikes with a\n"
@@ -3895,8 +3895,10 @@ static const u8 sTM173Desc[] = _(
     "Gravity is intensified\n"
     "negating levitation.");
 
-static const u8 sTM174Desc[] = _( // Todo
-    "?????");
+static const u8 sTM174Desc[] = _(
+    "Hit everything and\n"
+    "faint. Powers up on\n"
+    "Misty Terrain.");
 
 static const u8 sTM175Desc[] = _( // Todo
     "?????");
