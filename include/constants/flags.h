@@ -48,12 +48,12 @@
 #define FLAG_CHOSE_FIRESTARTER         0x22
 #define FLAG_TOUCHED_BALLS             0x23
 #define FLAG_DAWN_104                  0x24
-#define FLAG_RECEIVED_TM_ROCK_TOMB     0x25
+#define FLAG_RECEIVED_TM_ICY_WIND      0x25
 #define FLAG_USING_POKEMONPCMENU       0x26
 #define FLAG_STOP_ENCOUNTERS           0x27
 #define FLAG_PARTY_MOVES               0x28
 #define FLAG_UNUSED_0x29               0x29 // unused
-#define FLAG_RECEIVED_RUSTBORO_EGG     0x2A
+#define FLAG_RECEIVED_OLDALE_EGG       0x2A
 #define FLAG_RECEIVED_SETUP_TMS        0x2B
 #define FLAG_UNUSED_0x2C               0x2C // unused
 #define FLAG_RIVAL_110                 0x2D
@@ -64,7 +64,7 @@
 #define FLAG_DECLINED_DANCE_BATTLE     0x32
 #define FLAG_UNUSED_0x33               0x33 // unused
 #define FLAG_UNUSED_0x34               0x34 // unused
-#define FLAG_RECEIVED_ROUTE_111_EGG    0x35
+#define FLAG_UNUSED_0x35               0x35 // unused
 #define FLAG_RECEIVED_SCOPE_LENS       0x36
 #define FLAG_UNUSED_0x37               0x37 // unused
 #define FLAG_BEAT_TRICK_HOUSE_3        0x38
@@ -159,8 +159,8 @@
 #define FLAG_RECEIVED_HM_CUT                 0x89
 #define FLAG_SCOTT_CALL_FORTREE_GYM          0x8A // Triggers call from Scott after defeating Winona
 #define FLAG_DEFEATED_EVIL_TEAM_MT_CHIMNEY   0x8B
-#define FLAG_RECEIVED_CHARCADET              0x8C
-#define FLAG_DEFEATED_SEASHORE_HOUSE         0x8D
+#define FLAG_RECEIVED_HOT_HOUSE_GIFT_MON     0x8C
+#define FLAG_DEFEATED_HOT_HOUSE              0x8D
 #define FLAG_DEVON_GOODS_STOLEN              0x8E
 #define FLAG_RECOVERED_DEVON_GOODS           0x8F
 #define FLAG_RETURNED_DEVON_GOODS            0x90
@@ -169,7 +169,7 @@
 #define FLAG_MR_BRINEY_SAILING_INTRO         0x93
 #define FLAG_DOCK_REJECTED_DEVON_GOODS       0x94
 #define FLAG_DELIVERED_DEVON_GOODS           0x95
-#define FLAG_UNUSED_0x96                     0x96 //unused
+#define FLAG_SHINY_ROAMERS                   0x96
 #define FLAG_RECEIVED_CASTFORM               0x97
 #define FLAG_RECEIVED_SUPER_ROD              0x98
 #define FLAG_RUSTBORO_NPC_TRADE_COMPLETED    0x99
@@ -289,7 +289,7 @@
 #define FLAG_ENTERED_ELITE_FOUR              0x107
 #define FLAG_RECEIVED_TM_HIDDEN_POWER        0x108
 #define FLAG_RECEIVED_TM_THIEF               0x109
-#define FLAG_RECEIVED_LAVARIDGE_EGG          0x10A
+#define FLAG_UNUSED_0X10A                    0x10A    // unused
 #define FLAG_RECEIVED_REVIVED_FOSSIL_MON     0x10B
 #define FLAG_SECRET_BASE_REGISTRY_ENABLED    0x10C
 #define FLAG_RECEIVED_TM_FLIP_TURN           0x10D
@@ -306,7 +306,7 @@
 #define FLAG_RECEIVED_SOFT_SAND              0x118
 #define FLAG_ENABLE_PROF_BIRCH_MATCH_CALL    0x119
 #define FLAG_RECEIVED_CLEANSE_TAG            0x11A
-#define FLAG_RECEIVED_FOCUS_BAND             0x11B
+#define FLAG_UNUSED_0X11B                    0x11B
 #define FLAG_DECLINED_WALLY_BATTLE_MAUVILLE  0x11C
 #define FLAG_RECEIVED_DEVON_SCOPE            0x11D
 #define FLAG_DECLINED_RIVAL_BATTLE_EVERGRANDE 0x11E
@@ -322,7 +322,7 @@
 #define FLAG_PETALBURG_MART_EXPANDED_ITEMS   0x128
 #define FLAG_RECEIVED_MIRACLE_SEED           0x129
 #define FLAG_RECEIVED_BELDUM                 0x12A
-#define FLAG_UNUSED_0x12B                    0x12B
+#define FLAG_USED_POWERFUL_SUMMONER          0x12B
 #define FLAG_MET_FANCLUB_YOUNGER_BROTHER     0x12C
 #define FLAG_RIVAL_LEFT_FOR_ROUTE103         0x12D
 #define FLAG_OMIT_DIVE_FROM_STEVEN_LETTER    0x12E
@@ -765,7 +765,7 @@
 #define FLAG_HIDE_BATTLE_TOWER_MULTI_BATTLE_PARTNER_6               0x2CC
 #define FLAG_ITEM_ANCIENT_TOMB_MASTER_BALL                          0x2CD
 #define FLAG_HIDE_MEW                                               0x2CE
-#define FLAG_UNUSED_0x2CF                                           0x2CF  // unused flag
+#define FLAG_USE_MONOTYPE_STARTERS                                  0x2CF
 #define FLAG_HIDE_ROUTE_101_BIRCH_ZIGZAGOON_BATTLE                  0x2D0
 #define FLAG_HIDE_LITTLEROOT_TOWN_BIRCHS_LAB_BIRCH                  0x2D1
 #define FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_BEDROOM          0x2D2
@@ -1163,7 +1163,7 @@
 #define FLAG_ITEM_NEW_MAUVILLE_TM_SUPERPOWER                        0x456
 #define FLAG_ITEM_FIERY_PATH_FIRE_STONE                             0x457
 #define FLAG_ITEM_SHOAL_CAVE_ICE_ROOM_TM_HAIL                       0x458
-#define FLAG_ITEM_SHOAL_CAVE_ICE_ROOM_NEVER_MELT_ICE                0x459
+#define FLAG_UNUSED_0x459                                           0x459 // unused, formerly blizzard Tm
 #define FLAG_ITEM_ROUTE_103_GUARD_SPEC                              0x45A
 #define FLAG_ITEM_ROUTE_104_X_ACCURACY                              0x45B
 #define FLAG_ITEM_MAUVILLE_CITY_X_SPEED                             0x45C
@@ -1266,8 +1266,8 @@
 #define FLAG_RECEIVED_DNA_SPLICERS                                  0x4BC
 #define FLAG_RECEIVED_REINS_OF_UNITY                                0x4BD
 #define FLAG_RECEIVED_NECROZMA_FUSION                               0x4BE
-#define FLAG_UNUSED_0x4BF                                           0x4BF // Unused Flag
-#define FLAG_UNUSED_0x4C0                                           0x4C0 // Unused Flag
+#define FLAG_HIDE_HEATRAN                                           0x4BF
+#define FLAG_DEFEATED_HEATRAN                                       0x4C0
 #define FLAG_UNUSED_0x4C1                                           0x4C1 // Unused Flag
 #define FLAG_UNUSED_0x4C2                                           0x4C2 // Unused Flag
 #define FLAG_UNUSED_0x4C3                                           0x4C3 // Unused Flag
@@ -1388,10 +1388,10 @@
 #define FLAG_NURSE_UNION_ROOM_REMINDER              (SYSTEM_FLAGS + 0x20)
 
 #define FLAG_SYS_DEXNAV_SEARCH                      (SYSTEM_FLAGS + 0x21)
-#define FLAG_UNUSED_0x882                           (SYSTEM_FLAGS + 0x22) // Unused Flag
-#define FLAG_UNUSED_0x883                           (SYSTEM_FLAGS + 0x23) // Unused Flag
-#define FLAG_UNUSED_0x884                           (SYSTEM_FLAGS + 0x24) // Unused Flag
-#define FLAG_UNUSED_0x885                           (SYSTEM_FLAGS + 0x25) // Unused Flag
+#define FLAG_VISITED_FIERY_PATH                     (SYSTEM_FLAGS + 0x22)
+#define FLAG_VISITED_WEATHER_INST                   (SYSTEM_FLAGS + 0x23)
+#define FLAG_VISITED_ROUTE_121                      (SYSTEM_FLAGS + 0x24)
+#define FLAG_VISITED_ROUTE_128                      (SYSTEM_FLAGS + 0x25)
 #define FLAG_UNUSED_0x886                           (SYSTEM_FLAGS + 0x26) // Unused Flag
 #define FLAG_UNUSED_0x887                           (SYSTEM_FLAGS + 0x27) // Unused Flag
 

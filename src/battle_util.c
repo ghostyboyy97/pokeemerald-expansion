@@ -4102,7 +4102,8 @@ u32 CanAbilityAbsorbMove(u32 battlerAtk, u32 battlerDef, u32 abilityDef, u32 mov
             effect = MOVE_ABSORBED_BY_DRAIN_HP_ABILITY;
         break;
     case ABILITY_EARTH_EATER:
-        if (moveType == TYPE_GROUND)
+        if (moveType == TYPE_GROUND
+            && ((gBattleMons[battlerAtk].ability != ABILITY_BONE_ZONE) || (gBattleMons[battlerAtk].ability == ABILITY_BONE_ZONE && !gMovesInfo[move].boneMove)))
             effect = MOVE_ABSORBED_BY_DRAIN_HP_ABILITY;
         break;
     case ABILITY_ICE_EATER:
@@ -6100,6 +6101,24 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                 PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+                effect++;
+            }
+            break;
+        case ABILITY_GRIPPER:
+            if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+             && IsBattlerAlive(gBattlerTarget)
+             && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+             && GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_PROTECTIVE_PADS
+             && IsMoveMakingContact(move, gBattlerAttacker)
+             && TARGET_TURN_DAMAGED // Need to actually hit the target
+             && !(gBattleMons[gBattlerTarget].status2 & STATUS2_ESCAPE_PREVENTION) // dont show the popup if its already been shown
+             && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST)) // cant trap ghost types
+             {
+                gBattleMons[gBattlerTarget].status2 |= STATUS2_ESCAPE_PREVENTION;
+                gDisableStructs[gBattlerTarget].battlerPreventingEscape = gBattlerAttacker;
+                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_GripperMsgWithPopup;
                 effect++;
             }
             break;
@@ -10022,7 +10041,7 @@ static inline uq4_12_t GetCollisionCourseElectroDriftModifier(u32 move, uq4_12_t
     return UQ_4_12(1.0);
 }
 
-static inline uq4_12_t GetAttackerAbilitiesModifier(u32 battlerAtk, uq4_12_t typeEffectivenessModifier, bool32 isCrit, u32 abilityAtk)
+static inline uq4_12_t GetAttackerAbilitiesModifier(u32 move, u32 battlerAtk, uq4_12_t typeEffectivenessModifier, bool32 isCrit, u32 abilityAtk)
 {
     switch (abilityAtk)
     {
@@ -10042,6 +10061,10 @@ static inline uq4_12_t GetAttackerAbilitiesModifier(u32 battlerAtk, uq4_12_t typ
         break;
     case ABILITY_TINTED_LENS:
         if (typeEffectivenessModifier <= UQ_4_12(0.5))
+            return UQ_4_12(2.0);
+        break;
+    case ABILITY_BONE_ZONE:
+        if (gMovesInfo[move].boneMove && typeEffectivenessModifier <= UQ_4_12(0.5))
             return UQ_4_12(2.0);
         break;
     }
@@ -10143,8 +10166,20 @@ static inline uq4_12_t GetDefenderItemsModifier(struct DamageCalculationData *da
                 gSpecialStatuses[battlerDef].berryReduced = TRUE;
             if (fromAiCode 
                 && dmg > 0
-                && ((dmg * 100) / gBattleMons[battlerDef].hp) >= (hasRipen ? 80 : 66))
+                && ((dmg * 100) / gBattleMons[battlerDef].hp) >= (hasRipen ? 80 : 66)
+                && ((dmg * 100) / gBattleMons[battlerDef].hp) <= (hasRipen ? 400 : 200))
             {
+                u8 moveIndex = 0;
+                u32 battlerAtk = damageCalcData->battlerAtk;
+                u32 move = damageCalcData->move;
+
+                for (moveIndex = 0; moveIndex < MAX_MON_MOVES; moveIndex++)
+                {
+                    if (move == gBattleMons[battlerAtk].moves[moveIndex])
+                        break;
+                }
+
+                AI_DATA->resistBerryAffected[damageCalcData->battlerAtk][battlerDef][moveIndex] = TRUE;
                 return UQ_4_12(1.0);
             }
             else
@@ -10188,7 +10223,7 @@ static inline uq4_12_t GetOtherModifiers(struct DamageCalculationData *damageCal
 
     if (unmodifiedAttackerSpeed >= unmodifiedDefenderSpeed)
     {
-        DAMAGE_MULTIPLY_MODIFIER(GetAttackerAbilitiesModifier(battlerAtk, typeEffectivenessModifier, isCrit, abilityAtk));
+        DAMAGE_MULTIPLY_MODIFIER(GetAttackerAbilitiesModifier(move, battlerAtk, typeEffectivenessModifier, isCrit, abilityAtk));
         DAMAGE_MULTIPLY_MODIFIER(GetDefenderAbilitiesModifier(move, moveType, battlerAtk, battlerDef, typeEffectivenessModifier, abilityDef));
         DAMAGE_MULTIPLY_MODIFIER(GetDefenderPartnerAbilitiesModifier(battlerDefPartner));
         DAMAGE_MULTIPLY_MODIFIER(GetAttackerItemsModifier(battlerAtk, typeEffectivenessModifier, holdEffectAtk));
@@ -10198,7 +10233,7 @@ static inline uq4_12_t GetOtherModifiers(struct DamageCalculationData *damageCal
     {
         DAMAGE_MULTIPLY_MODIFIER(GetDefenderAbilitiesModifier(move, moveType, battlerAtk, battlerDef, typeEffectivenessModifier, abilityDef));
         DAMAGE_MULTIPLY_MODIFIER(GetDefenderPartnerAbilitiesModifier(battlerDefPartner));
-        DAMAGE_MULTIPLY_MODIFIER(GetAttackerAbilitiesModifier(battlerAtk, typeEffectivenessModifier, isCrit, abilityAtk));
+        DAMAGE_MULTIPLY_MODIFIER(GetAttackerAbilitiesModifier(move, battlerAtk, typeEffectivenessModifier, isCrit, abilityAtk));
         DAMAGE_MULTIPLY_MODIFIER(GetDefenderItemsModifier(damageCalcData, typeEffectivenessModifier, abilityDef, holdEffectDef, fromAiCode, dmg));
         DAMAGE_MULTIPLY_MODIFIER(GetAttackerItemsModifier(battlerAtk, typeEffectivenessModifier, holdEffectAtk));
     }
@@ -10406,6 +10441,14 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
         if (recordAbilities)
             RecordAbilityBattle(battlerAtk, abilityAtk);
     }
+    else if (abilityAtk == ABILITY_BONE_ZONE
+        && gMovesInfo[move].boneMove == TRUE
+        && mod == UQ_4_12(0.0))
+    {
+        mod = UQ_4_12(1.0);
+        if (recordAbilities)
+            RecordAbilityBattle(battlerAtk, abilityAtk);
+    }
     
     if (moveType == TYPE_PSYCHIC && defType == TYPE_DARK && gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
@@ -10415,6 +10458,8 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
         mod = UQ_4_12(1.0);
     if (moveType == TYPE_STELLAR && GetActiveGimmick(battlerDef) == GIMMICK_TERA)
         mod = UQ_4_12(2.0);
+    if (move == MOVE_DRACO_BARRAGE && defType == TYPE_FAIRY && mod == UQ_4_12(0.0))
+        mod = UQ_4_12(1.0);
 
     // B_WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pokémon
     if (gBattleWeather & B_WEATHER_STRONG_WINDS && WEATHER_HAS_EFFECT)
@@ -10473,6 +10518,7 @@ static inline uq4_12_t CalcTypeEffectivenessMultiplierInternal(u32 move, u32 mov
     u32 illusionSpecies;
     u32 types[3];
     GetBattlerTypes(battlerDef, FALSE, types);
+    u32 abilityAtk = GetBattlerAbility(battlerAtk);
 
     MulByTypeEffectiveness(&modifier, move, moveType, battlerDef, types[0], battlerAtk, recordAbilities);
     if (types[1] != types[0])
@@ -10491,7 +10537,8 @@ static inline uq4_12_t CalcTypeEffectivenessMultiplierInternal(u32 move, u32 mov
         if (B_GLARE_GHOST < GEN_4 && move == MOVE_GLARE && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST))
             modifier = UQ_4_12(0.0);
     }
-    else if (moveType == TYPE_GROUND && !IsBattlerGroundedInverseCheck(battlerDef, TRUE) && !(gMovesInfo[move].ignoreTypeIfFlyingAndUngrounded))
+    else if (moveType == TYPE_GROUND && !IsBattlerGroundedInverseCheck(battlerDef, TRUE) && !(gMovesInfo[move].ignoreTypeIfFlyingAndUngrounded)
+                && ((abilityAtk != ABILITY_BONE_ZONE) || (abilityAtk == ABILITY_BONE_ZONE && !gMovesInfo[move].boneMove)))
     {
         modifier = UQ_4_12(0.0);
         if (recordAbilities && defAbility == ABILITY_LEVITATE)

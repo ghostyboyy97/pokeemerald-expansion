@@ -21,7 +21,7 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_MONSTER, EGG_GROUP_GRASS),
-        .abilities = { ABILITY_OVERGROW,  ABILITY_SELF_SUFFICIENT,  ABILITY_ROCK_HEAD},
+        .abilities = { ABILITY_SHELL_ARMOR,  ABILITY_ROCK_HEAD,  ABILITY_SELF_SUFFICIENT},
         .bodyColor = BODY_COLOR_GREEN,
         .speciesName = _("Turtwig"),
         .cryId = CRY_TURTWIG,
@@ -85,7 +85,7 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_MONSTER, EGG_GROUP_GRASS),
-        .abilities = { ABILITY_OVERGROW,  ABILITY_SELF_SUFFICIENT,  ABILITY_ROCK_HEAD},
+        .abilities = { ABILITY_SHELL_ARMOR,  ABILITY_ROCK_HEAD,  ABILITY_SELF_SUFFICIENT},
         .bodyColor = BODY_COLOR_GREEN,
         .speciesName = _("Grotle"),
         .cryId = CRY_GROTLE,
@@ -154,7 +154,7 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_MONSTER, EGG_GROUP_GRASS),
-        .abilities = { ABILITY_OVERGROW,  ABILITY_SELF_SUFFICIENT,  ABILITY_ROCK_HEAD},
+        .abilities = { ABILITY_SHELL_ARMOR,  ABILITY_ROCK_HEAD,  ABILITY_SELF_SUFFICIENT},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = TRUE,
         .speciesName = _("Torterra"),
@@ -334,10 +334,10 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
     [SPECIES_INFERNAPE] =
     {
         .baseHP        = 76,
-        .baseAttack    = 110,
+        .baseAttack    = 110, //+6 from RR
         .baseDefense   = 71,
-        .baseSpeed     = 113,
-        .baseSpAttack  = 110,
+        .baseSpeed     = 113, //+5 from RR
+        .baseSpAttack  = 110, //+6 from RR
         .baseSpDefense = 71,
         .types = MON_TYPES(TYPE_FIRE, TYPE_FIGHTING),
         .catchRate = 45,
@@ -4209,7 +4209,7 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_FIELD),
-        .abilities = { ABILITY_SAND_STREAM,  ABILITY_NONE,  ABILITY_SAND_FORCE},
+        .abilities = { ABILITY_SAND_STREAM,  ABILITY_SAND_FORCE,  ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .speciesName = _("Hippopotas"),
         .cryId = CRY_HIPPOPOTAS,
@@ -4286,7 +4286,7 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_FIELD),
-        .abilities = { ABILITY_SAND_STREAM,  ABILITY_NONE,  ABILITY_SAND_FORCE},
+        .abilities = { ABILITY_SAND_STREAM,  ABILITY_SAND_FORCE,  ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .speciesName = _("Hippowdon"),
         .cryId = CRY_HIPPOWDON,
@@ -4857,7 +4857,7 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_MONSTER, EGG_GROUP_GRASS),
-        .abilities = { ABILITY_ICE_BODY,  ABILITY_NONE,  ABILITY_SOUNDPROOF},
+        .abilities = { ABILITY_SNOW_WARNING,  ABILITY_ICE_BODY,  ABILITY_SOUNDPROOF},
         .bodyColor = BODY_COLOR_WHITE,
         .speciesName = _("Snover"),
         .cryId = CRY_SNOVER,
@@ -5186,8 +5186,8 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
             gOverworldPalette_RotomHeat,
             gShinyOverworldPalette_RotomHeat
         )
-        .levelUpLearnset = sRotomLevelUpLearnset,
-        .teachableLearnset = sRotomTeachableLearnset,
+        .levelUpLearnset = sRotomHeatLevelUpLearnset,
+        .teachableLearnset = sRotomHeatTeachableLearnset,
         .formSpeciesIdTable = sRotomFormSpeciesIdTable,
         .formChangeTable = sRotomFormChangeTable,
         .randomizerMode = MON_RANDOMIZER_INVALID
@@ -5253,8 +5253,8 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
             gOverworldPalette_RotomWash,
             gShinyOverworldPalette_RotomWash
         )
-        .levelUpLearnset = sRotomLevelUpLearnset,
-        .teachableLearnset = sRotomTeachableLearnset,
+        .levelUpLearnset = sRotomWashLevelUpLearnset,
+        .teachableLearnset = sRotomWashTeachableLearnset,
         .formSpeciesIdTable = sRotomFormSpeciesIdTable,
         .formChangeTable = sRotomFormChangeTable,
         .randomizerMode = MON_RANDOMIZER_INVALID
@@ -5319,8 +5319,8 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
             gOverworldPalette_RotomFrost,
             gShinyOverworldPalette_RotomFrost
         )
-        .levelUpLearnset = sRotomLevelUpLearnset,
-        .teachableLearnset = sRotomTeachableLearnset,
+        .levelUpLearnset = sRotomFrostLevelUpLearnset,
+        .teachableLearnset = sRotomFrostTeachableLearnset,
         .formSpeciesIdTable = sRotomFormSpeciesIdTable,
         .formChangeTable = sRotomFormChangeTable,
         .randomizerMode = MON_RANDOMIZER_INVALID
@@ -5386,8 +5386,8 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
             gOverworldPalette_RotomFan,
             gShinyOverworldPalette_RotomFan
         )
-        .levelUpLearnset = sRotomLevelUpLearnset,
-        .teachableLearnset = sRotomTeachableLearnset,
+        .levelUpLearnset = sRotomFanLevelUpLearnset,
+        .teachableLearnset = sRotomFanTeachableLearnset,
         .formSpeciesIdTable = sRotomFormSpeciesIdTable,
         .formChangeTable = sRotomFormChangeTable,
         .randomizerMode = MON_RANDOMIZER_INVALID
@@ -5452,8 +5452,8 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
             gOverworldPalette_RotomMow,
             gShinyOverworldPalette_RotomMow
         )
-        .levelUpLearnset = sRotomLevelUpLearnset,
-        .teachableLearnset = sRotomTeachableLearnset,
+        .levelUpLearnset = sRotomCutLevelUpLearnset,
+        .teachableLearnset = sRotomCutTeachableLearnset,
         .formSpeciesIdTable = sRotomFormSpeciesIdTable,
         .formChangeTable = sRotomFormChangeTable,
         .randomizerMode = MON_RANDOMIZER_INVALID

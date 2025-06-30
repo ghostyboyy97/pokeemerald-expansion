@@ -4480,6 +4480,16 @@
       "secondary_tileset": "gTileset_GenericBuilding",
       "border_filepath": "data/layouts/SootopolisCity_ChampHouse/border.bin",
       "blockdata_filepath": "data/layouts/SootopolisCity_ChampHouse/map.bin"
+    },
+    {
+      "id": "LAYOUT_FIERY_PATH_BACK_ROOM",
+      "name": "FieryPath_BackRoom_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Lavaridge",
+      "border_filepath": "data/layouts/FieryPath_BackRoom/border.bin",
+      "blockdata_filepath": "data/layouts/FieryPath_BackRoom/map.bin"
     }
   ]
 }

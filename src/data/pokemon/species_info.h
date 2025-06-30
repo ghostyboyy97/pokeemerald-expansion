@@ -406,12 +406,12 @@ const struct SpeciesInfo gSpeciesInfo[] =
 
     [SPECIES_EMPOLEON_MEGA_O] =
     {
-        .baseHP        = 100, //+16
+        .baseHP        = 84,
         .baseAttack    = 150, //+64
-        .baseDefense   = 75,  //-13
+        .baseDefense   = 83,  //-5
         .baseSpeed     = 120, //+60
         .baseSpAttack  = 110, //-1
-        .baseSpDefense = 75,  //-26
+        .baseSpDefense = 83,  //-18
         .types = MON_TYPES(TYPE_WATER, TYPE_STEEL),
         .catchRate = 45,
     #if P_UPDATED_EXP_YIELDS >= GEN_8
@@ -468,12 +468,12 @@ const struct SpeciesInfo gSpeciesInfo[] =
 
     [SPECIES_EMPOLEON_MEGA_D] =
     {
-        .baseHP        = 140, //+56
-        .baseAttack    = 75,  //-11
-        .baseDefense   = 145, //+57
+        .baseHP        = 118, //+34
+        .baseAttack    = 86,
+        .baseDefense   = 88,
         .baseSpeed     = 50,  //-10
-        .baseSpAttack  = 75,  //-36
-        .baseSpDefense = 145, //+44
+        .baseSpAttack  = 131, //+20
+        .baseSpDefense = 157, //+56
         .types = MON_TYPES(TYPE_WATER, TYPE_STEEL),
         .catchRate = 45,
     #if P_UPDATED_EXP_YIELDS >= GEN_8
@@ -528,14 +528,15 @@ const struct SpeciesInfo gSpeciesInfo[] =
         .randomizerMode = MON_RANDOMIZER_INVALID
     },
 
+    // only +83 stats for mega because base got +17 from RR
     [SPECIES_INFERNAPE_MEGA] =
     {
         .baseHP        = 76,
-        .baseAttack    = 137, //+33
-        .baseDefense   = 71,
-        .baseSpeed     = 142, //+34
-        .baseSpAttack  = 137, //+33
-        .baseSpDefense = 71,
+        .baseAttack    = 137, //+27
+        .baseDefense   = 82,  //+11
+        .baseSpeed     = 120, //+7
+        .baseSpAttack  = 137, //+27
+        .baseSpDefense = 82,  //+11
         .types = MON_TYPES(TYPE_FIRE, TYPE_FIGHTING),
         .catchRate = 45,
     #if P_UPDATED_EXP_YIELDS >= GEN_8
@@ -553,7 +554,7 @@ const struct SpeciesInfo gSpeciesInfo[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_FIELD, EGG_GROUP_HUMAN_LIKE),
-        .abilities = { ABILITY_ADAPTABILITY, ABILITY_ADAPTABILITY, ABILITY_ADAPTABILITY },
+        .abilities = { ABILITY_IRON_FIST, ABILITY_IRON_FIST, ABILITY_IRON_FIST },
         .bodyColor = BODY_COLOR_BROWN,
         .speciesName = _("Infernape"),
         .cryId = CRY_INFERNAPE,
@@ -596,10 +597,10 @@ const struct SpeciesInfo gSpeciesInfo[] =
     {
         .baseHP        = 150,
         .baseAttack    = 160,
-        .baseDefense   = 110,
-        .baseSpeed     = 110,
-        .baseSpAttack  = 60,
-        .baseSpDefense = 110,
+        .baseDefense   = 110, //+10
+        .baseSpeed     = 110, //+10
+        .baseSpAttack  = 95,
+        .baseSpDefense = 75,  //+10
         .types = MON_TYPES(TYPE_NORMAL),
         .catchRate = 45,
     #if P_UPDATED_EXP_YIELDS >= GEN_8
@@ -657,11 +658,11 @@ const struct SpeciesInfo gSpeciesInfo[] =
     [SPECIES_ROSERADE_MEGA] =
     {
         .baseHP        = 60,
-        .baseAttack    = 70,
-        .baseDefense   = 85,
-        .baseSpeed     = 130,
-        .baseSpAttack  = 150,
-        .baseSpDefense = 120,
+        .baseAttack    = 80, //+10
+        .baseDefense   = 90,  //+25
+        .baseSpeed     = 120, //+30
+        .baseSpAttack  = 140, //+15
+        .baseSpDefense = 125, //+20
         .types = MON_TYPES(TYPE_GRASS, TYPE_POISON),
         .catchRate = 75,
     #if P_UPDATED_EXP_YIELDS >= GEN_8
@@ -751,7 +752,7 @@ const struct SpeciesInfo gSpeciesInfo[] =
         .friendship = 35,
         .growthRate = GROWTH_FAST,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_AMORPHOUS),
-        .abilities = {ABILITY_PRANKSTER,  ABILITY_PRANKSTER,  ABILITY_PRANKSTER },
+        .abilities = {ABILITY_PRANKSTER,  ABILITY_PRANKSTER,  ABILITY_GRIPPER },
         .bodyColor = BODY_COLOR_BLACK,
         .speciesName = _("Dusknoir"),
         .cryId = CRY_DUSKNOIR,

@@ -3194,6 +3194,7 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_DYNAMAX] =
         .contestComboStarterId = COMBO_STARTER_BONE_CLUB,
         .contestComboMoves = {COMBO_STARTER_BONEMERANG, COMBO_STARTER_BONE_RUSH, COMBO_STARTER_SHADOW_BONE},
         .battleAnimScript = gBattleAnimMove_BoneClub,
+        .boneMove = TRUE,
     },
 
     [MOVE_FIRE_BLAST] =
@@ -3937,6 +3938,7 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_DYNAMAX] =
         .contestComboStarterId = COMBO_STARTER_BONEMERANG,
         .contestComboMoves = {COMBO_STARTER_BONE_CLUB, COMBO_STARTER_BONE_RUSH, COMBO_STARTER_SHADOW_BONE},
         .battleAnimScript = gBattleAnimMove_Bonemerang,
+        .boneMove = TRUE,
     },
 
     [MOVE_REST] =
@@ -5021,6 +5023,7 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_DYNAMAX] =
         .contestComboStarterId = COMBO_STARTER_BONE_RUSH,
         .contestComboMoves = {COMBO_STARTER_BONE_CLUB, COMBO_STARTER_BONEMERANG, COMBO_STARTER_FOCUS_ENERGY, COMBO_STARTER_SHADOW_BONE},
         .battleAnimScript = gBattleAnimMove_BoneRush,
+        .boneMove = TRUE,
     },
 
     [MOVE_LOCK_ON] =
@@ -14159,7 +14162,7 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_DYNAMAX] =
         .power = 0,
         .type = TYPE_ELECTRIC,
         .accuracy = 0,
-        .pp = 25,
+        .pp = 5,
         .target = MOVE_TARGET_ALL_BATTLERS,
         .priority = 1,
         .category = DAMAGE_CATEGORY_STATUS,
@@ -15607,8 +15610,8 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_DYNAMAX] =
     {
         .name = COMPOUND_STRING("Ice Hammer"),
         .description = COMPOUND_STRING(
-            "Swings the fist to strike.\n"
-            "Lowers the user's Speed."),
+            "Swings the fist to strike\n"
+            "with ice."),
         .effect = EFFECT_HIT,
         .power = 100,
         .type = TYPE_ICE,
@@ -16464,6 +16467,7 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_DYNAMAX] =
         .contestComboStarterId = COMBO_STARTER_SHADOW_BONE,
         .contestComboMoves = {COMBO_STARTER_BONE_CLUB, COMBO_STARTER_BONEMERANG, COMBO_STARTER_BONE_RUSH},
         .battleAnimScript = gBattleAnimMove_ShadowBone,
+        .boneMove = TRUE,
     },
 
     [MOVE_ACCELEROCK] =
@@ -18110,6 +18114,29 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_DYNAMAX] =
         .contestComboStarterId = 0,
         .contestComboMoves = {0},
         .battleAnimScript = gBattleAnimMove_ShellSideArm,
+    },
+
+    [MOVE_DRACO_BARRAGE] =
+    {
+        .name = COMPOUND_STRING("Draco Barrage"),
+        .description = COMPOUND_STRING(
+            "Ignores Fairy immunity; 33%\n"
+            "recoil; best of phys. or spec."
+        ),
+        .effect = EFFECT_SHELL_SIDE_ARM,
+        .power = 100,
+        .type = TYPE_DRAGON,
+        .accuracy = 100,
+        .pp = 5,
+        .recoil = 33,
+        .target = MOVE_TARGET_SELECTED,
+        .priority = 0,
+        .category = DAMAGE_CATEGORY_SPECIAL,
+        .contestEffect = CONTEST_EFFECT_BETTER_IF_SAME_TYPE,
+        .contestCategory = CONTEST_CATEGORY_SMART,
+        .contestComboStarterId = 0,
+        .contestComboMoves = {0},
+        .battleAnimScript = gBattleAnimMove_DracoMeteor,
     },
 
     [MOVE_MISTY_EXPLOSION] =
@@ -20511,7 +20538,7 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_DYNAMAX] =
         .name = COMPOUND_STRING("Mighty Cleave"),
         .description = sFeintDescription,
         .effect = EFFECT_HIT,
-        .power = 95,
+        .power = 90,
         .type = TYPE_ROCK,
         .accuracy = 100,
         .pp = 5,

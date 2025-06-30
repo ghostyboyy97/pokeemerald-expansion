@@ -835,7 +835,7 @@ Route109_Text_EdmondPostBattle:
 
 Route109_Text_RickyIntro:
 	.string "I'm thirsty… I could go for a SODA POP\n"
-	.string "at the SEASHORE HOUSE…$"
+	.string "at the Hot House…$"
 
 Route109_Text_RickyDefeated:
 	.string "Groan…$"
@@ -1626,7 +1626,7 @@ Route113_Text_DillonPostBattle:
 Route113_Text_MadelineIntro:
 	.string "I use this parasol to ward off this\n"
 	.string "filthy, yucky volcanic ash from\l"
-	.string "my dear NUMEL.$"
+	.string "my dear Heracross.$"
 
 Route113_Text_MadelineDefeat:
 	.string "Huff, huff…\n"

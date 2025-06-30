@@ -3871,20 +3871,29 @@ static const u8 sTM168Desc[] = _(
     "to send a wave\n"
     "that strikes first.");
 
-static const u8 sTM169Desc[] = _( // Todo
-    "?????");
+static const u8 sTM169Desc[] = _(
+    "Sets spikes that\n"
+    "hurt a foe\n"
+    "switching in.");
 
-static const u8 sTM170Desc[] = _( // Todo
-    "?????");
+static const u8 sTM170Desc[] = _(
+    "Fires a beam from\n"
+    "its body. It hurts\n"
+    "the user.");
 
-static const u8 sTM171Desc[] = _( // Todo
-    "?????");
+static const u8 sTM171Desc[] = _(
+    "Beats Fairy immunity;\n"
+    "33% recoil; best of\n"
+    "phys. or spec.");
 
-static const u8 sTM172Desc[] = _( // Todo
-    "?????");
+static const u8 sTM172Desc[] = _(
+    "Does more damage if\n"
+    "the user outweighs\n"
+    "the foe.");
 
-static const u8 sTM173Desc[] = _( // Todo
-    "?????");
+static const u8 sTM173Desc[] = _(
+    "Gravity is intensified\n"
+    "negating levitation.");
 
 static const u8 sTM174Desc[] = _( // Todo
     "?????");

@@ -42,6 +42,20 @@ AI_SINGLE_BATTLE_TEST("Choiced Pokémon switch out after using a status move onc
     }
 }
 
+AI_SINGLE_BATTLE_TEST("Choiced Pokémon only consider their own status moves when determining if they should switch")
+{
+    GIVEN 
+    {
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_RISKY | AI_FLAG_SMART_SWITCHING | AI_FLAG_OMNISCIENT | AI_FLAG_SMART_MON_CHOICES);
+        PLAYER(SPECIES_ZIGZAGOON) { Speed(4); Moves(MOVE_TAIL_WHIP, MOVE_TACKLE); }
+        OPPONENT(SPECIES_ZIGZAGOON) { Speed(5); Moves(MOVE_TACKLE); Item(ITEM_CHOICE_BAND); }
+        OPPONENT(SPECIES_ZIGZAGOON) { Speed(5); Moves(MOVE_TACKLE); }
+    } WHEN {
+        TURN { EXPECT_MOVE(opponent, MOVE_TACKLE); MOVE(player, MOVE_TAIL_WHIP); }
+        TURN { EXPECT_MOVE(opponent, MOVE_TACKLE); MOVE(player, MOVE_TAIL_WHIP); }
+    }
+}
+
 AI_SINGLE_BATTLE_TEST("Choiced Pokémon won't use stat boosting moves")
 {
     // Moves defined by MOVE_TARGET_USER (with exceptions?)
@@ -212,5 +226,25 @@ AI_SINGLE_BATTLE_TEST("Choiced Pokémon will only see choiced moves when conside
     } WHEN {
         TURN { MOVE(player, MOVE_CELEBRATE); EXPECT_MOVE(opponent, MOVE_SURF); SEND_OUT(player, 1); }
         TURN { MOVE(player, MOVE_CLOSE_COMBAT); EXPECT_SWITCH(opponent, 1); }
+    }
+}
+
+AI_SINGLE_BATTLE_TEST("Choiced Pokémon will only see choiced moves when considering switching with FindMonThatAbsorbsMove")
+{
+    PASSES_RANDOMLY(100, 100, RNG_AI_SWITCH_ABSORBING);
+    GIVEN {
+        ASSUME(gSpeciesInfo[SPECIES_SANDSHREW].types[0] == TYPE_GROUND);
+        ASSUME(GetMoveType(MOVE_SCRATCH) == TYPE_NORMAL);
+        ASSUME(GetMoveType(MOVE_THUNDERBOLT) == TYPE_ELECTRIC);
+        ASSUME(GetMoveType(MOVE_WATER_GUN) == TYPE_WATER);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_OMNISCIENT | AI_FLAG_SMART_SWITCHING | AI_FLAG_SMART_MON_CHOICES);
+        PLAYER(SPECIES_WOOPER) { Ability(ABILITY_WATER_ABSORB); Moves(MOVE_CELEBRATE); }
+        PLAYER(SPECIES_DWEBBLE) { Moves(MOVE_WATER_GUN); }
+        OPPONENT(SPECIES_MUDKIP) { Item(ITEM_CHOICE_SCARF); Moves(MOVE_SCRATCH, MOVE_WATER_GUN); }
+        OPPONENT(SPECIES_WOOPER) { Ability(ABILITY_WATER_ABSORB); Moves(MOVE_SCRATCH); }
+    } WHEN {
+        TURN { SWITCH(player, 1); EXPECT_MOVE(opponent, MOVE_SCRATCH); }
+        TURN { MOVE(player, MOVE_WATER_GUN); EXPECT_MOVE(opponent, MOVE_SCRATCH); }
+        TURN { MOVE(player, MOVE_WATER_GUN); EXPECT_SWITCH(opponent, 1); }
     }
 }

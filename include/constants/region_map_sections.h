@@ -217,7 +217,9 @@
 #define MAPSEC_FLOATING_SLAB                0xD5
 #define MAPSEC_ROCKY_SLAB                   0xD6
 #define MAPSEC_GRASSY_SLAB                  0xD7
-#define MAPSEC_NONE                         0xD8
+#define MAPSEC_HOT_HOUSE                    0xD8
+#define MAPSEC_TRICK_HOUSE                  0xD9
+#define MAPSEC_NONE                         0xDA
 
 #define METLOC_SPECIAL_EGG                  0xFD
 #define METLOC_IN_GAME_TRADE                0xFE
@@ -226,5 +228,7 @@
 #define KANTO_MAPSEC_START  MAPSEC_PALLET_TOWN
 #define KANTO_MAPSEC_END    MAPSEC_SPECIAL_AREA
 #define KANTO_MAPSEC_COUNT (KANTO_MAPSEC_END - KANTO_MAPSEC_START + 1)
+#define FLYABLE_CITY_MAPSEC_COUNT                   16
+#define FLYABLE_DUNGEON_MAPSEC_COUNT                4
 
 #endif //GUARD_REGIONMAPSEC_H

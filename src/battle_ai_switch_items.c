@@ -22,7 +22,7 @@
 #include "constants/moves.h"
 
 // this file's functions
-static bool32 HasSuperEffectiveMoveAgainstOpponents(u32 battler, bool32 noRng);
+static bool32 CanUseSuperEffectiveMoveAgainstOpponents(u32 battler);
 static bool32 FindMonWithFlagsAndSuperEffective(u32 battler, u16 flags, u32 moduloPercent);
 static bool32 ShouldUseItem(u32 battler);
 static bool32 AiExpectsToFaintPlayer(u32 battler);
@@ -354,7 +354,7 @@ static bool32 FindMonThatAbsorbsOpponentsMove(u32 battler)
         return FALSE;
     if (gBattleStruct->prevTurnSpecies[battler] != gBattleMons[battler].species) // AI mon has changed, player's behaviour no longer reliable; note to override this if using AI_FLAG_PREDICT_MOVE
         return FALSE;
-    if (HasSuperEffectiveMoveAgainstOpponents(battler, TRUE) && RandomPercentage(RNG_AI_SWITCH_ABSORBING, 66))
+    if (CanUseSuperEffectiveMoveAgainstOpponents(battler) && RandomPercentage(RNG_AI_SWITCH_ABSORBING, 66))
         return FALSE;
 
     if (AreStatsRaised(battler))
@@ -412,7 +412,8 @@ static bool32 FindMonThatAbsorbsOpponentsMove(u32 battler)
     {
         absorbingTypeAbilities[numAbsorbingAbilities++] = ABILITY_SAP_SIPPER;
     }
-    else if (gMovesInfo[predictedMove].type == TYPE_GROUND || (isOpposingBattlerChargingOrInvulnerable && gMovesInfo[incomingMove].type == TYPE_GROUND))
+    else if ((gMovesInfo[predictedMove].type == TYPE_GROUND || (isOpposingBattlerChargingOrInvulnerable && gMovesInfo[incomingMove].type == TYPE_GROUND)) 
+              && ((gBattleMons[battler].ability != ABILITY_BONE_ZONE) || (gBattleMons[battler].ability == ABILITY_BONE_ZONE && !gMovesInfo[predictedMove].boneMove)))
     {
         absorbingTypeAbilities[numAbsorbingAbilities++] = ABILITY_EARTH_EATER;
         absorbingTypeAbilities[numAbsorbingAbilities++] = ABILITY_LEVITATE;
@@ -511,7 +512,7 @@ static bool32 ShouldSwitchIfTrapperInParty(u32 battler)
 
         monAbility = GetMonAbility(&party[i]);
 
-        if (CanAbilityTrapOpponent(monAbility, opposingBattler))
+        if (CanAbilityTrapOpponent(monAbility, opposingBattler) || (CanAbilityTrapOpponent(AI_GetBattlerAbility(opposingBattler), opposingBattler) && monAbility == ABILITY_TRACE))
         {
             // If mon in slot i is the most suitable switchin candidate, then it's a trapper than wins 1v1
             if (i == AI_DATA->mostSuitableMonId[battler])
@@ -661,7 +662,7 @@ static bool32 ShouldSwitchIfAbilityBenefit(u32 battler)
     return SetSwitchinAndSwitch(battler, PARTY_SIZE);
 }
 
-static bool32 HasSuperEffectiveMoveAgainstOpponents(u32 battler, bool32 noRng)
+static bool32 CanUseSuperEffectiveMoveAgainstOpponents(u32 battler)
 {
     s32 i;
     u16 move;
@@ -674,15 +675,12 @@ static bool32 HasSuperEffectiveMoveAgainstOpponents(u32 battler, bool32 noRng)
         for (i = 0; i < MAX_MON_MOVES; i++)
         {
             move = gBattleMons[battler].moves[i];
-            if (move == MOVE_NONE)
+            if (move == MOVE_NONE || AI_DoesChoiceItemBlockMove(battler, move))
                 continue;
 
             if (AI_GetMoveEffectiveness(move, battler, opposingBattler) >= AI_EFFECTIVENESS_x2)
             {
-                if (noRng)
-                    return TRUE;
-                if (Random() % 10 != 0)
-                    return TRUE;
+                return TRUE;
             }
         }
     }
@@ -696,15 +694,12 @@ static bool32 HasSuperEffectiveMoveAgainstOpponents(u32 battler, bool32 noRng)
         for (i = 0; i < MAX_MON_MOVES; i++)
         {
             move = gBattleMons[battler].moves[i];
-            if (move == MOVE_NONE)
+            if (move == MOVE_NONE || AI_DoesChoiceItemBlockMove(battler, move))
                 continue;
 
             if (AI_GetMoveEffectiveness(move, battler, opposingBattler) >= AI_EFFECTIVENESS_x2)
             {
-                if (noRng)
-                    return TRUE;
-                if (Random() % 10 != 0)
-                    return TRUE;
+                return TRUE;
             }
         }
     }
@@ -1086,7 +1081,7 @@ bool32 ShouldSwitch(u32 battler)
     // We don't use FindMonWithFlagsAndSuperEffective with AI_FLAG_SMART_SWITCHING, so we can bail early.
     if (AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_SMART_SWITCHING)
         return FALSE;
-    if (HasSuperEffectiveMoveAgainstOpponents(battler, FALSE))
+    if (CanUseSuperEffectiveMoveAgainstOpponents(battler))
         return FALSE;
     if (AreStatsRaised(battler))
         return FALSE;
@@ -1972,7 +1967,8 @@ static u32 GetBestMonIntegrated(struct Pokemon *party, int firstId, int lastId, 
                 }
 
                 // If mon can trap
-                if (CanAbilityTrapOpponent(AI_DATA->switchinCandidate.battleMon.ability, opposingBattler)
+                if ((CanAbilityTrapOpponent(AI_DATA->switchinCandidate.battleMon.ability, opposingBattler)
+                    || (CanAbilityTrapOpponent(AI_GetBattlerAbility(opposingBattler), opposingBattler) && AI_DATA->switchinCandidate.battleMon.ability == ABILITY_TRACE))
                     && CountUsablePartyMons(opposingBattler) > 0
                     && canSwitchinWin1v1)
                     trapperId = i;

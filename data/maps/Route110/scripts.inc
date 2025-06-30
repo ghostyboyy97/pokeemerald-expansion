@@ -1001,9 +1001,9 @@ Route110_EventScript_GiveRestOfItems::
 # 501 "data/maps/Route110/scripts.pory"
 	giveitemfast ITEM_MISTY_SEED, 10
 # 502 "data/maps/Route110/scripts.pory"
-	giveitemfast ITEM_AIR_BALLOON, 10
-# 503 "data/maps/Route110/scripts.pory"
 	giveitemfast ITEM_TERRAIN_EXTENDER, 10
+# 503 "data/maps/Route110/scripts.pory"
+	giveitemfast ITEM_SHED_SHELL, 10
 # 504 "data/maps/Route110/scripts.pory"
 	giveitemfast ITEM_LIGHT_CLAY, 10
 # 505 "data/maps/Route110/scripts.pory"
@@ -1945,11 +1945,11 @@ Route110_Text_RivalExplainRestOfItems::
 # 973 "data/maps/Route110/scripts.pory"
 	.string "Toxic Orbs, Smoke Balls, Thick Clubs,\l"
 # 974 "data/maps/Route110/scripts.pory"
-	.string "Weakness Policies, Air Balloons, Terrain\l"
+	.string "Weakness Policies, Terrain Extenders,\l"
 # 975 "data/maps/Route110/scripts.pory"
-	.string "Extenders, some Terrain Seeds and\l"
+	.string "Shed Shells, Light Clays, and some\l"
 # 976 "data/maps/Route110/scripts.pory"
-	.string "Light Clays.\p"
+	.string "Terrain Seeds.\p"
 # 977 "data/maps/Route110/scripts.pory"
 	.string "Whew, I think that's everything, you\n"
 # 978 "data/maps/Route110/scripts.pory"

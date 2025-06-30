@@ -565,3 +565,6 @@ gSpecials::
 	def_special GetWhiteOutCountForText
 	def_special UseBlankMessageToCancelPokemonPic
 	def_special ForceBattleStyleSetPleaseGod
+	def_special GetNumBadges
+	def_special LevelBoxesToCap
+	def_special HealPlayerPartyNonDead

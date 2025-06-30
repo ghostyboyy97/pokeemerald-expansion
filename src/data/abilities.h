@@ -2510,6 +2510,20 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .aiRating = 8,
     },
 
+    [ABILITY_BONE_ZONE] =
+    {
+        .name = _("Bone Zone"),
+        .description = COMPOUND_STRING("Bone moves have Tinted Lens\nand ignore immunities."),
+        .aiRating = 7,
+    },
+
+    [ABILITY_GRIPPER] =
+    {
+        .name = _("GRIPPER"),
+        .description = COMPOUND_STRING("Contact moves prevent the\nfoe from escaping."),
+        .aiRating = 7,
+    },
+
     
 
 };

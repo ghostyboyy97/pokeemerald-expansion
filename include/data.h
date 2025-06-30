@@ -88,6 +88,7 @@ struct TrainerMon
     u8 padding1:1;
     u8 dynamaxLevel:4;
     u8 padding2:4;
+    u16 preStatus;
 };
 
 #define TRAINER_PARTY(partyArray) partyArray, .partySize = ARRAY_COUNT(partyArray)
@@ -108,6 +109,9 @@ struct Trainer
     /*0x20*/ u8 partySize;
     /*0x21*/ bool8 isBossTrainer:1;
              u8 padding:7;
+             u32 (*partyPickerFunction)(const struct Trainer *trainer);
+             const struct TrainerMon *additionalParties[MAX_ADDITIONAL_TRAINER_PARTIES];
+             u8 additionalPartySizes[MAX_ADDITIONAL_TRAINER_PARTIES];
 };
 
 struct TrainerClass

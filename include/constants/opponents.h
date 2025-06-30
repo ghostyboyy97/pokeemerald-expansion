@@ -68,7 +68,7 @@
 #define TRAINER_LOLA_4                       62
 #define TRAINER_LOLA_5                       63
 #define TRAINER_RICKY_1                      64
-#define TRAINER_SIMON                        65
+#define TRAINER_BRIAN                        65
 #define TRAINER_CHARLIE                      66
 #define TRAINER_RICKY_2                      67
 #define TRAINER_RICKY_3                      68
@@ -76,8 +76,8 @@
 #define TRAINER_RICKY_5                      70
 #define TRAINER_MASTER_POUCINE               71
 #define TRAINER_OBLIVION_WING                72
-#define TRAINER_GEORGE                       73 //unused norman gym
-#define TRAINER_BERKE                        74 //unused norman gym
+#define TRAINER_BRIAN_2                      73
+#define TRAINER_BURAK                        74
 #define TRAINER_BRAXTON                      75
 #define TRAINER_VINCENT                      76
 #define TRAINER_LEROY                        77
@@ -713,7 +713,7 @@
 #define TRAINER_HAYDEN                      707
 #define TRAINER_SOPHIE                      708
 #define TRAINER_COBY                        709
-#define TRAINER_CANDICE                     710
+#define TRAINER_ROARK                       710
 #define TRAINER_BYRON                       711
 #define TRAINER_VOLKNER                     712
 #define TRAINER_KAI                         713
@@ -854,7 +854,7 @@
 #define TRAINER_MARIELA                     848
 #define TRAINER_ALVARO                      849
 #define TRAINER_EVERETT                     850
-#define TRAINER_ROARK                       851
+#define TRAINER_CANDICE                     851
 #define TRAINER_GARDENIA                    852
 #define TRAINER_BRENDAN_PLACEHOLDER         853
 #define TRAINER_MAY_PLACEHOLDER             854

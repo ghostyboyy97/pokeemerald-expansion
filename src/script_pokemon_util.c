@@ -34,6 +34,10 @@ static void CB2_ReturnFromChooseBattleFrontierParty(void);
 static u16 PickWaterStarterEgg(void);
 static u16 PickGrassStarterEgg(void);
 static u16 PickFireStarterEgg(void);
+static u16 PickOldaleEgg(void);
+static u16 PickPseudoEgg(void);
+static u16 PickSingleStageEgg(void);
+
 static void HealPlayerBoxes(void);
 
 void HealPlayerParty(void)
@@ -65,6 +69,23 @@ static void HealPlayerBoxes(void)
     }
 }
 
+void HealPlayerPartyNonDead(void)
+{
+    u32 i;
+    for (i = 0; i < gPlayerPartyCount; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_HP) != 0)
+            HealPokemon(&gPlayerParty[i]);
+    }
+        
+    if (OW_PC_HEAL >= GEN_8)
+        HealPlayerBoxes();
+
+    // Recharge Tera Orb, if possible.
+    if (B_FLAG_TERA_ORB_CHARGED != 0 && CheckBagHasItem(ITEM_TERA_ORB, 1))
+        FlagSet(B_FLAG_TERA_ORB_CHARGED);
+}
+
 u8 ScriptGiveEgg(u16 species)
 {
     struct Pokemon mon;
@@ -82,6 +103,18 @@ u8 ScriptGiveEgg(u16 species)
     else if(species == SPECIES_CHARMANDER)
     {
         species = PickFireStarterEgg();
+    }
+    else if(species == SPECIES_SENTRET)
+    {
+        species = PickOldaleEgg();
+    }
+    else if(species == SPECIES_DRATINI)
+    {
+        species = PickPseudoEgg();
+    }
+    else if(species == SPECIES_KLAWF)
+    {
+        species = PickSingleStageEgg();
     }
 
     #if RANDOMIZER_AVAILABLE == TRUE
@@ -146,6 +179,56 @@ static u16 PickFireStarterEgg(void)
     pokes[6] = SPECIES_LITTEN;
     pokes[7] = SPECIES_SCORBUNNY;
     pokes[8] = SPECIES_FUECOCO;
+    return pokes[rand];
+}
+
+static u16 PickOldaleEgg(void)
+{
+    u16 pokes[10];
+    u16 rand = Random() % 10;
+    pokes[0] = SPECIES_SENTRET;
+    pokes[1] = SPECIES_JIGGLYPUFF;
+    pokes[2] = SPECIES_KRICKETOT;
+    pokes[3] = SPECIES_CUBONE;
+    pokes[4] = SPECIES_PANCHAM;
+    pokes[5] = SPECIES_YAMPER;
+    pokes[6] = SPECIES_ROCKRUFF;
+    pokes[7] = SPECIES_SNORUNT;
+    pokes[8] = SPECIES_SPOINK;
+    pokes[9] = SPECIES_VAROOM;
+    return pokes[rand];
+}
+
+static u16 PickPseudoEgg(void)
+{
+    u16 pokes[10];
+    u16 rand = Random() % 10;
+    pokes[0] = SPECIES_DRATINI;
+    pokes[1] = SPECIES_LARVITAR;
+    pokes[2] = SPECIES_BAGON;
+    pokes[3] = SPECIES_BELDUM;
+    pokes[4] = SPECIES_GIBLE;
+    pokes[5] = SPECIES_DEINO;
+    pokes[6] = SPECIES_GOOMY;
+    pokes[7] = SPECIES_JANGMO_O;
+    pokes[8] = SPECIES_DREEPY;
+    pokes[9] = SPECIES_FRIGIBAX;
+    return pokes[rand];
+}
+
+static u16 PickSingleStageEgg(void)
+{
+    u16 pokes[9];
+    u16 rand = Random() % 9;
+    pokes[0] = SPECIES_TAUROS;
+    pokes[1] = SPECIES_DELIBIRD;
+    pokes[2] = SPECIES_TROPIUS;
+    pokes[3] = SPECIES_SPIRITOMB;
+    pokes[4] = SPECIES_HEATMOR;
+    pokes[5] = SPECIES_DEDENNE;
+    pokes[6] = SPECIES_BRUXISH;
+    pokes[7] = SPECIES_FALINKS;
+    pokes[8] = SPECIES_KLAWF;
     return pokes[rand];
 }
 

@@ -12392,7 +12392,7 @@ const struct Item gItemsInfo[] =
         .iconPalette = gItemIconPalette_FightingTMHM,
     },
 
-    [ITEM_TM169] =
+    [ITEM_TM_SPIKES] =
     {
         .name = _("TM169"),
         .price = 100,
@@ -12401,12 +12401,12 @@ const struct Item gItemsInfo[] =
         .pocket = POCKET_TM_HM,
         .type = ITEM_USE_PARTY_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_TMHM,
-        .secondaryId = MOVE_NONE, // Todo
+        .secondaryId = MOVE_SPIKES,
         .iconPic = gItemIcon_TM,
-        .iconPalette = gItemIconPalette_NormalTMHM,
+        .iconPalette = gItemIconPalette_GroundTMHM,
     },
 
-    [ITEM_TM170] =
+    [ITEM_TM_STEEL_BEAM] =
     {
         .name = _("TM170"),
         .price = 100,
@@ -12415,12 +12415,12 @@ const struct Item gItemsInfo[] =
         .pocket = POCKET_TM_HM,
         .type = ITEM_USE_PARTY_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_TMHM,
-        .secondaryId = MOVE_NONE, // Todo
+        .secondaryId = MOVE_STEEL_BEAM,
         .iconPic = gItemIcon_TM,
-        .iconPalette = gItemIconPalette_NormalTMHM,
+        .iconPalette = gItemIconPalette_SteelTMHM,
     },
 
-    [ITEM_TM171] =
+    [ITEM_TM_DRACO_BARRAGE] =
     {
         .name = _("TM171"),
         .price = 100,
@@ -12429,12 +12429,12 @@ const struct Item gItemsInfo[] =
         .pocket = POCKET_TM_HM,
         .type = ITEM_USE_PARTY_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_TMHM,
-        .secondaryId = MOVE_NONE, // Todo
+        .secondaryId = MOVE_DRACO_BARRAGE,
         .iconPic = gItemIcon_TM,
-        .iconPalette = gItemIconPalette_NormalTMHM,
+        .iconPalette = gItemIconPalette_DragonTMHM,
     },
 
-    [ITEM_TM172] =
+    [ITEM_TM_HEAVY_SLAM] =
     {
         .name = _("TM172"),
         .price = 100,
@@ -12443,12 +12443,12 @@ const struct Item gItemsInfo[] =
         .pocket = POCKET_TM_HM,
         .type = ITEM_USE_PARTY_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_TMHM,
-        .secondaryId = MOVE_NONE, // Todo
+        .secondaryId = MOVE_HEAVY_SLAM,
         .iconPic = gItemIcon_TM,
-        .iconPalette = gItemIconPalette_NormalTMHM,
+        .iconPalette = gItemIconPalette_SteelTMHM,
     },
 
-    [ITEM_TM173] =
+    [ITEM_TM_GRAVITY] =
     {
         .name = _("TM173"),
         .price = 100,
@@ -12457,9 +12457,9 @@ const struct Item gItemsInfo[] =
         .pocket = POCKET_TM_HM,
         .type = ITEM_USE_PARTY_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_TMHM,
-        .secondaryId = MOVE_NONE, // Todo
+        .secondaryId = MOVE_GRAVITY,
         .iconPic = gItemIcon_TM,
-        .iconPalette = gItemIconPalette_NormalTMHM,
+        .iconPalette = gItemIconPalette_PsychicTMHM,
     },
 
     [ITEM_TM174] =
@@ -16222,4 +16222,21 @@ const struct Item gItemsInfo[] =
         .iconPic = gItemIcon_Sablenite,
         .iconPalette = gItemIconPalette_Sablenite,
     },
+// Start hexorb branch
+    [ITEM_HEX_ORB] =
+    {
+        .name = _("Hex Orb"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "A purple orb\n"
+            "said to contain a\n"
+            "cursed power."),
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_Hexorb,
+        .effect = gItemEffect_Hexorb,
+        .iconPic = gItemIcon_Hexorb,
+        .iconPalette = gItemIconPalette_Hexorb,
+    },
+// End hexorb Branch
 };

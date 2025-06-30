@@ -647,6 +647,7 @@ static const u8 sText_IceBodyHpGain[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_ATK_ABI
 static const u8 sText_SnowWarningHail[] = _("It started to hail!");
 static const u8 sText_SnowWarningSnow[] = _("It started to snow!");
 static const u8 sText_FriskActivates[] = _("{B_ATK_NAME_WITH_PREFIX} frisked {B_DEF_NAME_WITH_PREFIX2} and found its {B_LAST_ITEM}!");
+static const u8 sText_GripperActivates[] = _("{B_ATK_NAME_WITH_PREFIX} got a grip on {B_DEF_NAME_WITH_PREFIX}, it can no longer escape!");
 static const u8 sText_UnnerveEnters[] = _("{B_DEF_TEAM1} team is too nervous to eat Berries!");
 static const u8 sText_HarvestBerry[] = _("{B_ATK_NAME_WITH_PREFIX} harvested its {B_LAST_ITEM}!");
 static const u8 sText_LastAbilityRaisedBuff1[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_LAST_ABILITY} raised its {B_BUFF1}!");
@@ -1591,6 +1592,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_SEEMSWEIRD - BATTLESTRINGS_TABLE_START] = sText_SeemsWeird,
     [STRINGID_WAGGLINGAFINGER - BATTLESTRINGS_TABLE_START] = sText_WagglingAFinger,
     [STRINGID_BLOCKEDBYSLEEPCLAUSE - BATTLESTRINGS_TABLE_START] = sText_BlockedBySleepClause,
+    [STRINGID_GRIPPERACTIVATES - BATTLESTRINGS_TABLE_START] = sText_GripperActivates,
 };
 
 const u16 gTrainerUsedItemStringIds[] =
@@ -2122,7 +2124,10 @@ const u8 gText_BattleMenu[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW DYNAMIC_COLO
 const u8 gText_BattleMenu2[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW DYNAMIC_COLOR4 DYNAMIC_COLOR5 DYNAMIC_COLOR6}Fight{CLEAR_TO 56}{COLOR 00}Bag\n{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW DYNAMIC_COLOR4 DYNAMIC_COLOR5 DYNAMIC_COLOR6}Pokémon{CLEAR_TO 56}Run");
 const u8 gText_SafariZoneMenu[] = _("Ball{CLEAR_TO 56}{POKEBLOCK}\nGo Near{CLEAR_TO 56}Run");
 const u8 gText_MoveInterfacePP[] = _("PP ");
-const u8 gText_MoveInterfaceType[] = _("TYPE/");
+const u8 gText_MoveInterfaceType[] = _("");
+const u8 gText_MoveInterfaceTypeSE[] = _("  {COLOR 09}{UP_ARROW_2}");
+const u8 gText_MoveInterfaceTypeNVE[] = _("  {COLOR 10}{DOWN_ARROW_2}");
+const u8 gText_MoveInterfaceTypeImmune[] = _("  {COLOR 01}{BIG_MULT_X}");
 const u8 gText_MoveInterfacePpType[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW DYNAMIC_COLOR4 DYNAMIC_COLOR5 DYNAMIC_COLOR6}PP\nTYPE/");
 const u8 gText_MoveInterfaceDynamicColors[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW DYNAMIC_COLOR4 DYNAMIC_COLOR5 DYNAMIC_COLOR6}");
 const u8 gText_WhichMoveToForget4[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW DYNAMIC_COLOR4 DYNAMIC_COLOR5 DYNAMIC_COLOR6}Which move should\nbe forgotten?");

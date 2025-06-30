@@ -2,6 +2,7 @@
 #define GUARD_ITEM_USE_H
 
 extern const u8 PokeVialHealScript[];
+extern const u8 PokeVialHealScript2[];
 void ItemUseOutOfBattle_Mail(u8);
 void ItemUseOutOfBattle_Bike(u8);
 void ItemUseOutOfBattle_Rod(u8);
@@ -66,5 +67,6 @@ enum {
 
 bool32 CanThrowBall(void);
 bool32 CannotUseItemsInBattle(u16 itemId, struct Pokemon *mon);
+void ItemUseOutOfBattle_Hexorb(u8); // Hexorb
 
 #endif // GUARD_ITEM_USE_H
