@@ -189,6 +189,7 @@ enum RandomTag
     RNG_HEALER,
     RNG_AI_SWITCH_ALL_SCORES_BAD,
     RNG_AI_CONSIDER_FOCUS_PUNCH,
+    RNG_AI_SWITCH_WONDER_GUARD,
 };
 
 #define RandomWeighted(tag, ...) \
