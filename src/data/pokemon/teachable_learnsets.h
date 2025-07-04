@@ -30465,6 +30465,7 @@ static const u16 sMagearnaTeachableLearnset[] = {
     MOVE_HEAVY_SLAM,
     MOVE_GRAVITY,
     MOVE_MISTY_EXPLOSION,
+    MOVE_DRAINING_KISS,
     MOVE_UNAVAILABLE,
 };
 #endif //P_FAMILY_MAGEARNA
