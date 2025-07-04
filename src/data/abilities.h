@@ -1932,7 +1932,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_SCREEN_CLEANER] =
     {
         .name = _("Screen Cleaner"),
-        .description = COMPOUND_STRING("Screens are remove\non entry."),
+        .description = COMPOUND_STRING("Screens are removed\non entry."),
         .aiRating = 3,
     },
 
