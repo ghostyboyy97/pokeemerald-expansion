@@ -652,7 +652,6 @@ struct BattleStruct
     u32 expValue;
     u8 expGettersOrder[PARTY_SIZE]; // First battlers which were sent out, then via exp-share
     u8 expGetterMonId;
-    u8 hasBattleInputStarted:1; // Speed up battle
     u8 expOrderId:3;
     u8 expGetterBattlerId:2;
     u8 teamGotExpMsgPrinted:1; // The 'Rest of your team got msg' has been printed.
@@ -839,6 +838,7 @@ struct BattleStruct
     u8 sleepClauseEffectExempt:4; // Stores whether effect should be exempt from triggering Sleep Clause (Effect Spore)
     u8 usedMicleBerry:4;
     u16 prevTurnSpecies[MAX_BATTLERS_COUNT]; // Stores species the AI has in play at start of turn
+    u8 hasBattleInputStarted:1; // Speed up battle
 };
 
 // The palaceFlags member of struct BattleStruct contains 1 flag per move to indicate which moves the AI should consider,
