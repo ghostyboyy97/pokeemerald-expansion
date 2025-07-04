@@ -1203,6 +1203,10 @@ static void Cmd_attackcanceler(void)
         if (moveType == TYPE_FIRE && (gBattleWeather & B_WEATHER_RAIN_PRIMAL))
         {
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PRIMAL_WEATHER_FIZZLED_BY_RAIN;
+            gBattleScripting.moveEffect = 0;
+            gProtectStructs[gBattlerAttacker].chargingTurn = FALSE;
+            CancelMultiTurnMoves(gBattlerAttacker);
+            gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
             BattleScriptPushCursor();
             gBattlescriptCurrInstr = BattleScript_PrimalWeatherBlocksMove;
             return;
@@ -1210,6 +1214,10 @@ static void Cmd_attackcanceler(void)
         else if (moveType == TYPE_WATER && (gBattleWeather & B_WEATHER_SUN_PRIMAL))
         {
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PRIMAL_WEATHER_EVAPORATED_IN_SUN;
+            gBattleScripting.moveEffect = 0;
+            gProtectStructs[gBattlerAttacker].chargingTurn = FALSE;
+            CancelMultiTurnMoves(gBattlerAttacker);
+            gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
             BattleScriptPushCursor();
             gBattlescriptCurrInstr = BattleScript_PrimalWeatherBlocksMove;
             return;
