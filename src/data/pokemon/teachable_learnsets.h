@@ -8394,6 +8394,7 @@ static const u16 sMeganiumTeachableLearnset[] = {
     MOVE_SUNNY_DAY,
     MOVE_SOLAR_BEAM,
     MOVE_SOLAR_BLADE,
+    MOVE_MOONBLAST,
     MOVE_UNAVAILABLE,
 };
 #endif //P_FAMILY_CHIKORITA
