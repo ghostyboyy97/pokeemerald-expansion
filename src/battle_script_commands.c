@@ -5925,6 +5925,7 @@ static void Cmd_moveend(void)
                 effect = TRUE;
             }
             if (gBattleMons[gBattlerTarget].status1 & STATUS1_FROSTBITE
+                && TARGET_TURN_DAMAGED
                 && IsBattlerAlive(gBattlerTarget)
                 && gBattlerAttacker != gBattlerTarget
                 && gMovesInfo[originallyUsedMove].thawsUser

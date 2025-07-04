@@ -95,3 +95,17 @@ SINGLE_BATTLE_TEST("Frostbite is healed when the user uses a thawing move")
         }
    }
 }
+
+SINGLE_BATTLE_TEST("Defrost: Scald does not thaw targets if user is asleep")
+{
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { Status1(STATUS1_FROSTBITE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Status1(STATUS1_SLEEP_TURN(3)); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SCALD); MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        NOT ANIMATION(ANIM_TYPE_MOVE, MOVE_SCALD, opponent);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, player);
+        HP_BAR(player);
+    }
+}
