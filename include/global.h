@@ -558,7 +558,6 @@ struct SaveBlock2
     /*0x64C*/ struct BattleFrontier frontier;
     /*0xF2C*/ bool8 autoRun;
               struct Time fakeRTC;
-              u16 optionsBattleSpeed:2; // OPTIONS_BATTLE_SPEED_[1x/2x/3x/4x]
 }; // sizeof=0xF2C
 //from debug as of 3/4/2024 before any space changes: 3884b/3968b; free space, 84b.
 //after changing SECTOR_DATA_SIZE -> 4084: 3884b/4084b; free space: 200b.

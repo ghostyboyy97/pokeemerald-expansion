@@ -27,6 +27,7 @@
 #define tButtonMode data[5]
 #define tWindowFrameType data[6]
 #define tBattleSpeed data[7]
+#define tHPBarSpeed data[8]
 
 // Page 1
 enum
@@ -46,6 +47,7 @@ enum
 enum
 {
     MENUITEM_BATTLESPEED,
+    MENUITEM_HP_BARS,
     MENUITEM_CANCEL_PG2,
     MENUITEM_COUNT_PG2,
 };
@@ -66,6 +68,7 @@ enum
 
 // Page 2
 #define YPOS_BATTLESPEED      (MENUITEM_BATTLESPEED * 16)
+#define YPOS_HPBARSPEED      (MENUITEM_HP_BARS * 16)
 
 #define PAGE_COUNT 2
 
@@ -90,6 +93,8 @@ static u8 ButtonMode_ProcessInput(u8 selection);
 static void ButtonMode_DrawChoices(u8 selection);
 static u8   BattleSpeed_ProcessInput(u8 selection);
 static void BattleSpeed_DrawChoices(u8 selection);
+static u8   HPBarSpeed_ProcessInput(u8 selection);
+static void HPBarSpeed_DrawChoices(u8 selection);
 static void DrawHeaderText(void);
 static void DrawOptionMenuTexts(void);
 static void DrawBgWindowFrames(void);
@@ -115,6 +120,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
 static const u8 *const sOptionMenuItemsNames_Pg2[MENUITEM_COUNT_PG2] =
 {
     [MENUITEM_BATTLESPEED]     = gText_BattleSpeed,
+    [MENUITEM_HP_BARS]         = gText_HPBars,
     [MENUITEM_CANCEL_PG2]      = gText_OptionMenuCancel,
 };
 
@@ -189,7 +195,8 @@ static void ReadAllCurrentSettings(u8 taskId)
     gTasks[taskId].tSound = gSaveBlock2Ptr->optionsSound;
     gTasks[taskId].tButtonMode = gSaveBlock2Ptr->optionsButtonMode;
     gTasks[taskId].tWindowFrameType = gSaveBlock2Ptr->optionsWindowFrameType;
-    gTasks[taskId].tBattleSpeed = gSaveBlock2Ptr->optionsBattleSpeed;
+    gTasks[taskId].tBattleSpeed = VarGet(VAR_BATTLE_SPEED);
+    gTasks[taskId].tHPBarSpeed = VarGet(VAR_HP_BAR_SPEED);
 }
 
 static void DrawOptionsPg1(u8 taskId)
@@ -209,6 +216,7 @@ static void DrawOptionsPg2(u8 taskId)
 {
     ReadAllCurrentSettings(taskId);
     BattleSpeed_DrawChoices(gTasks[taskId].tBattleSpeed);
+    HPBarSpeed_DrawChoices(gTasks[taskId].tHPBarSpeed);
     HighlightOptionMenuItem(gTasks[taskId].tMenuSelection);
     CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }
@@ -500,7 +508,14 @@ static void Task_OptionMenuProcessInput_Pg2(u8 taskId)
 
             if (previousOption != gTasks[taskId].tBattleSpeed)
                 BattleSpeed_DrawChoices(gTasks[taskId].tBattleSpeed);
-            break;   
+            break;
+        case MENUITEM_HP_BARS:
+            previousOption = gTasks[taskId].tHPBarSpeed;
+            gTasks[taskId].tHPBarSpeed = HPBarSpeed_ProcessInput(gTasks[taskId].tHPBarSpeed);
+
+            if (previousOption != gTasks[taskId].tHPBarSpeed)
+                HPBarSpeed_DrawChoices(gTasks[taskId].tHPBarSpeed);
+            break;
         default:
             return;
         }
@@ -520,8 +535,8 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->optionsSound = gTasks[taskId].tSound;
     gSaveBlock2Ptr->optionsButtonMode = gTasks[taskId].tButtonMode;
     gSaveBlock2Ptr->optionsWindowFrameType = gTasks[taskId].tWindowFrameType;
-    gSaveBlock2Ptr->optionsBattleSpeed = gTasks[taskId].tBattleSpeed;
-
+    VarSet(VAR_BATTLE_SPEED, gTasks[taskId].tBattleSpeed);
+    VarSet(VAR_HP_BAR_SPEED, gTasks[taskId].tHPBarSpeed);
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
     gTasks[taskId].func = Task_OptionMenuFadeOut;
 }
@@ -579,6 +594,18 @@ static u8 BattleSpeed_ProcessInput(u8 selection)
     return selection;
 }
 
+static u8 HPBarSpeed_ProcessInput(u8 selection)
+{
+    if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
+    {
+        selection ^= 1;
+        sArrowPressed = TRUE;
+    }
+    // Update the hp bar speed variable based on the selection
+    VarSet(VAR_HP_BAR_SPEED, selection);
+    return selection;
+}
+
 static void BattleSpeed_DrawChoices(u8 selection)
 {
     u8 styles[4];
@@ -595,6 +622,18 @@ static void BattleSpeed_DrawChoices(u8 selection)
     DrawOptionMenuChoice(gText_BattleSpeed2x, 104 + xSpacer, YPOS_BATTLESPEED, styles[1]);
     DrawOptionMenuChoice(gText_BattleSpeed3x, 104 + 2 * xSpacer, YPOS_BATTLESPEED, styles[2]);
     DrawOptionMenuChoice(gText_BattleSpeed4x, GetStringRightAlignXOffset(1, gText_BattleSpeed4x, 198), YPOS_BATTLESPEED, styles[3]);
+}
+
+static void HPBarSpeed_DrawChoices(u8 selection)
+{
+    u8 styles[2];
+
+    styles[0] = 0;
+    styles[1] = 0;
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(gText_HPBarSpeedSlow, 104, YPOS_HPBARSPEED, styles[0]);
+    DrawOptionMenuChoice(gText_HPBarSpeedFast, GetStringRightAlignXOffset(FONT_NORMAL, gText_HPBarSpeedFast, 198), YPOS_HPBARSPEED, styles[1]);
 }
 
 

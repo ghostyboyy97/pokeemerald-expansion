@@ -34,6 +34,7 @@
 #include "constants/songs.h"
 #include "constants/items.h"
 #include "caps.h"
+#include "event_data.h"
 
 enum
 {   // Corresponds to gHealthboxElementsGfxTable (and the tables after it) in graphics.c
@@ -2065,11 +2066,12 @@ s32 MoveBattleBar(u8 battlerId, u8 healthboxSpriteId, u8 whichBar, u8 unused)
     {
         if (whichBar == HEALTH_BAR) // health bar
         {
+            u16 hpFraction = VarGet(B_FAST_HP_DRAIN) == 0 ? 1 : max(gBattleSpritesDataPtr->battleBars[battlerId].maxValue / (B_HEALTHBAR_PIXELS / 2), 1);
             currentBarValue = CalcNewBarValue(gBattleSpritesDataPtr->battleBars[battlerId].maxValue,
                         gBattleSpritesDataPtr->battleBars[battlerId].oldValue,
                         gBattleSpritesDataPtr->battleBars[battlerId].receivedValue,
                         &gBattleSpritesDataPtr->battleBars[battlerId].currValue,
-                        B_HEALTHBAR_PIXELS / 8, 1);
+                        B_HEALTHBAR_PIXELS / 8, hpFraction);
         }
         else // exp bar
         {
