@@ -1270,6 +1270,7 @@ const u8 gText_Frame[] = _("FRAME");
 const u8 gText_OptionMenuCancel[] = _("Cancel");
 const u8 gText_ButtonMode[] = _("BUTTON MODE");
 const u8 gText_HPBars[] = _("HP BARS");
+const u8 gText_RToRun[] = _("R TO RUN");
 const u8 gText_HPBarSpeedSlow[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Slow");
 const u8 gText_HPBarSpeedFast[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Fast");
 const u8 gText_BattleSpeed[] = _("BATTLE SPEED");

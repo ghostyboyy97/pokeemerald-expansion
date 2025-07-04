@@ -28,6 +28,7 @@
 #define tWindowFrameType data[6]
 #define tBattleSpeed data[7]
 #define tHPBarSpeed data[8]
+#define tRToRun data[9]
 
 // Page 1
 enum
@@ -48,6 +49,7 @@ enum
 {
     MENUITEM_BATTLESPEED,
     MENUITEM_HP_BARS,
+    MENUITEM_R_TO_RUN,
     MENUITEM_CANCEL_PG2,
     MENUITEM_COUNT_PG2,
 };
@@ -68,7 +70,8 @@ enum
 
 // Page 2
 #define YPOS_BATTLESPEED      (MENUITEM_BATTLESPEED * 16)
-#define YPOS_HPBARSPEED      (MENUITEM_HP_BARS * 16)
+#define YPOS_HPBARSPEED       (MENUITEM_HP_BARS * 16)
+#define YPOS_RTORUN           (MENUITEM_R_TO_RUN * 16)
 
 #define PAGE_COUNT 2
 
@@ -95,6 +98,8 @@ static u8   BattleSpeed_ProcessInput(u8 selection);
 static void BattleSpeed_DrawChoices(u8 selection);
 static u8   HPBarSpeed_ProcessInput(u8 selection);
 static void HPBarSpeed_DrawChoices(u8 selection);
+static u8   RToRun_ProcessInput(u8 selection);
+static void RToRun_DrawChoices(u8 selection);
 static void DrawHeaderText(void);
 static void DrawOptionMenuTexts(void);
 static void DrawBgWindowFrames(void);
@@ -121,6 +126,7 @@ static const u8 *const sOptionMenuItemsNames_Pg2[MENUITEM_COUNT_PG2] =
 {
     [MENUITEM_BATTLESPEED]     = gText_BattleSpeed,
     [MENUITEM_HP_BARS]         = gText_HPBars,
+    [MENUITEM_R_TO_RUN]        = gText_RToRun,
     [MENUITEM_CANCEL_PG2]      = gText_OptionMenuCancel,
 };
 
@@ -197,6 +203,7 @@ static void ReadAllCurrentSettings(u8 taskId)
     gTasks[taskId].tWindowFrameType = gSaveBlock2Ptr->optionsWindowFrameType;
     gTasks[taskId].tBattleSpeed = VarGet(VAR_BATTLE_SPEED);
     gTasks[taskId].tHPBarSpeed = VarGet(VAR_HP_BAR_SPEED);
+    gTasks[taskId].tRToRun = FlagGet(FLAG_DISABLE_R_TO_RUN);
 }
 
 static void DrawOptionsPg1(u8 taskId)
@@ -217,6 +224,7 @@ static void DrawOptionsPg2(u8 taskId)
     ReadAllCurrentSettings(taskId);
     BattleSpeed_DrawChoices(gTasks[taskId].tBattleSpeed);
     HPBarSpeed_DrawChoices(gTasks[taskId].tHPBarSpeed);
+    RToRun_DrawChoices(gTasks[taskId].tRToRun);
     HighlightOptionMenuItem(gTasks[taskId].tMenuSelection);
     CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }
@@ -516,6 +524,13 @@ static void Task_OptionMenuProcessInput_Pg2(u8 taskId)
             if (previousOption != gTasks[taskId].tHPBarSpeed)
                 HPBarSpeed_DrawChoices(gTasks[taskId].tHPBarSpeed);
             break;
+        case MENUITEM_R_TO_RUN:
+            previousOption = gTasks[taskId].tRToRun;
+            gTasks[taskId].tRToRun = RToRun_ProcessInput(gTasks[taskId].tRToRun);
+
+            if (previousOption != gTasks[taskId].tRToRun)
+                RToRun_DrawChoices(gTasks[taskId].tRToRun);
+            break;
         default:
             return;
         }
@@ -606,6 +621,18 @@ static u8 HPBarSpeed_ProcessInput(u8 selection)
     return selection;
 }
 
+static u8 RToRun_ProcessInput(u8 selection)
+{
+    if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
+    {
+        selection ^= 1;
+        sArrowPressed = TRUE;
+        // Update the R to run variable
+        FlagToggle(FLAG_DISABLE_R_TO_RUN);
+    }
+    return selection;
+}
+
 static void BattleSpeed_DrawChoices(u8 selection)
 {
     u8 styles[4];
@@ -634,6 +661,18 @@ static void HPBarSpeed_DrawChoices(u8 selection)
 
     DrawOptionMenuChoice(gText_HPBarSpeedSlow, 104, YPOS_HPBARSPEED, styles[0]);
     DrawOptionMenuChoice(gText_HPBarSpeedFast, GetStringRightAlignXOffset(FONT_NORMAL, gText_HPBarSpeedFast, 198), YPOS_HPBARSPEED, styles[1]);
+}
+
+static void RToRun_DrawChoices(u8 selection)
+{
+    u8 styles[2];
+
+    styles[0] = 0;
+    styles[1] = 0;
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(gText_BattleSceneOn, 104, YPOS_RTORUN, styles[0]);
+    DrawOptionMenuChoice(gText_BattleSceneOff, GetStringRightAlignXOffset(FONT_NORMAL, gText_BattleSceneOff, 198), YPOS_RTORUN, styles[1]);
 }
 
 

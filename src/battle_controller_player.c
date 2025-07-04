@@ -413,7 +413,7 @@ static void HandleInputChooseAction(u32 battler)
     {
         SwapHpBarsWithHpText();
     }
-    else if (JOY_NEW(R_BUTTON))
+    else if (JOY_NEW(R_BUTTON) && !FlagGet(FLAG_DISABLE_R_TO_RUN))
     {
         if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
         {

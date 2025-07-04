@@ -288,5 +288,8 @@ EventScript_ResetAllMapFlags::
 	setvar VAR_HOT_HOUSE_STATE, 0
 	setvar VAR_ENTERING_HOT_HOUSE, 0
 	setvar VAR_LEAVING_HOT_HOUSE, 0
+	setvar VAR_BATTLE_SPEED, 1
+    setvar VAR_HP_BAR_SPEED, 0
+	setflag FLAG_DISABLE_R_TO_RUN
 	call EventScript_ResetAllBerries
 	end

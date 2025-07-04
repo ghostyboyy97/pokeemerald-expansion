@@ -292,6 +292,7 @@ extern const u8 gText_BattleSpeed4x[];
 extern const u8 gText_HPBarSpeedSlow[];
 extern const u8 gText_HPBarSpeedFast[];
 extern const u8 gText_HPBars[];
+extern const u8 gText_RToRun[];
 extern const u8 gText_SmallDot[];
 extern const u8 gText_LargeDot[];
 extern const u8 gText_PageNav[];
