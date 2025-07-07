@@ -1004,9 +1004,6 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
             if (PartnerMoveActivatesSleepClause(aiData->partnerMove))
                 ADJUST_SCORE(-20);
             break;
-        case EFFECT_EXPLOSION:
-            if (!(AI_THINKING_STRUCT->aiFlags[battlerAtk] & AI_FLAG_WILL_SUICIDE))
-                ADJUST_SCORE(-2);
 
             if (effectiveness == UQ_4_12(0.0))
             {
@@ -2641,7 +2638,14 @@ static s32 AI_TryToFaint(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
     if (IS_MOVE_STATUS(move))
         return score; // status moves aren't accounted here
 
-    if (CanIndexMoveFaintTarget(battlerAtk, battlerDef, movesetIndex, AI_ATTACKING_ON_FIELD) && gMovesInfo[move].effect != EFFECT_EXPLOSION)
+    // If it is not an explosion move 
+    // OR it is in an explosion move AND
+    // we get a random number based on the remaining HP of the AI attacker
+    bool8 canIgnoreExplosionEffect = ((gMovesInfo[move].effect != EFFECT_EXPLOSION)
+                                    || (gMovesInfo[move].effect == EFFECT_EXPLOSION
+                                        && AI_RandLessThan(GetAIExplosionChanceFromHP(AI_DATA->hpPercents[battlerAtk]))));
+
+    if (CanIndexMoveFaintTarget(battlerAtk, battlerDef, movesetIndex, AI_ATTACKING_ON_FIELD) && canIgnoreExplosionEffect)
     {
         //if (CanIndexMoveGuaranteeFaintTarget(battlerAtk, battlerDef, movesetIndex))
         //    ADJUST_SCORE(1); // Bonus point if the KO is guaranteed
@@ -3265,14 +3269,14 @@ static u32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move)
         break;
     case EFFECT_EXPLOSION:
     case EFFECT_MEMENTO:
-        if (AI_THINKING_STRUCT->aiFlags[battlerAtk] & AI_FLAG_WILL_SUICIDE && gBattleMons[battlerDef].statStages[STAT_EVASION] < 7)
+        if (gBattleMons[battlerDef].statStages[STAT_EVASION] < 7)
         {
-            if (aiData->hpPercents[battlerAtk] < 50 && AI_RandLessThan(128))
+            if (AI_RandLessThan(GetAIExplosionChanceFromHP(AI_DATA->hpPercents[battlerAtk])))
                 ADJUST_SCORE(DECENT_EFFECT);
         }
         break;
     case EFFECT_FINAL_GAMBIT:
-        if (AI_THINKING_STRUCT->aiFlags[battlerAtk] & AI_FLAG_WILL_SUICIDE)
+        if (aiData->hpPercents[battlerAtk] > 60 && AI_RandLessThan(128))
             ADJUST_SCORE(DECENT_EFFECT);
         break;
     case EFFECT_MIRROR_MOVE:

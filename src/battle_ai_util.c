@@ -67,6 +67,22 @@ u32 GetAIChosenMove(u32 battlerId)
     return (gBattleMons[battlerId].moves[gBattleStruct->aiMoveOrAction[battlerId]]);
 }
 
+// This function is meant to be used in tandem with
+// AI_RandLessThan
+// Lower HP means higher % chance to explode
+// hp 10% -> 229/255 -> ~90% chance to return TRUE from AI_RandLessThan
+// hp 50% -> ~57% chance
+// hp 89% -> ~2.8% chance
+// hp 90%+ 0/255-> 0% chance to return TRUE from AI_RandLessThan
+u32 GetAIExplosionChanceFromHP(u32 hpPercent)
+{
+    if (hpPercent >= 90)
+        return 0;
+    if (hpPercent <= 10)
+        return 229; // ~90% of 255
+    return (90 - hpPercent) * 229 / 80;
+}
+
 bool32 AI_RandLessThan(u32 val)
 {
     if ((Random() % 0xFF) < val)
@@ -936,14 +952,14 @@ static bool32 AI_IsMoveEffectInMinus(u32 battlerAtk, u32 battlerDef, u32 move, s
 
     switch (gMovesInfo[move].effect)
     {
-    case EFFECT_MAX_HP_50_RECOIL:
-    case EFFECT_MIND_BLOWN:
+        case EFFECT_MAX_HP_50_RECOIL:
+        case EFFECT_MIND_BLOWN:
             if (AI_IsDamagedByRecoil(battlerAtk, FALSE))
                 return TRUE;
             break;
     case EFFECT_EXPLOSION:
     case EFFECT_FINAL_GAMBIT:
-        return TRUE;
+            return TRUE;
     case EFFECT_RECOIL_IF_MISS:
         if (abilityAtk != ABILITY_MAGIC_GUARD)
             return TRUE;

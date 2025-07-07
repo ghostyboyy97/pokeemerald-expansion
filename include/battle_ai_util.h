@@ -41,6 +41,7 @@ static inline bool32 IsMoveUnusable(u32 moveIndex, u32 move, u32 moveLimitations
 
 bool32 AI_IsFaster(u32 battlerAi, u32 battlerDef, u32 move);
 bool32 AI_IsSlower(u32 battlerAi, u32 battlerDef, u32 move);
+u32 GetAIExplosionChanceFromHP(u32 hpPercent);
 bool32 AI_RandLessThan(u32 val);
 bool32 IsAiVsAiBattle(void);
 bool32 BattlerHasAi(u32 battlerId);
