@@ -3103,6 +3103,25 @@ static s32 CompareMoveAccuracies(u32 battlerAtk, u32 battlerDef, u32 moveSlot1, 
     return 0;
 }
 
+static s32 CompareMoveDamageRolls(u32 battlerAtk, u32 battlerDef, u32 moveSlot1, u32 moveSlot2)
+{
+    u32 medRoll1 = AI_DATA->simulatedDmg[battlerAtk][battlerDef][moveSlot1].median;
+    u32 highRoll1 = AI_DATA->simulatedDmg[battlerAtk][battlerDef][moveSlot1].maximum;
+    u32 medRoll2 = AI_DATA->simulatedDmg[battlerAtk][battlerDef][moveSlot2].median;
+    u32 highRoll2 = AI_DATA->simulatedDmg[battlerAtk][battlerDef][moveSlot2].maximum;
+
+    // if median roll of move 1 is higher than high roll of move 2 then move 1 is better
+    
+    if (medRoll1 > highRoll2)
+        return 1;
+    
+    // else if median roll of move 2 is higher than high roll of move 1 then move 2 is better
+    else if (medRoll2 > highRoll1)
+        return -1;
+    
+    return 0;
+}
+
 static inline bool32 ShouldUseSpreadDamageMove(u32 battlerAtk, u32 move, u32 moveIndex, u32 hitsToFaintOpposingBattler)
 {
     u32 partnerBattler = BATTLE_PARTNER(battlerAtk);
@@ -3159,8 +3178,9 @@ static s32 AI_CompareDamagingMoves(u32 battlerAtk, u32 battlerDef, u32 currId)
     // Priority list:
     // 1. Less no of hits to ko
     // 2. Not charging
-    // 3. More accuracy
-    // 4. Better effect
+    // 3. Significantly more damage (median roll of one move is higher than the highest roll of another)
+    // 4. More accuracy
+    // 5. Better effect
 
     // Current move requires the least hits to KO. Compare with other moves.
     if (leastHits == noOfHits[currId])
@@ -3174,10 +3194,19 @@ static s32 AI_CompareDamagingMoves(u32 battlerAtk, u32 battlerDef, u32 currId)
                 multipleBestMoves = TRUE;
                 // We need to make sure it's the current move which is objectively better.
                 if (isTwoTurnNotSemiInvulnerableMove[i] && !isTwoTurnNotSemiInvulnerableMove[currId])
-                    viableMoveScores[i] -= 3;
+                    viableMoveScores[i] -= 4;
                 else if (!isTwoTurnNotSemiInvulnerableMove[i] && isTwoTurnNotSemiInvulnerableMove[currId])
-                    viableMoveScores[currId] -= 3;
+                    viableMoveScores[currId] -= 4;
 
+                switch (CompareMoveDamageRolls(battlerAtk, battlerDef, currId, i))
+                {
+                case 1:
+                    viableMoveScores[i] -= 3;
+                    break;
+                case -1:
+                    viableMoveScores[currId] -= 3;
+                    break;
+                }
                 switch (CompareMoveAccuracies(battlerAtk, battlerDef, currId, i))
                 {
                 case 1:
