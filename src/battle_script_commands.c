@@ -1644,6 +1644,16 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, u32 atkAbility, u
     // Check Thunder and Hurricane on sunny weather.
     if (IsBattlerWeatherAffected(battlerDef, B_WEATHER_SUN) && gMovesInfo[move].effect == EFFECT_THUNDER)
         moveAcc = 50;
+
+    // Check Thunder and Hurricane on rainy weather.
+    if (IsBattlerWeatherAffected(battlerDef, B_WEATHER_RAIN) 
+        && (gMovesInfo[move].effect == EFFECT_THUNDER || gMovesInfo[move].effect == EFFECT_RAIN_ALWAYS_HIT))
+        moveAcc = 100;
+
+    // Check blizzard on snowy weather.
+    if (IsBattlerWeatherAffected(battlerDef, B_WEATHER_SNOW) && gMovesInfo[move].effect == EFFECT_BLIZZARD)
+        moveAcc = 100;
+    
     // Check Wonder Skin.
     if (defAbility == ABILITY_WONDER_SKIN && IS_MOVE_STATUS(move) && moveAcc > 50)
         moveAcc = 50;
