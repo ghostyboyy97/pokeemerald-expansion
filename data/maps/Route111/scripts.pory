@@ -675,7 +675,7 @@ Route111_Text_RouteSign113:
 	.string "{LEFT_ARROW} ROUTE 113$"
 
 Route111_Text_OldLadysRestStopSign:
-	.string "TAKE THE EGG I HAVE$"
+	.string "Nurse Here$"
 
 Route111_Text_TrainerTipsSpAtkSpDef:
 	.string "Trainer Tips\p"
