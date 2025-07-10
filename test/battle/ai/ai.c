@@ -930,17 +930,17 @@ AI_SINGLE_BATTLE_TEST("AI won't use status moves against opponents that would be
     }
 }
 
-// AI_SINGLE_BATTLE_TEST("AI sees that Primal weather can block a move by type")
-// {
-//     GIVEN {
-//         ASSUME(GetMoveType(MOVE_HYDRO_PUMP) == TYPE_WATER);
-//         AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_OMNISCIENT);
-//         PLAYER(SPECIES_GROUDON) { Item(ITEM_RED_ORB); Moves(MOVE_SCRATCH); }
-//         OPPONENT(SPECIES_BLASTOISE) { Moves(MOVE_HYDRO_PUMP, MOVE_POUND); }
-//     } WHEN {
-//         TURN { MOVE(player, MOVE_SCRATCH); EXPECT_MOVE(opponent, MOVE_POUND); }
-//     }
-// }
+AI_SINGLE_BATTLE_TEST("AI sees that Primal weather can block a move by type")
+{
+    GIVEN {
+        ASSUME(GetMoveType(MOVE_HYDRO_PUMP) == TYPE_WATER);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_OMNISCIENT);
+        PLAYER(SPECIES_GROUDON) { Item(ITEM_RED_ORB); Moves(MOVE_SCRATCH); }
+        OPPONENT(SPECIES_BLASTOISE) { Moves(MOVE_HYDRO_PUMP, MOVE_POUND); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); EXPECT_MOVE(opponent, MOVE_POUND); }
+    }
+}
 
 // AI_DOUBLE_BATTLE_TEST("AI sees opposing drain ability")
 // {
@@ -980,18 +980,18 @@ AI_SINGLE_BATTLE_TEST("AI won't use status moves against opponents that would be
 //     }
 // }
 
-AI_SINGLE_BATTLE_TEST("Move scoring comparison properly awards bonus point to best OHKO move")
-{
-    GIVEN {
-        ASSUME(MoveHasAdditionalEffect(MOVE_THUNDER, MOVE_EFFECT_PARALYSIS));
-        ASSUME(GetMoveAdditionalEffectCount(MOVE_WATER_SPOUT) == 0);
-        ASSUME(GetMoveAdditionalEffectCount(MOVE_WATER_GUN) == 0);
-        ASSUME(GetMoveAdditionalEffectCount(MOVE_ORIGIN_PULSE) == 0);
-        ASSUME(GetMoveAccuracy(MOVE_WATER_SPOUT) > GetMoveAccuracy(MOVE_THUNDER));
-        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY);
-        PLAYER(SPECIES_WAILORD) { Level(50); }
-        OPPONENT(SPECIES_WAILORD) { Moves(MOVE_THUNDER, MOVE_WATER_SPOUT, MOVE_WATER_GUN, MOVE_SURF); }
-    } WHEN {
-        TURN { EXPECT_MOVE(opponent, MOVE_WATER_SPOUT); }
-    }
-}
+// AI_SINGLE_BATTLE_TEST("Move scoring comparison properly awards bonus point to best OHKO move")
+// {
+//     GIVEN {
+//         ASSUME(MoveHasAdditionalEffect(MOVE_THUNDER, MOVE_EFFECT_PARALYSIS));
+//         ASSUME(GetMoveAdditionalEffectCount(MOVE_WATER_SPOUT) == 0);
+//         ASSUME(GetMoveAdditionalEffectCount(MOVE_WATER_GUN) == 0);
+//         ASSUME(GetMoveAdditionalEffectCount(MOVE_ORIGIN_PULSE) == 0);
+//         ASSUME(GetMoveAccuracy(MOVE_WATER_SPOUT) > GetMoveAccuracy(MOVE_THUNDER));
+//         AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY);
+//         PLAYER(SPECIES_WAILORD) { Level(50); }
+//         OPPONENT(SPECIES_WAILORD) { Moves(MOVE_THUNDER, MOVE_WATER_SPOUT, MOVE_WATER_GUN, MOVE_SURF); }
+//     } WHEN {
+//         TURN { EXPECT_MOVE(opponent, MOVE_WATER_SPOUT); }
+//     }
+// }

@@ -432,27 +432,52 @@ static inline s32 DmgRoll(s32 dmg)
     return dmg;
 }
 
-bool32 IsDamageMoveUnusable(u32 battlerAtk, u32 battlerDef, u32 move, u32 moveType)
+bool32 IsDamageMoveUnusable(u32 battlerAtk, u32 battlerDef, u32 move, u32 moveType, uq4_12_t effectiveness, u32 weather)
 {
+    u32 battlerDefAbility;
+    u32 partnerDefAbility;
     struct AiLogicData *aiData = AI_DATA;
-    u32 partnerBattlerDefAbility;
 
-    if (DoesBattlerIgnoreAbilityChecks(aiData->abilities[battlerAtk], move))
-        partnerBattlerDefAbility = ABILITY_NONE;
-    else
-        partnerBattlerDefAbility = aiData->abilities[BATTLE_PARTNER(battlerDef)];
-
+    if (effectiveness == UQ_4_12(0.0))
+        return TRUE;
     if (gBattleStruct->commandingDondozo & (1u << battlerDef))
         return TRUE;
 
-    if (CanAbilityBlockMove(battlerAtk, battlerDef, move, aiData->abilities[battlerDef]))
+    // aiData->abilities does not check for Mold Breaker since it happens during combat so it needs to be done manually
+    if (IsMoldBreakerTypeAbility(battlerAtk, aiData->abilities[battlerAtk]) || gMovesInfo[move].ignoresTargetAbility)
+    {
+        battlerDefAbility = ABILITY_NONE;
+        partnerDefAbility = ABILITY_NONE;
+    }
+    else
+    {
+        battlerDefAbility = aiData->abilities[battlerDef];
+        partnerDefAbility = aiData->abilities[BATTLE_PARTNER(battlerDef)];
+    }
+
+    if (CanAbilityBlockMove(battlerAtk, battlerDef, move, battlerDefAbility))
         return TRUE;
 
-    if (CanPartnerAbilityBlockMove(battlerAtk, battlerDef, move, partnerBattlerDefAbility))
+    if (CanPartnerAbilityBlockMove(battlerAtk, battlerDef, move, partnerDefAbility))
         return TRUE;
 
-    if (CanAbilityAbsorbMove(battlerAtk, battlerDef, aiData->abilities[battlerDef], move, moveType))
+    if (CanAbilityAbsorbMove(battlerAtk, battlerDef, battlerDefAbility, move, moveType))
         return TRUE;
+
+    // Limited to Lighning Rod and Storm Drain because otherwise the AI would consider Water Absorb, etc...
+    if (partnerDefAbility == ABILITY_LIGHTNING_ROD || partnerDefAbility == ABILITY_STORM_DRAIN)
+    {
+        if (CanAbilityAbsorbMove(battlerAtk, battlerDef, partnerDefAbility, move, moveType))
+            return TRUE;
+    }
+
+    if (HasWeatherEffect())
+    {
+        if (weather & B_WEATHER_SUN_PRIMAL && moveType == TYPE_WATER)
+            return TRUE;
+        if (weather & B_WEATHER_RAIN_PRIMAL && moveType == TYPE_FIRE)
+            return TRUE;
+    }
 
     switch (gMovesInfo[move].effect)
     {
@@ -499,6 +524,13 @@ bool32 IsDamageMoveUnusable(u32 battlerAtk, u32 battlerDef, u32 move, u32 moveTy
         // If AI could Sub and doesn't have a Sub, don't Punch yet
         if (HasMoveEffect(battlerAtk, EFFECT_SUBSTITUTE) && !(gBattleMons[battlerAtk].status2 & STATUS2_SUBSTITUTE))
             return TRUE;
+        break;
+    case EFFECT_EXPLOSION:
+    case EFFECT_MIND_BLOWN:
+        if (battlerDefAbility == ABILITY_DAMP || partnerDefAbility == ABILITY_DAMP)
+            return TRUE;
+        break;
+    default:
         break;
     }
 
@@ -707,7 +739,7 @@ struct SimulatedDamage AI_CalcDamage(u32 move, u32 battlerAtk, u32 battlerDef, u
     effectivenessMultiplier = CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, aiData->abilities[battlerDef], FALSE);
 
     if (gMovesInfo[move].power)
-        isDamageMoveUnusable = IsDamageMoveUnusable(battlerAtk, battlerDef, move, moveType);
+        isDamageMoveUnusable = IsDamageMoveUnusable(battlerAtk, battlerDef, move, moveType, effectivenessMultiplier, weather);
 
     if (gMovesInfo[move].power && !isDamageMoveUnusable)
     {

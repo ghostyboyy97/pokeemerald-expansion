@@ -12060,3 +12060,22 @@ bool32 DoesDestinyBondFail(u32 battler)
         return TRUE;
     return FALSE;
 }
+
+bool32 HasWeatherEffect(void)
+{
+    for (u32 battler = 0; battler < gBattlersCount; battler++)
+    {
+        if (!IsBattlerAlive(battler))
+            continue;
+
+        u32 ability = GetBattlerAbility(battler);
+        switch (ability)
+        {
+        case ABILITY_CLOUD_NINE:
+        case ABILITY_AIR_LOCK:
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+}
