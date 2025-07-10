@@ -3114,6 +3114,10 @@ static s32 CompareMoveAccuracies(u32 battlerAtk, u32 battlerDef, u32 moveSlot1, 
 
 static s32 CompareMoveDamageRolls(u32 battlerAtk, u32 battlerDef, u32 moveSlot1, u32 moveSlot2)
 {
+    // if both moves can guarantee OHKO, theres no sense in comparing the rolls
+    if (CanIndexMoveGuaranteeFaintTarget(battlerAtk, battlerDef, moveSlot1) && CanIndexMoveGuaranteeFaintTarget(battlerAtk, battlerDef, moveSlot2))
+        return 0;
+    
     u32 medRoll1 = AI_DATA->simulatedDmg[battlerAtk][battlerDef][moveSlot1].median;
     u32 highRoll1 = AI_DATA->simulatedDmg[battlerAtk][battlerDef][moveSlot1].maximum;
     u32 medRoll2 = AI_DATA->simulatedDmg[battlerAtk][battlerDef][moveSlot2].median;
