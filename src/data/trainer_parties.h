@@ -5486,7 +5486,7 @@ static const struct TrainerMon sParty_Flannery1[] = {
     .ev = TRAINER_PARTY_EVS_JOLLY(),
     .ability = ABILITY_IRON_FIST,
     .isShiny = TRUE,
-    .moves = {MOVE_FIRE_PUNCH, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_ROCK_SLIDE}
+    .moves = {MOVE_FIRE_PUNCH, MOVE_CLOSE_COMBAT, MOVE_KNOCK_OFF, MOVE_THUNDER_PUNCH}
     }
 };
 
