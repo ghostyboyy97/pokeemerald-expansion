@@ -16546,16 +16546,16 @@ static const struct TrainerMon sParty_Candice[] = {
     .nature = NATURE_CALM,
     .ability = ABILITY_THICK_FAT,
     .heldItem = ITEM_ORAN_BERRY,
-    .moves = {MOVE_ICY_WIND, MOVE_BRINE, MOVE_HIDDEN_POWER, MOVE_NONE}
+    .moves = {MOVE_ICY_WIND, MOVE_BRINE, MOVE_HIDDEN_POWER, MOVE_SIGNAL_BEAM}
     },
     {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
     .lvl = 201,
-    .species = SPECIES_SMOOCHUM,
-    .nature = NATURE_TIMID,
-    .ability = ABILITY_OBLIVIOUS,
-    .heldItem = ITEM_WISE_GLASSES,
-    .moves = {MOVE_ICY_WIND, MOVE_PSYBEAM, MOVE_DRAINING_KISS, MOVE_FLASH}
+    .species = SPECIES_DELIBIRD,
+    .nature = NATURE_ADAMANT,
+    .ability = ABILITY_REFRIGERATE,
+    .heldItem = ITEM_MUSCLE_BAND,
+    .moves = {MOVE_FAKE_OUT, MOVE_AERIAL_ACE, MOVE_ICE_SHARD, MOVE_STEEL_WING}
     },
     {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
