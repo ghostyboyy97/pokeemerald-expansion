@@ -442,10 +442,10 @@ static void Task_HandleStopLearningMoveYesNoInput(u8);
 static void Task_TryLearningNextMoveAfterText(u8);
 static void BufferMonStatsToTaskData(struct Pokemon *, s16 *);
 static void UpdateMonDisplayInfoAfterRareCandy(u8, struct Pokemon *);
-static void Task_DisplayLevelUpStatsPg1(u8);
-static void DisplayLevelUpStatsPg1(u8);
-static void Task_DisplayLevelUpStatsPg2(u8);
-static void DisplayLevelUpStatsPg2(u8);
+//static void Task_DisplayLevelUpStatsPg1(u8);
+//static void DisplayLevelUpStatsPg1(u8);
+//static void Task_DisplayLevelUpStatsPg2(u8);
+//static void DisplayLevelUpStatsPg2(u8);
 static void Task_TryLearnNewMoves(u8);
 static void PartyMenuTryEvolution(u8);
 static void DisplayMonNeedsToReplaceMove(u8);
@@ -2961,18 +2961,18 @@ static void PartyMenuDisplayYesNoMenu(void)
     CreateYesNoMenu(&sPartyMenuYesNoWindowTemplate, 0x4F, 13, 0);
 }
 
-static u8 CreateLevelUpStatsWindow(void)
-{
-    sPartyMenuInternal->windowId[0] = AddWindow(&sLevelUpStatsWindowTemplate);
-    DrawStdFrameWithCustomTileAndPalette(sPartyMenuInternal->windowId[0], FALSE, 0x4F, 13);
-    return sPartyMenuInternal->windowId[0];
-}
+// static u8 CreateLevelUpStatsWindow(void)
+// {
+//     sPartyMenuInternal->windowId[0] = AddWindow(&sLevelUpStatsWindowTemplate);
+//     DrawStdFrameWithCustomTileAndPalette(sPartyMenuInternal->windowId[0], FALSE, 0x4F, 13);
+//     return sPartyMenuInternal->windowId[0];
+// }
 
-static void RemoveLevelUpStatsWindow(void)
-{
-    ClearWindowTilemap(sPartyMenuInternal->windowId[0]);
-    PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[0]);
-}
+// static void RemoveLevelUpStatsWindow(void)
+// {
+//     ClearWindowTilemap(sPartyMenuInternal->windowId[0]);
+//     PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[0]);
+// }
 
 static void SetPartyMonSelectionActions(struct Pokemon *mons, u8 slotId, u8 action)
 {
@@ -5999,7 +5999,9 @@ void ItemUseCB_RareCandy(u8 taskId, TaskFunc task)
 
             DisplayPartyMenuMessage(gStringVar4, TRUE);
             ScheduleBgCopyTilemapToVram(2);
-            gTasks[taskId].func = Task_DisplayLevelUpStatsPg1;
+
+            sInitialLevel += 1; // so the Pokemon doesn't learn a move meant for its previous level
+            gTasks[taskId].func = Task_TryLearnNewMoves;
         }
         else
         {
@@ -6027,53 +6029,54 @@ static void UpdateMonDisplayInfoAfterRareCandy(u8 slot, struct Pokemon *mon)
     ScheduleBgCopyTilemapToVram(0);
 }
 
-static void Task_DisplayLevelUpStatsPg1(u8 taskId)
-{
-    if (WaitFanfare(FALSE) && IsPartyMenuTextPrinterActive() != TRUE && ((JOY_NEW(A_BUTTON)) || (JOY_NEW(B_BUTTON))))
-    {
-        PlaySE(SE_SELECT);
-        DisplayLevelUpStatsPg1(taskId);
-        gTasks[taskId].func = Task_DisplayLevelUpStatsPg2;
-    }
-}
+// static void Task_DisplayLevelUpStatsPg1(u8 taskId)
+// {
+//     if (WaitFanfare(FALSE) && IsPartyMenuTextPrinterActive() != TRUE && ((JOY_NEW(A_BUTTON)) || (JOY_NEW(B_BUTTON))))
+//     {
+//         PlaySE(SE_SELECT);
+//         DisplayLevelUpStatsPg1(taskId);
+//         gTasks[taskId].func = Task_DisplayLevelUpStatsPg2;
+//     }
+// }
 
-static void Task_DisplayLevelUpStatsPg2(u8 taskId)
-{
-    if ((JOY_NEW(A_BUTTON)) || (JOY_NEW(B_BUTTON)))
-    {
-        PlaySE(SE_SELECT);
-        DisplayLevelUpStatsPg2(taskId);
-        sInitialLevel += 1; // so the Pokemon doesn't learn a move meant for its previous level
-        gTasks[taskId].func = Task_TryLearnNewMoves;
-    }
-}
+// static void Task_DisplayLevelUpStatsPg2(u8 taskId)
+// {
+//     if ((JOY_NEW(A_BUTTON)) || (JOY_NEW(B_BUTTON)))
+//     {
+//         PlaySE(SE_SELECT);
+//         DisplayLevelUpStatsPg2(taskId);
+//         sInitialLevel += 1; // so the Pokemon doesn't learn a move meant for its previous level
+//         gTasks[taskId].func = Task_TryLearnNewMoves;
+//     }
+// }
 
-static void DisplayLevelUpStatsPg1(u8 taskId)
-{
-    u16 *arrayPtr = (u16*) sPartyMenuInternal->data;
+// static void DisplayLevelUpStatsPg1(u8 taskId)
+// {
+//     u16 *arrayPtr = (u16*) sPartyMenuInternal->data;
 
-    arrayPtr[12] = CreateLevelUpStatsWindow();
-    DrawLevelUpWindowPg1(arrayPtr[12], arrayPtr, &arrayPtr[6], TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY);
-    CopyWindowToVram(arrayPtr[12], COPYWIN_GFX);
-    ScheduleBgCopyTilemapToVram(2);
-}
+//     arrayPtr[12] = CreateLevelUpStatsWindow();
+//     DrawLevelUpWindowPg1(arrayPtr[12], arrayPtr, &arrayPtr[6], TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY);
+//     CopyWindowToVram(arrayPtr[12], COPYWIN_GFX);
+//     ScheduleBgCopyTilemapToVram(2);
+// }
 
-static void DisplayLevelUpStatsPg2(u8 taskId)
-{
-    u16 *arrayPtr = (u16*) sPartyMenuInternal->data;
+// static void DisplayLevelUpStatsPg2(u8 taskId)
+// {
+//     u16 *arrayPtr = (u16*) sPartyMenuInternal->data;
 
-    DrawLevelUpWindowPg2(arrayPtr[12], &arrayPtr[6], TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY);
-    CopyWindowToVram(arrayPtr[12], COPYWIN_GFX);
-    ScheduleBgCopyTilemapToVram(2);
-}
+//     DrawLevelUpWindowPg2(arrayPtr[12], &arrayPtr[6], TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY);
+//     CopyWindowToVram(arrayPtr[12], COPYWIN_GFX);
+//     ScheduleBgCopyTilemapToVram(2);
+// }
 
 static void Task_TryLearnNewMoves(u8 taskId)
 {
     u16 learnMove;
 
-    if (WaitFanfare(FALSE) && ((JOY_NEW(A_BUTTON)) || (JOY_NEW(B_BUTTON))))
+    if (WaitFanfare(FALSE) && IsPartyMenuTextPrinterActive() != TRUE && ((JOY_NEW(A_BUTTON)) || (JOY_NEW(B_BUTTON))))
     {
-        RemoveLevelUpStatsWindow();
+        PlaySE(SE_SELECT);
+        //RemoveLevelUpStatsWindow();
         for (; sInitialLevel <= sFinalLevel; sInitialLevel++)
         {
             SetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_LEVEL, &sInitialLevel);
