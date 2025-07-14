@@ -8431,6 +8431,7 @@ u32 GetMoveTarget(u16 move, u8 setTarget)
 
 u8 GetAttackerObedienceForAction()
 {
+    gHitMarker |= HITMARKER_OBEYS;
     return OBEYS;
 }
 
