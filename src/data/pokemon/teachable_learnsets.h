@@ -25693,6 +25693,7 @@ static const u16 sGreninjaTeachableLearnset[] = {
     MOVE_RAIN_DANCE,
     MOVE_WATER_PULSE,
     MOVE_SPIKES,
+    MOVE_SMACK_DOWN,
     MOVE_UNAVAILABLE,
 };
 #endif //P_FAMILY_FROAKIE
