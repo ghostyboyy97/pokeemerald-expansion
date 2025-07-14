@@ -1216,6 +1216,46 @@ static bool32 CanEndureHit(u32 battler, u32 battlerTarget, u32 move)
     return FALSE;
 }
 
+static bool32 CanForce2HKOForSetupMove(u32 battler, u32 battlerTarget)
+{
+    if (gBattleMons[battlerTarget].species == SPECIES_MIMIKYU_DISGUISED)
+            return TRUE;
+        
+    if (!BATTLER_MAX_HP(battlerTarget))
+        return FALSE;
+    
+    if (AI_DATA->holdEffects[battlerTarget] == HOLD_EFFECT_FOCUS_SASH)
+        return TRUE;
+
+    if (B_STURDY >= GEN_5 && AI_DATA->abilities[battlerTarget] == ABILITY_STURDY)
+        return TRUE;
+
+    return FALSE;
+}
+
+// Check if AI mon can do enough damage to OHKO the player, ignoring focus sash / sturdy
+// this is used to stop the AI from spamming setup moves when they should probably be attacking!
+static bool32 CanAIOHKOTargetForSetup(u32 battlerAtk, u32 battlerDef)
+{
+    struct AiLogicData *aiData = AI_DATA;
+    s32 moveIndex, dmg;
+    u16 *moves = gBattleMons[battlerAtk].moves;
+    u32 moveLimitations = aiData->moveLimitations[battlerAtk];
+
+    for (moveIndex = 0; moveIndex < MAX_MON_MOVES; moveIndex++)
+    {
+        if (IsMoveUnusable(moveIndex, moves[moveIndex], moveLimitations))
+            continue;
+        
+        dmg = AI_GetDamage(battlerAtk, battlerDef, moveIndex, AI_ATTACKING_ON_FIELD, aiData);
+
+        if (gBattleMons[battlerDef].hp <= dmg)
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
 // Check if target has means to faint ai mon.
 bool32 CanTargetFaintAi(u32 battlerDef, u32 battlerAtk)
 {
@@ -4051,6 +4091,11 @@ static u32 IncreaseStatUpScoreInternal(u32 battlerAtk, u32 battlerDef, u32 statI
     if (gBattleMons[battlerAtk].statStages[statId] >= MAX_STAT_STAGE - 5 && (HasBattlerSideMoveWithEffect(battlerDef, EFFECT_HAZE)
         || HasBattlerSideMoveWithAdditionalEffect(battlerDef, MOVE_EFFECT_CLEAR_SMOG)
         || HasBattlerSideMoveWithAdditionalEffect(battlerDef, MOVE_EFFECT_HAZE)))
+        return NO_INCREASE;
+
+    // Don't increase if AI can already do enough damage to kill, ignoring sturdy, focus sash, and disguise explicitly
+    // to prevent the AI from always seeing that it 2HKOs in those scenarios
+    if (CanAIOHKOTargetForSetup(battlerAtk, battlerDef) && CanForce2HKOForSetupMove(battlerAtk, battlerDef))
         return NO_INCREASE;
 
     switch (statId)
