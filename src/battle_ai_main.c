@@ -772,30 +772,7 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
     }
 
     if (effectiveness == UQ_4_12(0.0))
-    {
         RETURN_SCORE_MINUS(20);
-    }
-    else if (effectiveness < UQ_4_12(0.5))
-    {
-        switch (moveEffect)
-        {
-        case EFFECT_FIXED_DAMAGE_ARG:
-        case EFFECT_LEVEL_DAMAGE:
-        case EFFECT_PSYWAVE:
-        case EFFECT_OHKO:
-        case EFFECT_BIDE:
-        case EFFECT_SUPER_FANG:
-        case EFFECT_ENDEAVOR:
-        case EFFECT_COUNTER:
-        case EFFECT_MIRROR_COAT:
-        case EFFECT_METAL_BURST:
-        case EFFECT_FINAL_GAMBIT:
-        case EFFECT_GUARDIAN_OF_ALOLA:
-            break;
-        default:
-            RETURN_SCORE_MINUS(10);
-        }
-    }
 
     // check non-user target
     if (!(moveTarget & MOVE_TARGET_USER))
