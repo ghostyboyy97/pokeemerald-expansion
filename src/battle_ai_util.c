@@ -204,38 +204,39 @@ void SaveBattlerData(u32 battlerId)
 
 static bool32 ShouldFailForIllusion(u32 illusionSpecies, u32 battlerId)
 {
-    u32 i, j;
-    const struct LevelUpMove *learnset;
+    return FALSE;
+    // u32 i, j;
+    // const struct LevelUpMove *learnset;
 
-    if (BATTLE_HISTORY->abilities[battlerId] == ABILITY_ILLUSION)
-        return FALSE;
+    // if (BATTLE_HISTORY->abilities[battlerId] == ABILITY_ILLUSION)
+    //     return FALSE;
 
-    // Don't fall for Illusion if the mon used a move it cannot know.
-    for (i = 0; i < MAX_MON_MOVES; i++)
-    {
-        u32 move = BATTLE_HISTORY->usedMoves[battlerId][i];
-        if (move == MOVE_NONE)
-            continue;
+    // // Don't fall for Illusion if the mon used a move it cannot know.
+    // for (i = 0; i < MAX_MON_MOVES; i++)
+    // {
+    //     u32 move = BATTLE_HISTORY->usedMoves[battlerId][i];
+    //     if (move == MOVE_NONE)
+    //         continue;
 
-        learnset = GetSpeciesLevelUpLearnset(illusionSpecies);
-        for (j = 0; learnset[j].move != MOVE_UNAVAILABLE; j++)
-        {
-            if (learnset[j].move == move)
-                break;
-        }
-        // The used move is in the learnsets of the fake species.
-        if (learnset[j].move != MOVE_UNAVAILABLE)
-            continue;
+    //     learnset = GetSpeciesLevelUpLearnset(illusionSpecies);
+    //     for (j = 0; learnset[j].move != MOVE_UNAVAILABLE; j++)
+    //     {
+    //         if (learnset[j].move == move)
+    //             break;
+    //     }
+    //     // The used move is in the learnsets of the fake species.
+    //     if (learnset[j].move != MOVE_UNAVAILABLE)
+    //         continue;
 
-        // The used move can be learned from Tm/Hm or Move Tutors.
-        if (CanLearnTeachableMove(illusionSpecies, move))
-            continue;
+    //     // The used move can be learned from Tm/Hm or Move Tutors.
+    //     if (CanLearnTeachableMove(illusionSpecies, move))
+    //         continue;
 
-        // 'Illegal move', AI won't fail for the illusion.
-        return FALSE;
-    }
+    //     // 'Illegal move', AI won't fail for the illusion.
+    //     return FALSE;
+    // }
 
-    return TRUE;
+    // return TRUE;
 }
 
 void SetBattlerData(u32 battlerId)
@@ -4114,6 +4115,11 @@ static u32 IncreaseStatUpScoreInternal(u32 battlerAtk, u32 battlerDef, u32 statC
     if (AI_DATA->abilities[battlerDef] == ABILITY_OPPORTUNIST)
         return NO_INCREASE;
 
+    // Don't increase if AI can already do enough damage to kill, ignoring sturdy, focus sash, and disguise explicitly
+    // to prevent the AI from always seeing that it 2HKOs in those scenarios
+    if (CanAIOHKOTargetForSetup(battlerAtk, battlerDef) && CanForce2HKOForSetupMove(battlerAtk, battlerDef))
+        return NO_INCREASE;
+
     if(HasMoveToStopSetup(battlerDef, noOfHitsToFaint, aiIsFaster))
         return NO_INCREASE;
     
@@ -4130,11 +4136,6 @@ static u32 IncreaseStatUpScoreInternal(u32 battlerAtk, u32 battlerDef, u32 statC
     if (gBattleMons[battlerAtk].statStages[statId] >= MAX_STAT_STAGE - 5 && (HasBattlerSideMoveWithEffect(battlerDef, EFFECT_HAZE)
         || HasBattlerSideMoveWithAdditionalEffect(battlerDef, MOVE_EFFECT_CLEAR_SMOG)
         || HasBattlerSideMoveWithAdditionalEffect(battlerDef, MOVE_EFFECT_HAZE)))
-        return NO_INCREASE;
-
-    // Don't increase if AI can already do enough damage to kill, ignoring sturdy, focus sash, and disguise explicitly
-    // to prevent the AI from always seeing that it 2HKOs in those scenarios
-    if (CanAIOHKOTargetForSetup(battlerAtk, battlerDef) && CanForce2HKOForSetupMove(battlerAtk, battlerDef))
         return NO_INCREASE;
 
     switch (statChange)
