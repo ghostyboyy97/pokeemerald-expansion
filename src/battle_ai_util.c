@@ -1289,7 +1289,7 @@ bool32 CanTargetFaintAi(u32 battlerDef, u32 battlerAtk)
     return FALSE;
 }
 
-u32 NoOfHitsForTargetToFaintAI(u32 battlerDef, u32 battlerAtk)
+u32 NoOfHitsForTargetToFaintBattler(u32 battlerDef, u32 battlerAtk)
 {
     u32 i;
     u32 currNumberOfHits;
@@ -1300,6 +1300,32 @@ u32 NoOfHitsForTargetToFaintAI(u32 battlerDef, u32 battlerAtk)
         // used to see how many hits player needs to KO AI when deciding if AI should use a setup move
         // this is the only place where AI calcs high roll dmg from the player
         currNumberOfHits = GetNoOfHitsToKOBattler(battlerDef, battlerAtk, i, AI_DEFENDING_SETUP);
+        if (currNumberOfHits != 0)
+        {
+            if (currNumberOfHits < leastNumberOfHits)
+                leastNumberOfHits = currNumberOfHits;
+        }
+    }
+    return leastNumberOfHits;
+}
+
+u32 NoOfHitsForTargetToFaintBattlerWithMod(u32 battlerDef, u32 battlerAtk, s32 hpMod)
+{
+    u32 i;
+    u32 currNumberOfHits;
+    u32 leastNumberOfHits = UNKNOWN_NO_OF_HITS;
+    u32 hpCheck = gBattleMons[battlerAtk].hp + hpMod;
+    u32 damageDealt = 0;
+
+    if (hpCheck > gBattleMons[battlerAtk].maxHP)
+        hpCheck = gBattleMons[battlerAtk].maxHP;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        damageDealt = AI_GetDamage(battlerDef, battlerAtk, i, AI_DEFENDING_NORMAL, AI_DATA);
+        if (damageDealt == 0)
+            continue;
+        currNumberOfHits = hpCheck / (damageDealt + 1) + 1;
         if (currNumberOfHits != 0)
         {
             if (currNumberOfHits < leastNumberOfHits)
@@ -3585,21 +3611,30 @@ bool32 ShouldAbsorb(u32 battlerAtk, u32 battlerDef, u32 move, s32 damage)
     return FALSE;
 }
 
-bool32 ShouldRecover(u32 battlerAtk, u32 battlerDef, u32 move, u32 healPercent, enum DamageCalcContext calcContext)
+bool32 ShouldRecover(u32 battlerAtk, u32 battlerDef, u32 move, u32 healPercent)
 {
-    if (move == 0xFFFF || AI_IsFaster(battlerAtk, battlerDef, move))
+    u32 maxHP = gBattleMons[battlerAtk].maxHP;
+    u32 healAmount = (healPercent * maxHP) / 100;
+    if (healAmount > maxHP)
+        healAmount = maxHP;
+    if (gStatuses3[battlerAtk] & STATUS3_HEAL_BLOCK)
+        healAmount = 0;
+    if (AI_IsFaster(battlerAtk, battlerDef, move))
     {
-        // using item or user going first
-        s32 damage = AI_GetDamage(battlerAtk, battlerDef, AI_THINKING_STRUCT->movesetIndex, calcContext, AI_DATA);
-        s32 healAmount = (healPercent * damage) / 100;
-        if (gStatuses3[battlerAtk] & STATUS3_HEAL_BLOCK)
-            healAmount = 0;
-
         if (CanTargetFaintAi(battlerDef, battlerAtk)
           && !CanTargetFaintAiWithMod(battlerDef, battlerAtk, healAmount, 0))
             return TRUE;    // target can faint attacker unless they heal
-        else if (!CanTargetFaintAi(battlerDef, battlerAtk) && AI_DATA->hpPercents[battlerAtk] < 60 && (Random() % 3))
-            return TRUE;    // target can't faint attacker at all, attacker health is about half, 2/3rds rate of encouraging healing
+        else if (!CanTargetFaintAi(battlerDef, battlerAtk) && AI_DATA->hpPercents[battlerAtk] < ENABLE_RECOVERY_THRESHOLD && RandomPercentage(RNG_AI_SHOULD_RECOVER, SHOULD_RECOVER_CHANCE))
+            return TRUE;    // target can't faint attacker at all, generally safe
+    }
+    else
+    {
+        if (!CanTargetFaintAi(battlerDef, battlerAtk)
+          && GetBestDmgFromBattler(battlerDef, battlerAtk, AI_DEFENDING_NORMAL) < healAmount
+          && NoOfHitsForTargetToFaintBattler(battlerDef, battlerAtk) < NoOfHitsForTargetToFaintBattlerWithMod(battlerDef, battlerAtk, healAmount))
+            return TRUE;    // target can't faint attacker and is dealing less damage than we're healing
+        else if (!CanTargetFaintAi(battlerDef, battlerAtk) && AI_DATA->hpPercents[battlerAtk] < ENABLE_RECOVERY_THRESHOLD && RandomPercentage(RNG_AI_SHOULD_RECOVER, SHOULD_RECOVER_CHANCE))
+            return TRUE;    // target can't faint attacker at all, generally safe
     }
     return FALSE;
 }
@@ -3820,7 +3855,7 @@ bool32 ShouldUseWishAromatherapy(u32 battlerAtk, u32 battlerDef, u32 move)
         switch (gMovesInfo[move].effect)
         {
         case EFFECT_WISH:
-            return ShouldRecover(battlerAtk, battlerDef, move, 50, AI_DEFENDING_NORMAL); // Switch recovery isn't good idea in doubles
+            return ShouldRecover(battlerAtk, battlerDef, move, 50); // Switch recovery isn't good idea in doubles
         case EFFECT_HEAL_BELL:
             if (hasStatus)
                 return TRUE;
@@ -4086,7 +4121,7 @@ static u32 GetStatBeingChanged(u32 statChange)
 static u32 IncreaseStatUpScoreInternal(u32 battlerAtk, u32 battlerDef, u32 statChange, bool32 considerContrary)
 {
     u32 tempScore = NO_INCREASE;
-    u32 noOfHitsToFaint = NoOfHitsForTargetToFaintAI(battlerDef, battlerAtk);
+    u32 noOfHitsToFaint = NoOfHitsForTargetToFaintBattler(battlerDef, battlerAtk);
     u32 aiIsFaster = AI_IsFaster(battlerAtk, battlerDef, TRUE);
     u32 shouldSetUp = ((noOfHitsToFaint >= 2 && aiIsFaster) || (noOfHitsToFaint >= 3 && !aiIsFaster) || noOfHitsToFaint == UNKNOWN_NO_OF_HITS);
     u32 statId = GetStatBeingChanged(statChange);

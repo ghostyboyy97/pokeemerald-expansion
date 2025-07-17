@@ -55,6 +55,9 @@
 
 // AI move scoring
 #define CONSIDER_FOCUS_PUNCH_CHANCE                             50 // Chance the AI will consider Focus Punch as a damaging move from the player
+#define SHOULD_RECOVER_CHANCE                                   50 // Chance the AI will give recovery moves score increase if less than ENABLE_RECOVERY_THRESHOLD and in no immediate danger
+#define ENABLE_RECOVERY_THRESHOLD                               60 // HP percentage beneath which SHOULD_RECOVER_CHANCE is active
+
 
 // AI damage calc considerations
 #define RISKY_AI_CRIT_STAGE_THRESHOLD                           2   // Stat stages at which Risky will assume it gets a crit

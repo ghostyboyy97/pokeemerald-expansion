@@ -3308,6 +3308,19 @@ static u32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move)
         if (aiData->holdEffects[battlerAtk] == HOLD_EFFECT_BIG_ROOT && effectiveness >= UQ_4_12(1.0))
             ADJUST_SCORE(DECENT_EFFECT);
         break;
+    case EFFECT_STRENGTH_SAP:
+        u32 atkStat = gBattleMons[battlerDef].attack;
+        u32 atkStage = gBattleMons[battlerDef].statStages[STAT_ATK];
+        atkStat *= gStatStageRatios[atkStage][0];
+        atkStat /= gStatStageRatios[atkStage][1];
+        u32 healPercent = atkStat * 100 / gBattleMons[battlerAtk].maxHP;
+        if (ShouldRecover(battlerAtk, battlerDef, move, healPercent))
+        {
+            ADJUST_SCORE(GOOD_EFFECT);
+            if (aiData->holdEffects[battlerAtk] == HOLD_EFFECT_BIG_ROOT)
+                ADJUST_SCORE(WEAK_EFFECT);
+        }
+        break;
     case EFFECT_EXPLOSION:
     case EFFECT_MEMENTO:
         if (gBattleMons[battlerDef].statStages[STAT_EVASION] < 7)
@@ -3519,7 +3532,7 @@ static u32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move)
                 break;
             }
 
-            if (ShouldRecover(battlerAtk, battlerDef, move, healPercent, AI_DEFENDING_NORMAL))
+            if (ShouldRecover(battlerAtk, battlerDef, move, healPercent))
                 ADJUST_SCORE(DECENT_EFFECT);
         }
         break;
@@ -3529,7 +3542,7 @@ static u32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move)
     case EFFECT_MORNING_SUN:
     case EFFECT_SYNTHESIS:
     case EFFECT_MOONLIGHT:
-        if (ShouldRecover(battlerAtk, battlerDef, move, 50, AI_DEFENDING_NORMAL))
+        if (ShouldRecover(battlerAtk, battlerDef, move, 50))
             ADJUST_SCORE(GOOD_EFFECT);
         if (aiData->holdEffects[battlerAtk] == HOLD_EFFECT_BIG_ROOT)
             ADJUST_SCORE(DECENT_EFFECT);
@@ -3553,7 +3566,7 @@ static u32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move)
         {
             break;
         }
-        else if (ShouldRecover(battlerAtk, battlerDef, move, 100, AI_DEFENDING_NORMAL))
+        else if (ShouldRecover(battlerAtk, battlerDef, move, 100))
         {
             if (aiData->holdEffects[battlerAtk] == HOLD_EFFECT_CURE_SLP
               || aiData->holdEffects[battlerAtk] == HOLD_EFFECT_CURE_STATUS
@@ -4490,9 +4503,9 @@ static u32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move)
             ADJUST_SCORE(GOOD_EFFECT);
         break;
     case EFFECT_SHORE_UP:
-        if ((AI_GetWeather(aiData) & B_WEATHER_SANDSTORM) && ShouldRecover(battlerAtk, battlerDef, move, 67, AI_DEFENDING_NORMAL))
+        if ((AI_GetWeather(aiData) & B_WEATHER_SANDSTORM) && ShouldRecover(battlerAtk, battlerDef, move, 67))
             ADJUST_SCORE(DECENT_EFFECT);
-        else if (ShouldRecover(battlerAtk, battlerDef, move, 50, AI_DEFENDING_NORMAL))
+        else if (ShouldRecover(battlerAtk, battlerDef, move, 50))
             ADJUST_SCORE(DECENT_EFFECT);
         break;
     case EFFECT_ENDEAVOR:
@@ -4518,8 +4531,8 @@ static u32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move)
     //case EFFECT_SKY_DROP
         //break;
     case EFFECT_JUNGLE_HEALING:
-        if (ShouldRecover(battlerAtk, battlerDef, move, 25, AI_DEFENDING_NORMAL)
-         || ShouldRecover(BATTLE_PARTNER(battlerAtk), battlerDef, move, 25, AI_DEFENDING_NORMAL)
+        if (ShouldRecover(battlerAtk, battlerDef, move, 25)
+         || ShouldRecover(BATTLE_PARTNER(battlerAtk), battlerDef, move, 25)
          || gBattleMons[battlerAtk].status1 & STATUS1_ANY
          || gBattleMons[BATTLE_PARTNER(battlerAtk)].status1 & STATUS1_ANY)
             ADJUST_SCORE(GOOD_EFFECT);
