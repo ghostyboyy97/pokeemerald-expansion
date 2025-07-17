@@ -1321,12 +1321,13 @@ static const struct TrainerMon sParty_Brian5Badges[] = {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
     .lvl = 200,
     .species = SPECIES_BRELOOM,
-    .heldItem = ITEM_TOXIC_ORB,
+    .heldItem = ITEM_LEFTOVERS,
     .nature = NATURE_IMPISH,
                //hp,atk,def,spatk,spdef,speed
     .ev = TRAINER_PARTY_EVS( 6, 252, 252, 0, 0, 0 ),
     .ability = ABILITY_POISON_HEAL,
-    .moves = {MOVE_SUBSTITUTE, MOVE_SPORE, MOVE_FOCUS_PUNCH, MOVE_ROCK_SLIDE}
+    .moves = {MOVE_SUBSTITUTE, MOVE_SPORE, MOVE_FOCUS_PUNCH, MOVE_ROCK_SLIDE},
+    .preStatus = STATUS1_TOXIC_POISON
     },
     {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
@@ -1744,8 +1745,8 @@ static const struct TrainerMon sParty_Johanna7Badges[] = {
     .lvl = 200,
     .species = SPECIES_ARMAROUGE,
     .heldItem = ITEM_WHITE_HERB,
-    .nature = NATURE_JOLLY,
-    .ev = TRAINER_PARTY_EVS_JOLLY(),
+    .nature = NATURE_TIMID,
+    .ev = TRAINER_PARTY_EVS_TIMID(),
     .ability = ABILITY_MEGA_LAUNCHER,
     .moves = {MOVE_ARMOR_CANNON, MOVE_AURA_SPHERE, MOVE_DRAGON_PULSE, MOVE_PSYSHOCK}
     },
@@ -1865,11 +1866,12 @@ static const struct TrainerMon sParty_Dwayne5Badges[] = {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
     .lvl = 200,
     .species = SPECIES_SWELLOW,
-    .heldItem = ITEM_FLAME_ORB,
+    .heldItem = ITEM_MUSCLE_BAND,
     .nature = NATURE_JOLLY,
     .ev = TRAINER_PARTY_EVS_JOLLY(),
     .ability = ABILITY_GUTS,
-    .moves = {MOVE_PROTECT, MOVE_FACADE, MOVE_DUAL_WINGBEAT, MOVE_U_TURN}
+    .moves = {MOVE_STEEL_WING, MOVE_FACADE, MOVE_DUAL_WINGBEAT, MOVE_U_TURN},
+    .preStatus = STATUS1_FROSTBITE
     },
     {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
@@ -16726,7 +16728,7 @@ static const struct TrainerMon sParty_DawnRoute111[] = {
     .ev = TRAINER_PARTY_EVS_BOLD(),
     .ability = ABILITY_TORRENT,
     .heldItem = ITEM_EMPOLEONITE_D,
-    .moves = {MOVE_SURF, MOVE_FLASH_CANNON, MOVE_TOXIC, MOVE_ROOST}
+    .moves = {MOVE_SURF, MOVE_FLASH_CANNON, MOVE_AIR_SLASH, MOVE_ROOST}
     },
 };
 
@@ -16790,7 +16792,7 @@ static const struct TrainerMon sParty_DawnLilycove[] = {
     .ev = TRAINER_PARTY_EVS_BOLD(),
     .ability = ABILITY_TORRENT,
     .heldItem = ITEM_EMPOLEONITE_D,
-    .moves = {MOVE_SURF, MOVE_FLASH_CANNON, MOVE_TOXIC, MOVE_ROOST}
+    .moves = {MOVE_SURF, MOVE_FLASH_CANNON, MOVE_AIR_SLASH, MOVE_ROOST}
     },
 };
 
@@ -16853,7 +16855,7 @@ static const struct TrainerMon sParty_DawnEvergrande[] = {
     .ev = TRAINER_PARTY_EVS_BOLD(),
     .ability = ABILITY_TORRENT,
     .heldItem = ITEM_EMPOLEONITE_D,
-    .moves = {MOVE_SURF, MOVE_FLASH_CANNON, MOVE_TOXIC, MOVE_ROOST}
+    .moves = {MOVE_SURF, MOVE_FLASH_CANNON, MOVE_AIR_SLASH, MOVE_ROOST}
     },
 };
 
