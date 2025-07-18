@@ -4162,9 +4162,10 @@ static u32 IncreaseStatUpScoreInternal(u32 battlerAtk, u32 battlerDef, u32 statC
         return NO_INCREASE;
 
     // Don't increase stats if opposing battler has used Haze effect
-    if (HasBattlerSideUsedMoveWithEffect(battlerDef, EFFECT_HAZE)
+    if (!RandomPercentage(RNG_AI_BOOST_INTO_HAZE, BOOST_INTO_HAZE_CHANCE) &&
+        (HasBattlerSideUsedMoveWithEffect(battlerDef, EFFECT_HAZE)
         || HasBattlerSideUsedMoveWithAdditionalEffect(battlerDef, MOVE_EFFECT_CLEAR_SMOG)
-        || HasBattlerSideUsedMoveWithAdditionalEffect(battlerDef, MOVE_EFFECT_HAZE))
+        || HasBattlerSideUsedMoveWithAdditionalEffect(battlerDef, MOVE_EFFECT_HAZE)))
         return NO_INCREASE;
 
     // Don't increase if AI is at +1 and opponent has Haze effect
