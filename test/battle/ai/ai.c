@@ -1110,3 +1110,34 @@ AI_SINGLE_BATTLE_TEST("AI won't use stat boosting moves if the player has used H
         TURN { MOVE(player, MOVE_HAZE); EXPECT_MOVE(opponent, MOVE_DRAGON_DANCE); }
     }
 }
+
+AI_SINGLE_BATTLE_TEST("AI sees popped Air Balloon")
+{
+    GIVEN {
+        ASSUME(gItemsInfo[ITEM_AIR_BALLOON].holdEffect == HOLD_EFFECT_AIR_BALLOON);
+        ASSUME(GetMoveType(MOVE_EARTHQUAKE) == TYPE_GROUND);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_OMNISCIENT);
+        PLAYER(SPECIES_TORCHIC) { Item(ITEM_AIR_BALLOON); Moves(MOVE_SCRATCH); }
+        OPPONENT(SPECIES_GEODUDE) { Moves(MOVE_SCRATCH, MOVE_EARTHQUAKE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); EXPECT_MOVE(opponent, MOVE_SCRATCH); }
+        TURN { MOVE(player, MOVE_SCRATCH); EXPECT_MOVE(opponent, MOVE_EARTHQUAKE); }
+    }
+}
+
+AI_SINGLE_BATTLE_TEST("AI sees popped Air Balloon after Air Balloon mon switches out and back in")
+{
+    GIVEN {
+        ASSUME(gItemsInfo[ITEM_AIR_BALLOON].holdEffect == HOLD_EFFECT_AIR_BALLOON);
+        ASSUME(GetMoveType(MOVE_EARTHQUAKE) == TYPE_GROUND);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_OMNISCIENT);
+        PLAYER(SPECIES_TORCHIC) { Item(ITEM_AIR_BALLOON); Moves(MOVE_SCRATCH); }
+        PLAYER(SPECIES_TORCHIC) { Item(ITEM_AIR_BALLOON); Moves(MOVE_SCRATCH); }
+        OPPONENT(SPECIES_GEODUDE) { Moves(MOVE_SCRATCH, MOVE_EARTHQUAKE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); EXPECT_MOVE(opponent, MOVE_SCRATCH); }
+        TURN { SWITCH(player, 1); EXPECT_MOVE(opponent, MOVE_EARTHQUAKE); }
+        TURN { SWITCH(player, 0); EXPECT_MOVE(opponent, MOVE_SCRATCH); }
+        TURN { MOVE(player, MOVE_SCRATCH); EXPECT_MOVE(opponent, MOVE_EARTHQUAKE); SEND_OUT(player, 1); }
+    }
+}
