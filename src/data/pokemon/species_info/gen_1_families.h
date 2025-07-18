@@ -2690,7 +2690,7 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .iconPalIndex = 2,
         SHADOW(-3, 5, SHADOW_SIZE_M)
         FOOTPRINT(Pikachu)
-        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .levelUpLearnset = sPikachuCosplayLevelUpLearnset,
         .teachableLearnset = sPikachuTeachableLearnset,
         .formSpeciesIdTable = sPikachuFormSpeciesIdTable,
     },
@@ -2741,7 +2741,7 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .iconPalIndex = 1,
         SHADOW(-3, 5, SHADOW_SIZE_M)
         FOOTPRINT(Pikachu)
-        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .levelUpLearnset = sPikachuRockStarLevelUpLearnset,
         .teachableLearnset = sPikachuRockStarTeachableLearnset,
         .formSpeciesIdTable = sPikachuFormSpeciesIdTable,
     },
@@ -2896,7 +2896,7 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .iconPalIndex = 1,
         SHADOW(-3, 5, SHADOW_SIZE_M)
         FOOTPRINT(Pikachu)
-        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .levelUpLearnset = sPikachuPhDLevelUpLearnset,
         .teachableLearnset = sPikachuPhDTeachableLearnset,
         .formSpeciesIdTable = sPikachuFormSpeciesIdTable,
     },
@@ -2947,7 +2947,7 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .iconPalIndex = 0,
         SHADOW(-3, 5, SHADOW_SIZE_M)
         FOOTPRINT(Pikachu)
-        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .levelUpLearnset = sPikachuLibreLevelUpLearnset,
         .teachableLearnset = sPikachuLibreTeachableLearnset,
         .formSpeciesIdTable = sPikachuFormSpeciesIdTable,
     },
@@ -3052,7 +3052,7 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .iconPalIndex = 0,
         SHADOW(-3, 5, SHADOW_SIZE_M)
         FOOTPRINT(Pikachu)
-        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .levelUpLearnset = sPikachuFlyingLevelUpLearnset,
         .teachableLearnset = sPikachuFlyingTeachableLearnset,
         .formSpeciesIdTable = sPikachuFormSpeciesIdTable,
     },

@@ -1172,7 +1172,6 @@ static const u16 sPikachuBelleTeachableLearnset[] = {
     MOVE_FOCUS_PUNCH,
     MOVE_RAIN_DANCE,
     MOVE_ICICLE_SPEAR,
-    MOVE_ICICLE_CRASH,
     MOVE_ICE_BEAM,
     MOVE_UNAVAILABLE,
 };
