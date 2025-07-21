@@ -1141,3 +1141,23 @@ AI_SINGLE_BATTLE_TEST("AI sees popped Air Balloon after Air Balloon mon switches
         TURN { MOVE(player, MOVE_SCRATCH); EXPECT_MOVE(opponent, MOVE_EARTHQUAKE); SEND_OUT(player, 1); }
     }
 }
+
+
+AI_SINGLE_BATTLE_TEST("AI_SMART_MON_CHOICES: AI sees its own weather setting ability when considering switchin candidates")
+{
+    u32 ability = ABILITY_NONE;
+    PARAMETRIZE { ability = ABILITY_WATER_ABSORB; }
+    PARAMETRIZE { ability = ABILITY_DRIZZLE; }
+    GIVEN {
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_SMART_MON_CHOICES | AI_FLAG_OMNISCIENT);
+        PLAYER(SPECIES_ZIGZAGOON) { Speed(2); Moves(MOVE_SCRATCH); }
+        OPPONENT(SPECIES_ZIGZAGOON) { Speed(1); Level(1); Moves(MOVE_SCRATCH); }
+        OPPONENT(SPECIES_POLITOED) { Speed(5); Ability(ability); Moves(MOVE_BUBBLE_BEAM); }
+        OPPONENT(SPECIES_CONKELDURR) { Speed(1); Ability(ABILITY_GUTS); Moves(MOVE_SUPERPOWER); }
+    } WHEN {
+        if (ability == ABILITY_DRIZZLE)
+            TURN { MOVE(player, MOVE_SCRATCH); EXPECT_MOVE(opponent, MOVE_SCRATCH); EXPECT_SEND_OUT(opponent, 1); }
+        else
+            TURN { MOVE(player, MOVE_SCRATCH); EXPECT_MOVE(opponent, MOVE_SCRATCH); EXPECT_SEND_OUT(opponent, 2); }
+    }
+}

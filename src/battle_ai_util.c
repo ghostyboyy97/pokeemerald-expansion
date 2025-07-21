@@ -3880,6 +3880,33 @@ void FreeRestoreBattleMons(struct BattlePokemon *savedBattleMons)
     Free(savedBattleMons);
 }
 
+u32 AI_GetSwitchinWeather(struct BattlePokemon battleMon)
+{
+    u32 ability = battleMon.ability;
+    // Forced weather behaviour
+    if (!AI_WeatherHasEffect(AI_DATA))
+        return B_WEATHER_NONE;
+    if (ability == ABILITY_CLOUD_NINE || ability == ABILITY_AIR_LOCK)
+        return B_WEATHER_NONE;
+    if (gBattleWeather & B_WEATHER_PRIMAL_ANY)
+        return gBattleWeather;
+
+    // Switchin will introduce new weather
+    switch(ability)
+    {
+    case ABILITY_DRIZZLE:
+        return B_WEATHER_RAIN;
+    case ABILITY_DROUGHT:
+        return B_WEATHER_SUN;
+    case ABILITY_SAND_STREAM:
+        return B_WEATHER_SANDSTORM;
+    case ABILITY_SNOW_WARNING:
+        return B_SNOW_WARNING >= GEN_9 ? B_WEATHER_SNOW : B_WEATHER_HAIL;
+    default:
+        return gBattleWeather;
+    }    
+}
+
 // party logic
 s32 AI_CalcPartyMonDamage(u32 move, u32 battlerAtk, u32 battlerDef, struct BattlePokemon switchinCandidate, enum DamageCalcContext calcContext)
 {
@@ -3902,7 +3929,7 @@ s32 AI_CalcPartyMonDamage(u32 move, u32 battlerAtk, u32 battlerDef, struct Battl
         AI_THINKING_STRUCT->saved[battlerAtk].saved = FALSE;
     }
 
-    dmg = AI_CalcDamage(move, battlerAtk, battlerDef, &effectiveness, FALSE, AI_GetWeather(AI_DATA));
+    dmg = AI_CalcDamage(move, battlerAtk, battlerDef, &effectiveness, FALSE, AI_GetSwitchinWeather(switchinCandidate));
 
     // restores original gBattleMon struct
     FreeRestoreBattleMons(savedBattleMons);

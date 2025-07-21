@@ -86,6 +86,7 @@ s32 AI_DecideKnownAbilityForTurn(u32 battlerId);
 u32 AI_DecideHoldEffectForTurn(u32 battlerId);
 bool32 DoesBattlerIgnoreAbilityChecks(u32 atkAbility, u32 move);
 u32 AI_GetWeather(struct AiLogicData *aiData);
+u32 AI_GetSwitchinWeather(struct BattlePokemon battleMon);
 bool32 CanAIFaintTarget(u32 battlerAtk, u32 battlerDef, u32 numHits);
 bool32 CanIndexMoveFaintTarget(u32 battlerAtk, u32 battlerDef, u32 index, enum DamageCalcContext calcContext);
 bool32 CanIndexMoveGuaranteeFaintTarget(u32 battlerAtk, u32 battlerDef, u32 moveIndex);
