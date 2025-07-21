@@ -18133,7 +18133,7 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_DYNAMAX] =
         .contestCategory = CONTEST_CATEGORY_SMART,
         .contestComboStarterId = 0,
         .contestComboMoves = {0},
-        .battleAnimScript = gBattleAnimMove_DracoMeteor,
+        .battleAnimScript = gBattleAnimMove_DevastatingDrake,
     },
 
     [MOVE_MISTY_EXPLOSION] =
