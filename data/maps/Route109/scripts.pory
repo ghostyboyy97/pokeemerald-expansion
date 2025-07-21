@@ -11,6 +11,7 @@ Route109_MapScripts::
 	.byte 0
 
 Route109_OnTransition:
+	setflag FLAG_VISITED_SLATEPORT_CITY
 	goto_if_set FLAG_DEFEATED_HOT_HOUSE, SetHotHouseGirlPermLoc
 	end
 
