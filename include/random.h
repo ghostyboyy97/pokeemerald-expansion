@@ -192,6 +192,7 @@ enum RandomTag
     RNG_AI_SWITCH_WONDER_GUARD,
     RNG_AI_SHOULD_RECOVER,
     RNG_AI_BOOST_INTO_HAZE,
+    RNG_AI_PRIORITIZE_LAST_CHANCE,
 };
 
 #define RandomWeighted(tag, ...) \

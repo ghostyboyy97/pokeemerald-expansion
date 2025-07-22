@@ -43,13 +43,21 @@ typedef s32 (*AiScoreFunc)(u32, u32, u32, s32);
 #define BEST_EFFECT      4
 
 // AI_TryToFaint
-#define FAST_KILL      7 // AI is faster and faints target
+#define FAST_KILL      6 // AI is faster and faints target
 #define SLOW_KILL      4 // AI is slower and faints target
 #define LAST_CHANCE    2 // AI faints to target. It should try and do damage with a priority move
 
 // AI_Risky
 #define STRONG_RISKY_EFFECT     3
 #define AVERAGE_RISKY_EFFECT    2
+
+enum MoveComparisonResult
+{
+    MOVE_NEUTRAL_COMPARISON,
+    MOVE_WON_COMPARISON,
+    MOVE_LOST_COMPARISON,
+    MOVE_DOUBLE_OHKO_COMPARISON,
+};
 
 #include "test_runner.h"
 

@@ -4365,7 +4365,7 @@ static void HandleTurnActionSelectionState(void)
         case STATE_TURN_START_RECORD: // Recorded battle related action on start of every turn.
             RecordedBattle_CopyBattlerMoves(battler);
             gBattleCommunication[battler] = STATE_BEFORE_ACTION_CHOSEN;
-            u32 isAiRisky = AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_RISKY; // Risky AI switches aggressively even mid battle
+            //enum SwitchType switchType = (AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_RISKY) ? SWITCH_AFTER_KO : SWITCH_MID_BATTLE;
 
             // Do AI score computations here so we can use them in AI_TrySwitchOrUseItem
             if ((gBattleTypeFlags & BATTLE_TYPE_HAS_AI || IsWildMonSmart())
@@ -4378,7 +4378,7 @@ static void HandleTurnActionSelectionState(void)
                 BattleAI_SetupAIData(0xF, sBattler_AI);
 
                 // Setup switching data
-                AI_DATA->mostSuitableMonId[battler] = GetMostSuitableMonToSwitchInto(battler, isAiRisky);
+                AI_DATA->mostSuitableMonId[battler] = GetMostSuitableMonToSwitchInto(battler, SWITCH_MID_BATTLE);
                 if (ShouldSwitch(battler))
                     AI_DATA->shouldSwitch |= (1u << battler);
                 gBattleStruct->prevTurnSpecies[battler] = gBattleMons[battler].species;

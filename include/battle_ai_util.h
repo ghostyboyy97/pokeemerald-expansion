@@ -32,7 +32,10 @@ enum AiCompareMovesPriority
     PRIORITY_EFFECT,
     PRIORITY_ACCURACY,
     PRIORITY_SIGNIFICANTLY_MORE_DAMAGE,
-    PRIORITY_NOT_CHARGING
+    PRIORITY_GUARANTEE,
+    PRIORITY_NOT_CHARGING,
+    PRIORITY_SPEED,
+    PRIORITY_RESIST_BERRY,
 };
 
 enum AIPivot
@@ -42,6 +45,18 @@ enum AIPivot
     SHOULD_PIVOT,
 };
 
+enum ConsiderPriority
+{
+    DONT_CONSIDER_PRIORITY,
+    CONSIDER_PRIORITY,
+};
+
+enum
+{
+    SHOULDNT_COMPARE_DAMAGE_ROLLS,
+    SHOULD_COMPARE_DAMAGE_ROLLS,
+};
+
 static inline bool32 IsMoveUnusable(u32 moveIndex, u32 move, u32 moveLimitations)
 {
     return move == MOVE_NONE
@@ -49,8 +64,10 @@ static inline bool32 IsMoveUnusable(u32 moveIndex, u32 move, u32 moveLimitations
         || moveLimitations & 1u << moveIndex;
 }
 
-bool32 AI_IsFaster(u32 battlerAi, u32 battlerDef, u32 move);
-bool32 AI_IsSlower(u32 battlerAi, u32 battlerDef, u32 move);
+bool32 AI_IsFaster(u32 battlerAi, u32 battlerDef, u32 aiMove, u32 playerMove, enum ConsiderPriority considerPriority);
+bool32 AI_IsSlower(u32 battlerAi, u32 battlerDef, u32 aiMove, u32 playerMove, enum ConsiderPriority considerPriority);
+bool32 AI_IsPartyMonFaster(u32 battlerAi, u32 battlerDef, struct BattlePokemon switchinCandidate, u32 aiMove, u32 playerMove, enum ConsiderPriority considerPriority);
+bool32 AI_IsPartyMonSlower(u32 battlerAi, u32 battlerDef, struct BattlePokemon switchinCandidate, u32 aiMove, u32 playerMove, enum ConsiderPriority considerPriority);
 u32 GetAIExplosionChanceFromHP(u32 hpPercent);
 bool32 AI_RandLessThan(u32 val);
 bool32 IsAiVsAiBattle(void);
@@ -75,7 +92,7 @@ bool32 IsTruantMonVulnerable(u32 battlerAI, u32 opposingBattler);
 bool32 AtMaxHp(u32 battler);
 u32 GetHealthPercentage(u32 battler);
 bool32 IsBattlerTrapped(u32 battler, bool32 switching);
-s32 AI_WhoStrikesFirst(u32 battlerAI, u32 battler2, u32 moveConsidered);
+s32 AI_WhoStrikesFirst(u32 battlerAI, u32 battler2, u32 aiMoveConsidered, u32 playerMoveConsidered, enum ConsiderPriority considerPriority);
 bool32 CanTargetFaintAi(u32 battlerDef, u32 battlerAtk);
 u32 NoOfHitsForTargetToFaintBattler(u32 battlerDef, u32 battlerAtk);
 u32 GetBestDmgMoveFromBattler(u32 battlerAtk, u32 battlerDef, enum DamageCalcContext calcContext);
@@ -89,7 +106,6 @@ u32 AI_GetWeather(struct AiLogicData *aiData);
 u32 AI_GetSwitchinWeather(struct BattlePokemon battleMon);
 bool32 CanAIFaintTarget(u32 battlerAtk, u32 battlerDef, u32 numHits);
 bool32 CanIndexMoveFaintTarget(u32 battlerAtk, u32 battlerDef, u32 index, enum DamageCalcContext calcContext);
-bool32 CanIndexMoveGuaranteeFaintTarget(u32 battlerAtk, u32 battlerDef, u32 moveIndex);
 bool32 HasDamagingMove(u32 battlerId);
 bool32 HasDamagingMoveOfType(u32 battlerId, u32 type);
 u32 GetBattlerSecondaryDamage(u32 battlerId);
@@ -111,6 +127,7 @@ bool32 AI_IsAbilityOnSide(u32 battlerId, u32 ability);
 bool32 AI_MoveMakesContact(u32 ability, u32 holdEffect, u32 move);
 bool32 ShouldUseZMove(u32 battlerAtk, u32 battlerDef, u32 chosenMove);
 u32 AI_GetBattlerAbility(u32 battler);
+bool32 CanEndureHit(u32 battler, u32 battlerTarget, u32 move);
 
 // stat stage checks
 bool32 AnyStatIsRaised(u32 battlerId);
@@ -130,7 +147,7 @@ bool32 ShouldLowerEvasion(u32 battlerAtk, u32 battlerDef, u32 defAbility);
 // move checks
 bool32 IsAffectedByPowder(u32 battler, u32 ability, u32 holdEffect);
 bool32 MovesWithCategoryUnusable(u32 attacker, u32 target, u32 category);
-s32 AI_WhichMoveBetter(u32 move1, u32 moveIndex1, u32 move2, u32 moveIndex2, u32 battlerAtk, u32 battlerDef, s32 noOfHitsToKo);
+enum MoveComparisonResult AI_WhichMoveBetter(u32 move1, u32 move2, u32 battlerAtk, u32 battlerDef, s32 noOfHitsToKo);
 struct SimulatedDamage AI_CalcDamageSaveBattlers(u32 move, u32 battlerAtk, u32 battlerDef, uq4_12_t *typeEffectiveness, bool32 considerZPower);
 struct SimulatedDamage AI_CalcDamage(u32 move, u32 battlerAtk, u32 battlerDef, uq4_12_t *typeEffectiveness, bool32 considerZPower, u32 weather);
 bool32 AI_IsDamagedByRecoil(u32 battler, bool8 considerRockHead);
@@ -248,7 +265,7 @@ void IncreaseFrostbiteScore(u32 battlerAtk, u32 battlerDef, u32 move, s32 *score
 u32 IncreaseIndexMoveScoreBasedOnRolls(u32 battlerAtk, u32 battlerDef, u32 moveIndex);
 
 s32 AI_CalcPartyMonDamage(u32 move, u32 battlerAtk, u32 battlerDef, struct BattlePokemon switchinCandidate, enum DamageCalcContext calcContext);
-u32 AI_WhoStrikesFirstPartyMon(u32 battlerAtk, u32 battlerDef, struct BattlePokemon switchinCandidate, u32 moveConsidered);
+u32 AI_WhoStrikesFirstPartyMon(u32 battlerAtk, u32 battlerDef, struct BattlePokemon switchinCandidate, u32 aiMoveConsidered, u32 playerMoveConsidered, enum ConsiderPriority ConsiderPriority);
 s32 AI_TryToClearStats(u32 battlerAtk, u32 battlerDef, bool32 isDoubleBattle);
 bool32 AI_ShouldCopyStatChanges(u32 battlerAtk, u32 battlerDef);
 bool32 AI_ShouldSetUpHazards(u32 battlerAtk, u32 battlerDef, struct AiLogicData *aiData);
