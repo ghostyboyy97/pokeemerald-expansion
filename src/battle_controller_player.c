@@ -2459,22 +2459,53 @@ static bool32 ShouldShowTypeEffectiveness(u32 targetId)
 
 static u32 CheckTypeEffectiveness(u32 targetId, u32 battler)
 {
+    u32 types[3];
+    GetBattlerTypes(targetId, FALSE, types);
+    uq4_12_t effectivenessMultiplier = UQ_4_12(1.0);
+    uq4_12_t mod1 = UQ_4_12(1.0);
+    uq4_12_t mod2 = UQ_4_12(1.0);
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battler][4]);
     struct Pokemon *mon = &gPlayerParty[gBattlerPartyIndexes[battler]];
     u32 move = moveInfo->moves[gMoveSelectionCursor[battler]];
     u32 moveType = CheckDynamicMoveType(mon, move, battler);
-    uq4_12_t modifier = CalcTypeEffectivenessMultiplier(move, moveType, battler, targetId, GetBattlerAbility(targetId), FALSE);
+
+    if (move != MOVE_NONE && move != MOVE_UNAVAILABLE && gMovesInfo[move].power > 0)
+    {
+        mod1 = GetTypeModifier(moveType, types[0]);
+        if(types[0] != types[1])
+            mod2 = GetTypeModifier(moveType, types[1]);
+        
+        effectivenessMultiplier = uq4_12_multiply(mod1, mod2);
+    }
 
     if (!ShouldShowTypeEffectiveness(targetId))
         return EFFECTIVENESS_CANNOT_VIEW;
 
-    if (modifier == UQ_4_12(0.0))
+    if (effectivenessMultiplier == UQ_4_12(0.0))
         return EFFECTIVENESS_NO_EFFECT; // No effect
-    else if (modifier <= UQ_4_12(0.5))
+    else if (effectivenessMultiplier <= UQ_4_12(0.5))
         return EFFECTIVENESS_NOT_VERY_EFFECTIVE; // Not very effective
-    else if (modifier >= UQ_4_12(2.0))
+    else if (effectivenessMultiplier >= UQ_4_12(2.0))
         return EFFECTIVENESS_SUPER_EFFECTIVE; // Super effective
     return EFFECTIVENESS_NORMAL; // Normal effectiveness
+
+
+    // struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battler][4]);
+    // struct Pokemon *mon = &gPlayerParty[gBattlerPartyIndexes[battler]];
+    // u32 move = moveInfo->moves[gMoveSelectionCursor[battler]];
+    // u32 moveType = CheckDynamicMoveType(mon, move, battler);
+    // uq4_12_t modifier = CalcTypeEffectivenessMultiplier(move, moveType, battler, targetId, GetBattlerAbility(targetId), FALSE);
+
+    // if (!ShouldShowTypeEffectiveness(targetId))
+    //     return EFFECTIVENESS_CANNOT_VIEW;
+
+    // if (modifier == UQ_4_12(0.0))
+    //     return EFFECTIVENESS_NO_EFFECT; // No effect
+    // else if (modifier <= UQ_4_12(0.5))
+    //     return EFFECTIVENESS_NOT_VERY_EFFECTIVE; // Not very effective
+    // else if (modifier >= UQ_4_12(2.0))
+    //     return EFFECTIVENESS_SUPER_EFFECTIVE; // Super effective
+    // return EFFECTIVENESS_NORMAL; // Normal effectiveness
 }
 
 static u32 CheckTargetTypeEffectiveness(u32 battler)
