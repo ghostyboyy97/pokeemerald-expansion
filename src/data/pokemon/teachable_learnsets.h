@@ -1137,6 +1137,7 @@ static const u16 sPikachuRockStarTeachableLearnset[] = {
     MOVE_RAIN_DANCE,
     MOVE_IRON_HEAD,
     MOVE_STEEL_BEAM,
+    MOVE_FLASH_CANNON,
     MOVE_UNAVAILABLE,
 };
 

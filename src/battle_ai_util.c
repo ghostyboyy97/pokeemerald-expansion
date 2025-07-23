@@ -81,7 +81,7 @@ u32 GetAIChosenMove(u32 battlerId)
 // AI_RandLessThan
 // Lower HP means higher % chance to explode
 // hp 10% -> 229/255 -> ~90% chance to return TRUE from AI_RandLessThan
-// hp 50% -> ~57% chance
+// hp 50% -> ~45% chance
 // hp 89% -> ~2.8% chance
 // hp 90%+ 0/255-> 0% chance to return TRUE from AI_RandLessThan
 u32 GetAIExplosionChanceFromHP(u32 hpPercent)
@@ -2144,23 +2144,23 @@ bool32 CanIndexMoveFaintTarget(u32 battlerAtk, u32 battlerDef, u32 moveIndex, en
     return FALSE;
 }
 
-u32 IncreaseIndexMoveScoreBasedOnRolls(u32 battlerAtk, u32 battlerDef, u32 moveIndex)
-{
-    s32 minDmg, medDmg;
-    u16 *moves = gBattleMons[battlerAtk].moves;
-    bool32 canEndureHit = CanEndureHit(battlerAtk, battlerDef, moves[moveIndex]);
+// u32 IncreaseIndexMoveScoreBasedOnRolls(u32 battlerAtk, u32 battlerDef, u32 moveIndex)
+// {
+//     s32 minDmg, medDmg;
+//     u16 *moves = gBattleMons[battlerAtk].moves;
+//     bool32 canEndureHit = CanEndureHit(battlerAtk, battlerDef, moves[moveIndex]);
 
-    minDmg = AI_DATA->simulatedDmg[battlerAtk][battlerDef][moveIndex].minimum;
-    medDmg = AI_DATA->simulatedDmg[battlerAtk][battlerDef][moveIndex].median;
+//     minDmg = AI_DATA->simulatedDmg[battlerAtk][battlerDef][moveIndex].minimum;
+//     medDmg = AI_DATA->simulatedDmg[battlerAtk][battlerDef][moveIndex].median;
 
-    if (gBattleMons[battlerDef].hp <= minDmg && !canEndureHit)
-        return DECENT_EFFECT;
+//     if (gBattleMons[battlerDef].hp <= minDmg && !canEndureHit)
+//         return DECENT_EFFECT;
     
-    if (gBattleMons[battlerDef].hp <= medDmg && !canEndureHit)
-        return WEAK_EFFECT;
+//     if (gBattleMons[battlerDef].hp <= medDmg && !canEndureHit)
+//         return WEAK_EFFECT;
     
-    return NO_INCREASE;
-}
+//     return NO_INCREASE;
+// }
 
 u16 *GetMovesArray(u32 battler)
 {
