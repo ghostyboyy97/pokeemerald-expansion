@@ -5401,7 +5401,7 @@ static const struct TrainerMon sParty_Wattson1[] = {
     .nature = NATURE_MODEST,
     .ev = TRAINER_PARTY_EVS_MODEST(),
     .ability = ABILITY_ANALYTIC,
-    .moves = {MOVE_SHOCK_WAVE, MOVE_MIRROR_SHOT, MOVE_VOLT_SWITCH, MOVE_TRI_ATTACK}
+    .moves = {MOVE_DISCHARGE, MOVE_MIRROR_SHOT, MOVE_VOLT_SWITCH, MOVE_TRI_ATTACK}
     },
     {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
