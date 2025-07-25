@@ -16992,7 +16992,7 @@ static const struct TrainerMon sParty_Iriv24[] = {
     .species = SPECIES_TYRANITAR,
     .nature = NATURE_ADAMANT,
     .ev = TRAINER_PARTY_EVS_ADAMANT(),
-    .ability = ABILITY_SAND_STREAM,
+    .ability = ABILITY_UNNERVE,
     .heldItem = ITEM_CHOPLE_BERRY,
     .moves = {MOVE_CRUNCH, MOVE_ROCK_SLIDE, MOVE_HIGH_HORSEPOWER, MOVE_DRAGON_DANCE}
     },
