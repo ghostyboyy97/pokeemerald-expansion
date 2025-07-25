@@ -257,7 +257,7 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
             }
 
             // Only check damage if it's a damaging move
-            if (gMovesInfo[playerMove].category != DAMAGE_CATEGORY_STATUS
+            if (gMovesInfo[aiMove].category != DAMAGE_CATEGORY_STATUS
                 && !AI_DoesChoiceEffectBlockMove(battler, aiMove))
             {
                 // Check if mon has a super effective move
@@ -2050,7 +2050,7 @@ static inline bool32 IsFreeSwitch(enum SwitchType switchType, u32 battlerSwitchi
 
     // Post KO check has to be last because the GetMostSuitableMonToSwitchInto call in OpponentHandleChoosePokemon assumes a KO rather than a forced switch choice
     if (switchType == SWITCH_AFTER_KO)
-        return TRUE;
+            return TRUE;
     else
         return FALSE;
 }
