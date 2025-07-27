@@ -462,12 +462,13 @@ static bool32 FindMonThatAbsorbsOpponentsMove(u32 battler)
     u32 predictedMove = incomingMove; // Update for move prediction
     bool32 isOpposingBattlerChargingOrInvulnerable = (IsSemiInvulnerable(opposingBattler, incomingMove) || IsTwoTurnNotSemiInvulnerableMove(opposingBattler, incomingMove));
     s32 i, j;
+    bool32 playerIsChoiceLocked = (predictedMove == gBattleStruct->choicedMove[opposingBattler]);
 
     if (!(AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_SMART_SWITCHING))
         return FALSE;
     if (gBattleStruct->prevTurnSpecies[battler] != gBattleMons[battler].species) // AI mon has changed, player's behaviour no longer reliable; note to override this if using AI_FLAG_PREDICT_MOVE
         return FALSE;
-    if (CanUseSuperEffectiveMoveAgainstOpponents(battler) && RandomPercentage(RNG_AI_SWITCH_ABSORBING, 66))
+    if (CanUseSuperEffectiveMoveAgainstOpponents(battler) && RandomPercentage(RNG_AI_SWITCH_ABSORBING_STAY_IN, STAY_IN_ABSORBING_PERCENTAGE))
         return FALSE;
 
     if (AreStatsRaised(battler))
@@ -579,7 +580,10 @@ static bool32 FindMonThatAbsorbsOpponentsMove(u32 battler)
         {
             // Found a mon
             if (absorbingTypeAbilities[j] == monAbility)
-                return SetSwitchinAndSwitch(battler, i);
+            {
+                if (playerIsChoiceLocked || RandomPercentage(RNG_AI_SWITCH_ABSORBING, GetSwitchChance(SHOULD_SWITCH_ABSORBS_MOVE)))
+                    return SetSwitchinAndSwitch(battler, i);
+            }     
         }
     }
     return FALSE;
