@@ -16332,7 +16332,7 @@ static const struct TrainerMon sParty_Fantina[] = {
     .heldItem = ITEM_BANETTITE,
     .nature = NATURE_JOLLY,
     .ev = TRAINER_PARTY_EVS_JOLLY(),
-    .ability = ABILITY_PRANKSTER,
+    .ability = ABILITY_INSOMNIA,
     .friendship = MAX_FRIENDSHIP,
     .moves = {MOVE_KNOCK_OFF, MOVE_SHADOW_CLAW, MOVE_SHADOW_SNEAK, MOVE_RETURN}
     }
