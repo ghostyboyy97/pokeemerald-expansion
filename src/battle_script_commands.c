@@ -1207,6 +1207,7 @@ static void Cmd_attackcanceler(void)
             gProtectStructs[gBattlerAttacker].chargingTurn = FALSE;
             CancelMultiTurnMoves(gBattlerAttacker);
             gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+            gHitMarker |= HITMARKER_OBEYS;
             BattleScriptPushCursor();
             gBattlescriptCurrInstr = BattleScript_PrimalWeatherBlocksMove;
             return;
@@ -1218,6 +1219,7 @@ static void Cmd_attackcanceler(void)
             gProtectStructs[gBattlerAttacker].chargingTurn = FALSE;
             CancelMultiTurnMoves(gBattlerAttacker);
             gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+            gHitMarker |= HITMARKER_OBEYS;
             BattleScriptPushCursor();
             gBattlescriptCurrInstr = BattleScript_PrimalWeatherBlocksMove;
             return;
@@ -1266,7 +1268,10 @@ static void Cmd_attackcanceler(void)
     if (AtkCanceller_UnableToUseMove2())
         return;
     if (AbilityBattleEffects(ABILITYEFFECT_MOVES_BLOCK, gBattlerTarget, 0, 0, 0))
+    {
+        gHitMarker |= HITMARKER_OBEYS;
         return;
+    }
     if (!gBattleMons[gBattlerAttacker].pp[gCurrMovePos] && gCurrentMove != MOVE_STRUGGLE
      && !(gHitMarker & (HITMARKER_ALLOW_NO_PP | HITMARKER_NO_ATTACKSTRING | HITMARKER_NO_PPDEDUCT))
      && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))
