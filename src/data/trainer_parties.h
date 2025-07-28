@@ -4919,7 +4919,6 @@ static const struct TrainerMon sParty_Phoebe1[] = {
     .ability = ABILITY_INTIMIDATE,
     .heldItem = ITEM_LIFE_ORB,
     .moves = {MOVE_GUNK_SHOT, MOVE_THROAT_CHOP, MOVE_AQUA_TAIL, MOVE_FACADE},
-    .preStatus = STATUS1_FROSTBITE
     },
     {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
