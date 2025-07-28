@@ -497,6 +497,7 @@ static u32 ChooseMoveOrAction_Singles(u32 battlerAi)
     s32 i;
     u32 flags = AI_THINKING_STRUCT->aiFlags[battlerAi];
     u32 opposingBattler = GetBattlerAtPosition(BATTLE_OPPOSITE(GetBattlerPosition(battlerAi)));
+    AI_DATA->shouldConsiderExpolsion = AI_RandLessThan(GetAIExplosionChanceFromHP(AI_DATA->hpPercents[battlerAi]));
 
     AI_DATA->partnerMove = 0;   // no ally
     while (flags != 0)
@@ -991,8 +992,7 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
                 ADJUST_SCORE(-20);
             break;
         case EFFECT_EXPLOSION:
-            AI_DATA->shouldConsiderExpolsion = AI_RandLessThan(GetAIExplosionChanceFromHP(AI_DATA->hpPercents[battlerAtk]));
-            if(!AI_DATA->shouldConsiderExpolsion)
+            if(!aiData->shouldConsiderExpolsion)
             {
                 ADJUST_SCORE(-10);
             }
