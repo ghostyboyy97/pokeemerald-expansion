@@ -5553,8 +5553,9 @@ static const struct TrainerMon sParty_Norman1[] = {
     .nature = NATURE_JOLLY,
     .ev = TRAINER_PARTY_EVS_JOLLY(),
     .ability = ABILITY_GUTS,
-    .heldItem = ITEM_FLAME_ORB,
-    .moves = {MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_BRICK_BREAK, MOVE_OBSTRUCT}
+    .heldItem = ITEM_LIFE_ORB,
+    .moves = {MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_CLOSE_COMBAT, MOVE_SUCKER_PUNCH},
+    .preStatus = STATUS1_FROSTBITE
     },
 };
 
@@ -14711,8 +14712,9 @@ static const struct TrainerMon sParty_Norman2[] = {
     .nature = NATURE_JOLLY,
     .ev = TRAINER_PARTY_EVS_JOLLY(),
     .ability = ABILITY_GUTS,
-    .heldItem = ITEM_FLAME_ORB,
-    .moves = {MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_BRICK_BREAK, MOVE_OBSTRUCT}
+    .heldItem = ITEM_LIFE_ORB,
+    .moves = {MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_CLOSE_COMBAT, MOVE_SUCKER_PUNCH},
+    .preStatus = STATUS1_FROSTBITE
     },
 };
 
@@ -14777,8 +14779,9 @@ static const struct TrainerMon sParty_Norman3[] = {
     .nature = NATURE_JOLLY,
     .ev = TRAINER_PARTY_EVS_JOLLY(),
     .ability = ABILITY_GUTS,
-    .heldItem = ITEM_FLAME_ORB,
-    .moves = {MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_BRICK_BREAK, MOVE_OBSTRUCT}
+    .heldItem = ITEM_LIFE_ORB,
+    .moves = {MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_CLOSE_COMBAT, MOVE_SUCKER_PUNCH},
+    .preStatus = STATUS1_FROSTBITE
     },
 };
 
@@ -14843,8 +14846,9 @@ static const struct TrainerMon sParty_Norman4[] = {
     .nature = NATURE_JOLLY,
     .ev = TRAINER_PARTY_EVS_JOLLY(),
     .ability = ABILITY_GUTS,
-    .heldItem = ITEM_FLAME_ORB,
-    .moves = {MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_BRICK_BREAK, MOVE_OBSTRUCT}
+    .heldItem = ITEM_LIFE_ORB,
+    .moves = {MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_CLOSE_COMBAT, MOVE_SUCKER_PUNCH},
+    .preStatus = STATUS1_FROSTBITE
     },
 };
 
@@ -14909,8 +14913,9 @@ static const struct TrainerMon sParty_Norman5[] = {
     .nature = NATURE_JOLLY,
     .ev = TRAINER_PARTY_EVS_JOLLY(),
     .ability = ABILITY_GUTS,
-    .heldItem = ITEM_FLAME_ORB,
-    .moves = {MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_BRICK_BREAK, MOVE_OBSTRUCT}
+    .heldItem = ITEM_LIFE_ORB,
+    .moves = {MOVE_FACADE, MOVE_KNOCK_OFF, MOVE_CLOSE_COMBAT, MOVE_SUCKER_PUNCH},
+    .preStatus = STATUS1_FROSTBITE
     },
 };
 
