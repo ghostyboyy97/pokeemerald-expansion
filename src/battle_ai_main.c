@@ -1132,16 +1132,20 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
                 if (!BattlerStatCanRise(battlerAtk, aiData->abilities[battlerAtk], STAT_DEF))
                     ADJUST_SCORE(-10);
                 else if (!BattlerStatCanRise(battlerAtk, aiData->abilities[battlerAtk], STAT_SPDEF))
-                    ADJUST_SCORE(-8);
+                    ADJUST_SCORE(-10);
             }
             else
             {
-                if (!BattlerStatCanRise(battlerAtk, aiData->abilities[battlerAtk], STAT_ATK) || !HasMoveWithCategory(battlerAtk, DAMAGE_CATEGORY_PHYSICAL))
+                if (!BattlerStatCanRise(battlerAtk, aiData->abilities[battlerAtk], STAT_ATK))
                     ADJUST_SCORE(-10);
-                else if (!BattlerStatCanRise(battlerAtk, aiData->abilities[battlerAtk], STAT_SPATK) || !HasMoveWithCategory(battlerAtk, DAMAGE_CATEGORY_SPECIAL))
-                    ADJUST_SCORE(-8);
+                else if (!BattlerStatCanRise(battlerAtk, aiData->abilities[battlerAtk], STAT_SPATK))
+                    ADJUST_SCORE(-10);
                 else if (!BattlerStatCanRise(battlerAtk, aiData->abilities[battlerAtk], STAT_SPEED))
-                    ADJUST_SCORE(-6);
+                    ADJUST_SCORE(-10);
+                else if (gBattleMons[battlerAtk].statStages[STAT_DEF] < (DEFAULT_STAT_STAGE - 2))
+                    ADJUST_SCORE(-4);
+                else if (gBattleMons[battlerAtk].statStages[STAT_SPDEF] < (DEFAULT_STAT_STAGE - 2))
+                    ADJUST_SCORE(-4);
             }
             break;
         case EFFECT_GROWTH:
