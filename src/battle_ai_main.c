@@ -990,21 +990,19 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
             if (PartnerMoveActivatesSleepClause(aiData->partnerMove))
                 ADJUST_SCORE(-20);
             break;
-
-            if (effectiveness == UQ_4_12(0.0))
+        case EFFECT_EXPLOSION:
+            AI_DATA->shouldConsiderExpolsion = AI_RandLessThan(GetAIExplosionChanceFromHP(AI_DATA->hpPercents[battlerAtk]));
+            if(!AI_DATA->shouldConsiderExpolsion)
+            {
+                ADJUST_SCORE(-10);
+            }
+            else if (effectiveness == UQ_4_12(0.0))
             {
                 ADJUST_SCORE(-10);
             }
             else if (IsAbilityOnField(ABILITY_DAMP) && !DoesBattlerIgnoreAbilityChecks(aiData->abilities[battlerAtk], move))
             {
                 ADJUST_SCORE(-10);
-            }
-            else if (CountUsablePartyMons(battlerAtk) == 0)
-            {
-                if (CountUsablePartyMons(battlerDef) != 0)
-                    ADJUST_SCORE(-10);
-                else
-                    ADJUST_SCORE(-1);
             }
             break;
     // stat raising effects
@@ -2634,7 +2632,7 @@ static s32 AI_TryToFaint(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
     // we get a random number based on the remaining HP of the AI attacker
     bool8 canIgnoreExplosionEffect = ((gMovesInfo[move].effect != EFFECT_EXPLOSION)
                                     || (gMovesInfo[move].effect == EFFECT_EXPLOSION
-                                        && AI_RandLessThan(GetAIExplosionChanceFromHP(AI_DATA->hpPercents[battlerAtk]))));
+                                        && AI_DATA->shouldConsiderExpolsion));
 
     if (CanIndexMoveFaintTarget(battlerAtk, battlerDef, movesetIndex, AI_ATTACKING_ON_FIELD) && canIgnoreExplosionEffect)
     {
@@ -3468,14 +3466,6 @@ static u32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move)
             ADJUST_SCORE(GOOD_EFFECT);
             if (aiData->holdEffects[battlerAtk] == HOLD_EFFECT_BIG_ROOT)
                 ADJUST_SCORE(WEAK_EFFECT);
-        }
-        break;
-    case EFFECT_EXPLOSION:
-    case EFFECT_MEMENTO:
-        if (gBattleMons[battlerDef].statStages[STAT_EVASION] < 7)
-        {
-            if (AI_RandLessThan(GetAIExplosionChanceFromHP(AI_DATA->hpPercents[battlerAtk])))
-                ADJUST_SCORE(DECENT_EFFECT);
         }
         break;
     case EFFECT_FINAL_GAMBIT:
