@@ -882,6 +882,10 @@ static bool32 AI_IsMoveEffectInPlus(u32 battlerAtk, u32 battlerDef, u32 move, s3
         if (BattlerStatCanRise(battlerAtk, abilityAtk, STAT_ATK))
             return TRUE;
         break;
+    case EFFECT_BOLT_BEAK:
+        if(AI_IsFaster(battlerAtk, battlerDef, move, AI_DATA->lastUsedMove[battlerDef], DONT_CONSIDER_PRIORITY))
+            return TRUE;
+        break;
     }
 
     // check ADDITIONAL_EFFECTS
