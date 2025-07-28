@@ -3375,6 +3375,35 @@ static void AI_CompareDamagingMoves(u32 battlerAtk, u32 battlerDef)
     }
 }
 
+static u32 GetStatBeingLoweredFromMoveEffect(u32 statChange)
+{
+    switch(statChange)
+    {
+        case MOVE_EFFECT_ATK_MINUS_1:
+        case MOVE_EFFECT_ATK_MINUS_2:
+            return STAT_ATK;
+        case MOVE_EFFECT_DEF_MINUS_1:
+        case MOVE_EFFECT_DEF_MINUS_2:
+            return STAT_DEF;
+        case MOVE_EFFECT_SPD_MINUS_1:
+        case MOVE_EFFECT_SPD_MINUS_2:
+            return STAT_SPEED;
+        case MOVE_EFFECT_SP_ATK_MINUS_1:
+        case MOVE_EFFECT_SP_ATK_MINUS_2:
+            return STAT_SPATK;
+        case MOVE_EFFECT_SP_DEF_MINUS_1:
+        case MOVE_EFFECT_SP_DEF_MINUS_2:
+            return STAT_SPDEF;
+        case MOVE_EFFECT_ACC_MINUS_1:
+        case MOVE_EFFECT_ACC_MINUS_2:
+            return STAT_ACC;
+        case MOVE_EFFECT_EVS_MINUS_1:
+        case MOVE_EFFECT_EVS_MINUS_2:
+            return STAT_EVASION;
+    }
+    return 0; // STAT_HP, should never be getting changed
+}
+
 static u32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move)
 {
     // move data
@@ -4763,16 +4792,13 @@ static u32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move)
                 case MOVE_EFFECT_SP_DEF_MINUS_1:
                 case MOVE_EFFECT_ACC_MINUS_1:
                 case MOVE_EFFECT_EVS_MINUS_1:
-                    if (aiData->abilities[battlerDef] != ABILITY_CONTRARY)
-                        ADJUST_SCORE(DECENT_EFFECT);
-                    break;
                 case MOVE_EFFECT_ATK_MINUS_2:
                 case MOVE_EFFECT_DEF_MINUS_2:
                 case MOVE_EFFECT_SP_ATK_MINUS_2:
                 case MOVE_EFFECT_SP_DEF_MINUS_2:
                 case MOVE_EFFECT_ACC_MINUS_2:
                 case MOVE_EFFECT_EVS_MINUS_2:
-                    if (aiData->abilities[battlerDef] != ABILITY_CONTRARY)
+                    if (ShouldLowerStat(battlerDef, aiData->abilities[battlerDef], GetStatBeingLoweredFromMoveEffect(gMovesInfo[move].additionalEffects[i].moveEffect)))
                         ADJUST_SCORE(DECENT_EFFECT);
                     break;
                 case MOVE_EFFECT_POISON:

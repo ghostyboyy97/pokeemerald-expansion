@@ -1925,7 +1925,8 @@ void ProtectChecks(u32 battlerAtk, u32 battlerDef, u32 move, u32 predictedMove, 
 // stat stages
 bool32 ShouldLowerStat(u32 battler, u32 battlerAbility, u32 stat)
 {
-    if (gBattleMons[battler].statStages[stat] > MIN_STAT_STAGE && battlerAbility != ABILITY_CONTRARY)
+    // no need to keep lowering stats if theyre at -4
+    if (gBattleMons[battler].statStages[stat] > (MIN_STAT_STAGE + 2) && battlerAbility != ABILITY_CONTRARY)
     {
         if (AI_DATA->holdEffects[battler] == HOLD_EFFECT_CLEAR_AMULET
          || battlerAbility == ABILITY_CLEAR_BODY
