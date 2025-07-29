@@ -3283,6 +3283,10 @@ void SetMoveEffect(bool32 primary, bool32 certain)
             }
             if (gBattleMons[gEffectBattler].status1)
                 break;
+
+            if (CanTriggerParasiticWaste(gBattleScripting.battler, gCurrentMove))
+                break;
+
             if (CanBePoisoned(gBattleScripting.battler, gEffectBattler, GetBattlerAbility(gEffectBattler)))
             {
                 // It's redundant, because at this point we know the status1 value is 0.
@@ -3295,7 +3299,10 @@ void SetMoveEffect(bool32 primary, bool32 certain)
             {
                 gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
             }
+
             break;
+
+            
         case STATUS1_FROSTBITE:
             if (B_STATUS_TYPE_IMMUNITY == GEN_1)
             {
