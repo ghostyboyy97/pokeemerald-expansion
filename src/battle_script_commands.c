@@ -3139,6 +3139,9 @@ void SetMoveEffect(bool32 primary, bool32 certain)
             if (!CanBePoisoned(gBattleScripting.battler, gEffectBattler, GetBattlerAbility(gEffectBattler)))
                 break;
 
+            if (CanTriggerParasiticWaste(gBattleScripting.battler, gCurrentMove))
+                break;
+
             statusChanged = TRUE;
             break;
         case STATUS1_BURN:
@@ -3280,6 +3283,10 @@ void SetMoveEffect(bool32 primary, bool32 certain)
             }
             if (gBattleMons[gEffectBattler].status1)
                 break;
+
+            if (CanTriggerParasiticWaste(gBattleScripting.battler, gCurrentMove))
+                break;
+
             if (CanBePoisoned(gBattleScripting.battler, gEffectBattler, GetBattlerAbility(gEffectBattler)))
             {
                 // It's redundant, because at this point we know the status1 value is 0.
@@ -3292,7 +3299,10 @@ void SetMoveEffect(bool32 primary, bool32 certain)
             {
                 gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
             }
+
             break;
+
+            
         case STATUS1_FROSTBITE:
             if (B_STATUS_TYPE_IMMUNITY == GEN_1)
             {
@@ -5886,7 +5896,7 @@ static void Cmd_moveend(void)
             gBattleScripting.moveendState++;
             break;
         case MOVEEND_ABSORB:
-            if (gMovesInfo[gCurrentMove].effect == EFFECT_ABSORB
+            if ((gMovesInfo[gCurrentMove].effect == EFFECT_ABSORB || CanTriggerParasiticWaste(gBattlerAttacker, gCurrentMove))
              && !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
              && TARGET_TURN_DAMAGED)
             {
@@ -5897,7 +5907,10 @@ static void Cmd_moveend(void)
                 }
                 else if (IsBattlerAlive(gBattlerAttacker) && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
                 {
-                    gBattleMoveDamage = max(1, (gHpDealt * gMovesInfo[gCurrentMove].argument / 100));
+                    if(CanTriggerParasiticWaste(gBattlerAttacker, gCurrentMove))
+                        gBattleMoveDamage = max(1,  (gHpDealt / 2)); // Always heals half
+                    else
+                        gBattleMoveDamage = max(1, (gHpDealt * gMovesInfo[gCurrentMove].argument / 100));
                     gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, gBattleMoveDamage);
                     gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE;
                     effect = TRUE;
