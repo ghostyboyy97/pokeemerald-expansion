@@ -2524,6 +2524,13 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .aiRating = 7,
     },
 
+    [ABILITY_PARASITIC_WASTE] =
+    {
+        .name = _("Parasitic Waste"),
+        .description = COMPOUND_STRING("Attacks that poison drain instead."),
+        .aiRating = 6,
+    },
+
     
 
 };

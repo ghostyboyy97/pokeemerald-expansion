@@ -3139,6 +3139,9 @@ void SetMoveEffect(bool32 primary, bool32 certain)
             if (!CanBePoisoned(gBattleScripting.battler, gEffectBattler, GetBattlerAbility(gEffectBattler)))
                 break;
 
+            if (CanTriggerParasiticWaste(gBattleScripting.battler, gCurrentMove))
+                break;
+
             statusChanged = TRUE;
             break;
         case STATUS1_BURN:
@@ -5886,7 +5889,7 @@ static void Cmd_moveend(void)
             gBattleScripting.moveendState++;
             break;
         case MOVEEND_ABSORB:
-            if (gMovesInfo[gCurrentMove].effect == EFFECT_ABSORB
+            if ((gMovesInfo[gCurrentMove].effect == EFFECT_ABSORB || CanTriggerParasiticWaste(gBattlerAttacker, gCurrentMove))
              && !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
              && TARGET_TURN_DAMAGED)
             {
@@ -5897,7 +5900,10 @@ static void Cmd_moveend(void)
                 }
                 else if (IsBattlerAlive(gBattlerAttacker) && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
                 {
-                    gBattleMoveDamage = max(1, (gHpDealt * gMovesInfo[gCurrentMove].argument / 100));
+                    if(CanTriggerParasiticWaste(gBattlerAttacker, gCurrentMove))
+                        gBattleMoveDamage = max(1,  (gHpDealt / 2)); // Always heals half
+                    else
+                        gBattleMoveDamage = max(1, (gHpDealt * gMovesInfo[gCurrentMove].argument / 100));
                     gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, gBattleMoveDamage);
                     gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE;
                     effect = TRUE;

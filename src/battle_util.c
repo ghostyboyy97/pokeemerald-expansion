@@ -11639,6 +11639,34 @@ u32 GetBattlerMoveTargetType(u32 battler, u32 move)
     return gMovesInfo[move].target;
 }
 
+// Checks if the move can trigger parasitic waste
+bool32 CanTriggerParasiticWaste(u32 battler, u32 move)
+{
+
+    bool32 IsParasiticWasteMaxEffect =
+        gMovesInfo[move].argument == MAX_EFFECT_EFFECT_SPORE_FOES ||
+        gMovesInfo[move].argument == MAX_EFFECT_POISON_PARALYZE_FOES ||
+        gMovesInfo[move].argument == MAX_EFFECT_POISON_FOES;
+
+    bool32 IsParasiticWasteEffect =
+        MoveHasAdditionalEffect(move, MOVE_EFFECT_POISON) ||
+        MoveHasAdditionalEffect(move, MOVE_EFFECT_TOXIC);
+
+    bool32 IsParasiticWasteTriggered =
+        IsParasiticWasteEffect && gMovesInfo[move].effect == EFFECT_HIT;
+
+    bool32 IsParasticWasteTriggeredMax =
+        IsParasiticWasteMaxEffect && gMovesInfo[move].effect == EFFECT_MAX_MOVE;
+
+    if ((IsParasiticWasteTriggered || IsParasticWasteTriggeredMax) &&
+        gBattleMons[battler].ability == ABILITY_PARASITIC_WASTE)
+    {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 bool32 CanTargetBattler(u32 battlerAtk, u32 battlerDef, u16 move)
 {
     if (gMovesInfo[move].effect == EFFECT_HIT_ENEMY_HEAL_ALLY
