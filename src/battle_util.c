@@ -11649,16 +11649,11 @@ bool32 CanTriggerParasiticWaste(u32 battler, u32 move)
         gMovesInfo[move].argument == MAX_EFFECT_POISON_FOES;
 
     bool32 IsParasiticWasteEffect =
+        IsParasiticWasteMaxEffect ||
         MoveHasAdditionalEffect(move, MOVE_EFFECT_POISON) ||
         MoveHasAdditionalEffect(move, MOVE_EFFECT_TOXIC);
 
-    bool32 IsParasiticWasteTriggered =
-        IsParasiticWasteEffect && gMovesInfo[move].effect == EFFECT_HIT;
-
-    bool32 IsParasticWasteTriggeredMax =
-        IsParasiticWasteMaxEffect && gMovesInfo[move].effect == EFFECT_MAX_MOVE;
-
-    if ((IsParasiticWasteTriggered || IsParasticWasteTriggeredMax) &&
+    if (IsParasiticWasteEffect &&
         gBattleMons[battler].ability == ABILITY_PARASITIC_WASTE)
     {
         return TRUE;
