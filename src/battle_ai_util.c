@@ -3051,9 +3051,9 @@ enum AIPivot ShouldPivot(u32 battlerAtk, u32 battlerDef, u32 defAbility, u32 mov
             if (!CanAIFaintTarget(battlerAtk, battlerDef, 0)) // Can't KO foe otherwise
             {
                 if ((AI_DATA->mostSuitableMonId[battlerAtk] != PARTY_SIZE)              // there is actually a suitable mon to switch into
-                    && (gBattleMons[battlerAtk].hp >= gBattleMons[battlerAtk].maxHP / 3 // And the current mon has at least 1/3 their HP, or 1/4 HP and Regenerator
+                    && (AI_DATA->hpPercents[battlerAtk] >= 33 // And the current mon has at least 1/3 their HP, or 1/4 HP and Regenerator
                     || (gBattleMons[battlerAtk].ability == ABILITY_REGENERATOR
-                    && gBattleMons[battlerAtk].hp >= gBattleMons[battlerAtk].maxHP / 4)))
+                    && AI_DATA->hpPercents[battlerAtk] >= 25)))
                 {
                     if (CanTargetFaintAi(battlerDef, battlerAtk)) // the player can KO the AI
                         return SHOULD_PIVOT;
