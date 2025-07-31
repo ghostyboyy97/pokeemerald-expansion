@@ -141,7 +141,6 @@ Debug_EventScript_Text_NonsenseFiller:
 	.string "Literal filler$"
 
 
-
 Debug_EventScript_Script_1::
 	release
 	end
