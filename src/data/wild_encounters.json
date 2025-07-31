@@ -2955,12 +2955,12 @@
               {
                 "min_level": 5,
                 "max_level": 35,
-                "species": "SPECIES_TATSUGIRI"
+                "species": "SPECIES_LUVDISC"
               },
               {
                 "min_level": 10,
                 "max_level": 30,
-                "species": "SPECIES_VELUZA"
+                "species": "SPECIES_LUVDISC"
               },
               {
                 "min_level": 15,
@@ -5195,12 +5195,12 @@
               {
                 "min_level": 5,
                 "max_level": 35,
-                "species": "SPECIES_LUVDISC"
+                "species": "SPECIES_TATSUGIRI"
               },
               {
                 "min_level": 10,
                 "max_level": 30,
-                "species": "SPECIES_LUVDISC"
+                "species": "SPECIES_VELUZA"
               },
               {
                 "min_level": 15,
