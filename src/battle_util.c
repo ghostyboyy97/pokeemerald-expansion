@@ -11789,9 +11789,18 @@ bool32 MoveHasAdditionalEffect(u32 move, u32 moveEffect)
     u32 i;
     for (i = 0; i < gMovesInfo[move].numAdditionalEffects; i++)
     {
-        if (gMovesInfo[move].additionalEffects[i].moveEffect == moveEffect
-         && gMovesInfo[move].additionalEffects[i].self == FALSE)
+        // rapid spin needs special handling because self == true for it, smh
+        if (moveEffect == MOVE_EFFECT_RAPID_SPIN)
+        {
+            if (gMovesInfo[move].additionalEffects[i].moveEffect == moveEffect)
+                return TRUE;
+        }
+        else
+        {
+            if (gMovesInfo[move].additionalEffects[i].moveEffect == moveEffect
+            && gMovesInfo[move].additionalEffects[i].self == FALSE)
             return TRUE;
+        }
     }
     return FALSE;
 }
