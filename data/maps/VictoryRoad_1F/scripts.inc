@@ -744,66 +744,68 @@ VictoryRoad_1F_EventScript_StairsRoom::
 # 410 "data/maps/VictoryRoad_1F/scripts.pory"
 	dynmultipush VictoryRoad_1F_EventScript_StairsRoom_Text_8, SPECIES_CELESTEELA
 # 411 "data/maps/VictoryRoad_1F/scripts.pory"
+	dynmultipush VictoryRoad_1F_EventScript_StairsRoom_Text_9, SPECIES_KARTANA
+# 412 "data/maps/VictoryRoad_1F/scripts.pory"
 	dynmultipush VictoryRoad_1F_EventScript_EntranceRoom_Text_10, MULTI_B_PRESSED
-# 415 "data/maps/VictoryRoad_1F/scripts.pory"
+# 416 "data/maps/VictoryRoad_1F/scripts.pory"
 	dynmultistack 0, 0, FALSE, 6, FALSE, SPECIES_NIHILEGO, DYN_MULTICHOICE_CB_NONE
-# 417 "data/maps/VictoryRoad_1F/scripts.pory"
+# 418 "data/maps/VictoryRoad_1F/scripts.pory"
 	compare VAR_RESULT, MULTI_B_PRESSED
 	goto_if_eq VictoryRoad_1F_EventScript_StairsRoom_2
 VictoryRoad_1F_EventScript_StairsRoom_1:
-# 422 "data/maps/VictoryRoad_1F/scripts.pory"
+# 423 "data/maps/VictoryRoad_1F/scripts.pory"
 	goto VictoryRoad_1F_EventScript_ConfirmAndUseSummon
-# 424 "data/maps/VictoryRoad_1F/scripts.pory"
+# 425 "data/maps/VictoryRoad_1F/scripts.pory"
 	release
 	end
 
 VictoryRoad_1F_EventScript_StairsRoom_2:
-# 419 "data/maps/VictoryRoad_1F/scripts.pory"
+# 420 "data/maps/VictoryRoad_1F/scripts.pory"
 	goto VictoryRoad_1F_EventScript_ChooseRoom
 	goto VictoryRoad_1F_EventScript_StairsRoom_1
 
 
 VictoryRoad_1F_EventScript_ConfirmAndUseSummon::
-# 431 "data/maps/VictoryRoad_1F/scripts.pory"
-	copyvar VAR_0x8005, VAR_RESULT
 # 432 "data/maps/VictoryRoad_1F/scripts.pory"
-	bufferspeciesname STR_VAR_1, VAR_0x8005
+	copyvar VAR_0x8005, VAR_RESULT
 # 433 "data/maps/VictoryRoad_1F/scripts.pory"
+	bufferspeciesname STR_VAR_1, VAR_0x8005
+# 434 "data/maps/VictoryRoad_1F/scripts.pory"
 	msgbox VictoryRoad_1F_Text_ConfirmSummon, MSGBOX_YESNO
-# 435 "data/maps/VictoryRoad_1F/scripts.pory"
+# 436 "data/maps/VictoryRoad_1F/scripts.pory"
 	compare VAR_RESULT, NO
 	goto_if_eq VictoryRoad_1F_EventScript_ConfirmAndUseSummon_2
 VictoryRoad_1F_EventScript_ConfirmAndUseSummon_1:
-# 440 "data/maps/VictoryRoad_1F/scripts.pory"
-	msgbox VictoryRoad_1F_Text_VeryWell, MSGBOX_DEFAULT
 # 441 "data/maps/VictoryRoad_1F/scripts.pory"
+	msgbox VictoryRoad_1F_Text_VeryWell, MSGBOX_DEFAULT
+# 442 "data/maps/VictoryRoad_1F/scripts.pory"
 	delay 30
-# 443 "data/maps/VictoryRoad_1F/scripts.pory"
-	setwildbattle VAR_0x8005, 50
 # 444 "data/maps/VictoryRoad_1F/scripts.pory"
-	waitse
+	setwildbattle VAR_0x8005, 50
 # 445 "data/maps/VictoryRoad_1F/scripts.pory"
-	playmoncry VAR_0x8005, CRY_MODE_ENCOUNTER
+	waitse
 # 446 "data/maps/VictoryRoad_1F/scripts.pory"
-	delay 40
+	playmoncry VAR_0x8005, CRY_MODE_ENCOUNTER
 # 447 "data/maps/VictoryRoad_1F/scripts.pory"
-	waitmoncry
+	delay 40
 # 448 "data/maps/VictoryRoad_1F/scripts.pory"
-	dowildbattle
+	waitmoncry
 # 449 "data/maps/VictoryRoad_1F/scripts.pory"
+	dowildbattle
+# 450 "data/maps/VictoryRoad_1F/scripts.pory"
 	release
 	end
 
 VictoryRoad_1F_EventScript_ConfirmAndUseSummon_2:
-# 437 "data/maps/VictoryRoad_1F/scripts.pory"
+# 438 "data/maps/VictoryRoad_1F/scripts.pory"
 	goto VictoryRoad_1F_EventScript_SummonWomanManNo
 	goto VictoryRoad_1F_EventScript_ConfirmAndUseSummon_1
 
 
 VictoryRoad_1F_EventScript_SummonWomanManNo::
-# 455 "data/maps/VictoryRoad_1F/scripts.pory"
-	msgbox VictoryRoad_1F_SummonWomanDeclined, MSGBOX_DEFAULT
 # 456 "data/maps/VictoryRoad_1F/scripts.pory"
+	msgbox VictoryRoad_1F_SummonWomanDeclined, MSGBOX_DEFAULT
+# 457 "data/maps/VictoryRoad_1F/scripts.pory"
 	release
 	end
 
@@ -944,8 +946,12 @@ VictoryRoad_1F_EventScript_StairsRoom_Text_8:
 # 410 "data/maps/VictoryRoad_1F/scripts.pory"
 	.string "Celesteela$"
 
+VictoryRoad_1F_EventScript_StairsRoom_Text_9:
+# 411 "data/maps/VictoryRoad_1F/scripts.pory"
+	.string "Kartana$"
+
 VictoryRoad_1F_Text_SummonerIntro::
-# 461 "data/maps/VictoryRoad_1F/scripts.pory"
+# 462 "data/maps/VictoryRoad_1F/scripts.pory"
 	.string "Hello, young trainer.\p"
 	.string "I've come to this remote location\n"
 	.string "because I have learned a powerful\l"
@@ -955,30 +961,30 @@ VictoryRoad_1F_Text_SummonerIntro::
 	.string "here so you can battle it?$"
 
 VictoryRoad_1F_Text_SummonerIntroQuick::
-# 471 "data/maps/VictoryRoad_1F/scripts.pory"
+# 472 "data/maps/VictoryRoad_1F/scripts.pory"
 	.string "Would you like me to summon a Pokémon\n"
 	.string "here so you can battle it?$"
 
 VictoryRoad_1F_Text_WhichRoom::
-# 476 "data/maps/VictoryRoad_1F/scripts.pory"
+# 477 "data/maps/VictoryRoad_1F/scripts.pory"
 	.string "Which room would you like me to summon a\n"
 	.string "Pokémon from?$"
 
 VictoryRoad_1F_Text_WhichPokemon::
-# 481 "data/maps/VictoryRoad_1F/scripts.pory"
+# 482 "data/maps/VictoryRoad_1F/scripts.pory"
 	.string "Which Pokémon would you like me to\n"
 	.string "summon so you can battle?$"
 
 VictoryRoad_1F_Text_ConfirmSummon::
-# 486 "data/maps/VictoryRoad_1F/scripts.pory"
+# 487 "data/maps/VictoryRoad_1F/scripts.pory"
 	.string "So you want me to summon a\n"
 	.string "{STR_VAR_1} for you to battle?$"
 
 VictoryRoad_1F_Text_VeryWell::
-# 491 "data/maps/VictoryRoad_1F/scripts.pory"
+# 492 "data/maps/VictoryRoad_1F/scripts.pory"
 	.string "Very well, prepare yourself for battle.$"
 
 VictoryRoad_1F_SummonWomanDeclined::
-# 495 "data/maps/VictoryRoad_1F/scripts.pory"
+# 496 "data/maps/VictoryRoad_1F/scripts.pory"
 	.string "I see. Let me know if you change\n"
 	.string "your mind.$"
