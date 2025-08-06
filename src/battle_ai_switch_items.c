@@ -195,8 +195,8 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
     u8 opposingPosition;
     u16 aiMoveEffect;
     s32 i, damageDealt = 0, maxDamageDealt = 0, damageTaken = 0, maxDamageTaken = 0, maxDamageTakenPriority = 0;
-    u32 aiMove, playerMove, bestPlayerPriorityMove = MOVE_NONE, aiAbility = AI_DATA->abilities[battler], opposingBattler;
-    bool32 getsOneShot = FALSE, hasStatusMove = FALSE, hasSuperEffectiveMove = FALSE;
+    u32 aiMove, playerMove, bestPlayerMove = MOVE_NONE, bestPlayerPriorityMove = MOVE_NONE, aiAbility = AI_DATA->abilities[battler], opposingBattler;
+    bool32 getsOneShot = FALSE, hasStatusMove = FALSE, hasSuperEffectiveMove = FALSE, getsOneShotByPrio = FALSE, oneShotDefenseCheck = FALSE;
     u32 typeMatchup;
     u32 hitsToKoAI = 0, hitsToKoAIPriority = 0, hitsToKoPlayer = 0;
     bool32 canBattlerWin1v1 = FALSE, isBattlerFirst, isBattlerFirstPriority;
@@ -216,9 +216,6 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
         playerMove = gBattleMons[opposingBattler].moves[i];
-        if (playerMove != MOVE_NONE && gMovesInfo[playerMove].power != 0)
-
-        playerMove = gBattleMons[opposingBattler].moves[i];
         if (playerMove != MOVE_NONE 
             && gMovesInfo[playerMove].category != DAMAGE_CATEGORY_STATUS 
             && gMovesInfo[playerMove].effect != EFFECT_FOCUS_PUNCH)
@@ -227,6 +224,7 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
             if (damageTaken > maxDamageTaken && !AI_DoesChoiceEffectBlockMove(opposingBattler, playerMove))
             {
                 maxDamageTaken = damageTaken;
+                bestPlayerMove = playerMove;
             }
             if (GetMovePriority(opposingBattler, playerMove) > 0 && damageTaken > maxDamageTakenPriority && !AI_DoesChoiceEffectBlockMove(opposingBattler, playerMove))
             {
@@ -266,10 +264,13 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
 
                 // Get maximum damage mon can deal
                 damageDealt = AI_GetDamage(battler, opposingBattler, i, AI_ATTACKING_ON_FIELD, AI_DATA);
+                if (damageDealt > maxDamageDealt)
+                    maxDamageDealt = damageDealt;
+                
                 if (!canBattlerWin1v1 ) // Once we can win a 1v1 we don't need to track this, but want to run the rest of the function to keep the runtime the same regardless of when we find the winning move
                 {
                     hitsToKoPlayer = GetNoOfHitsToKOBattlerDmg(damageDealt, opposingBattler);
-                    isBattlerFirst = AI_IsFaster(battler, opposingBattler, aiMove, AI_DATA->lastUsedMove[opposingBattler], CONSIDER_PRIORITY);
+                    isBattlerFirst = AI_IsFaster(battler, opposingBattler, aiMove, bestPlayerMove, CONSIDER_PRIORITY);
                     isBattlerFirstPriority = AI_IsFaster(battler, opposingBattler, aiMove, bestPlayerPriorityMove, CONSIDER_PRIORITY);
                     canBattlerWin1v1 = CanBattlerWin1v1(hitsToKoAI, hitsToKoPlayer, isBattlerFirst) && CanBattlerWin1v1(hitsToKoAIPriority, hitsToKoPlayer, isBattlerFirstPriority);
                 }
@@ -280,11 +281,19 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
     // Calculate type advantage
     typeMatchup = GetBattleMonTypeMatchup(gBattleMons[opposingBattler], gBattleMons[battler]);
 
+    oneShotDefenseCheck = ((gItemsInfo[gBattleMons[battler].item].holdEffect == HOLD_EFFECT_FOCUS_SASH)
+                        || ((aiAbility == ABILITY_STURDY) && !IsMoldBreakerTypeAbility(opposingBattler, gBattleMons[opposingBattler].ability)));
+
     // Check if mon gets one shot
-    if (maxDamageTaken > gBattleMons[battler].hp
-        && !(gItemsInfo[gBattleMons[battler].item].holdEffect == HOLD_EFFECT_FOCUS_SASH || (!IsMoldBreakerTypeAbility(opposingBattler, gBattleMons[opposingBattler].ability) && B_STURDY >= GEN_5 && aiAbility == ABILITY_STURDY)))
+    if (maxDamageTaken > gBattleMons[battler].hp && !oneShotDefenseCheck)
     {
         getsOneShot = TRUE;
+    }
+
+    // Check if mon gets one shot by a prio move
+    if (maxDamageTakenPriority > gBattleMons[battler].hp && !oneShotDefenseCheck)
+    {
+        getsOneShotByPrio = TRUE;
     }
 
     // Check if current mon can 1v1 in spite of bad matchup, and don't switch out if it can
@@ -296,8 +305,9 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
         return FALSE;
     // Start assessing whether or not mon has bad odds
     // Jump straight to switching out in cases where mon gets OHKO'd
-    if (((getsOneShot && gBattleMons[opposingBattler].speed > gBattleMons[battler].speed) // If the player OHKOs and outspeeds OR OHKOs, doesn't outspeed but isn't 2HKO'd
-            || (getsOneShot && gBattleMons[opposingBattler].speed <= gBattleMons[battler].speed && maxDamageDealt < gBattleMons[opposingBattler].hp / 2))
+    if (((getsOneShot && gBattleMons[opposingBattler].speed > gBattleMons[battler].speed) // If the player OHKOs and outspeeds 
+            || getsOneShotByPrio // OR OHKOs with a priority move
+            || (getsOneShot && gBattleMons[opposingBattler].speed <= gBattleMons[battler].speed && maxDamageDealt < gBattleMons[opposingBattler].hp / 2)) // OR OHKOs, doesn't outspeed but isn't 2HKO'd
         && (gBattleMons[battler].hp >= gBattleMons[battler].maxHP / 2 // And the current mon has at least 1/2 their HP, or 1/4 HP and Regenerator
             || (aiAbility == ABILITY_REGENERATOR
             && gBattleMons[battler].hp >= gBattleMons[battler].maxHP / 4)))
