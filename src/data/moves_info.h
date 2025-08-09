@@ -17152,8 +17152,8 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_DYNAMAX] =
     {
         .name = COMPOUND_STRING("Snipe Shot"),
         .description = COMPOUND_STRING(
-            "The user ignores effects\n"
-            "that draw in moves."),
+            "Ignores redirection with\n"
+            "a high critical-hit ratio."),
         .effect = EFFECT_SNIPE_SHOT,
         .power = 70,
         .ballisticMove = TRUE,
@@ -19001,7 +19001,7 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_DYNAMAX] =
         .name = COMPOUND_STRING("Barb Barrage"),
         .description = COMPOUND_STRING(
             "Can poison on impact. Powers\n"
-            "up against poisoned foes."),
+            "up against statused foes."),
         .effect = EFFECT_DOUBLE_POWER_ON_ARG_STATUS,
         .power = 60,
         .type = TYPE_POISON,
