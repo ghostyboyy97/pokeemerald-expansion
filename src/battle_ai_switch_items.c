@@ -23,7 +23,6 @@
 
 // this file's functions
 static bool32 CanUseSuperEffectiveMoveAgainstOpponents(u32 battler);
-static bool32 FindMonWithFlagsAndSuperEffective(u32 battler, u16 flags, u32 moduloPercent);
 static bool32 ShouldUseItem(u32 battler);
 static bool32 AiExpectsToFaintPlayer(u32 battler);
 static bool32 AI_ShouldHeal(u32 battler, u32 healAmount);
@@ -856,84 +855,6 @@ static bool32 AreStatsRaised(u32 battler)
     return (buffedStatsValue > STAY_IN_STATS_RAISED);
 }
 
-static bool32 FindMonWithFlagsAndSuperEffective(u32 battler, u16 flags, u32 percentChance)
-{
-    u32 battlerIn1, battlerIn2;
-    s32 firstId;
-    s32 lastId; // + 1
-    struct Pokemon *party;
-    s32 i, j;
-    u16 move;
-
-    // Similar functionality handled more thoroughly by ShouldSwitchIfHasBadOdds
-    if (AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_SMART_SWITCHING)
-        return FALSE;
-
-    if (gLastLandedMoves[battler] == MOVE_NONE)
-        return FALSE;
-    if (gLastLandedMoves[battler] == MOVE_UNAVAILABLE)
-        return FALSE;
-    if (gLastHitBy[battler] == 0xFF)
-        return FALSE;
-    if (IS_MOVE_STATUS(gLastLandedMoves[battler]))
-        return FALSE;
-
-    if (IsDoubleBattle())
-    {
-        battlerIn1 = battler;
-        if (gAbsentBattlerFlags & (1u << GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(battler)))))
-            battlerIn2 = battler;
-        else
-            battlerIn2 = GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(battler)));
-    }
-    else
-    {
-        battlerIn1 = battler;
-        battlerIn2 = battler;
-    }
-
-    GetAIPartyIndexes(battler, &firstId, &lastId);
-    party = GetBattlerParty(battler);
-
-    for (i = firstId; i < lastId; i++)
-    {
-        u16 species, monAbility;
-
-        if (!IsValidForBattle(&party[i]))
-            continue;
-        if (i == gBattlerPartyIndexes[battlerIn1])
-            continue;
-        if (i == gBattlerPartyIndexes[battlerIn2])
-            continue;
-        if (i == gBattleStruct->monToSwitchIntoId[battlerIn1])
-            continue;
-        if (i == gBattleStruct->monToSwitchIntoId[battlerIn2])
-            continue;
-        if (IsAceMon(battler, i))
-            continue;
-
-        species = GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG);
-        monAbility = GetMonAbility(&party[i]);
-        CalcPartyMonTypeEffectivenessMultiplier(gLastLandedMoves[battler], species, monAbility);
-        if (gMoveResultFlags & flags)
-        {
-            battlerIn1 = gLastHitBy[battler];
-
-            for (j = 0; j < MAX_MON_MOVES; j++)
-            {
-                move = GetMonData(&party[i], MON_DATA_MOVE1 + j);
-                if (move == 0)
-                    continue;
-
-                if (AI_GetMoveEffectiveness(move, battler, battlerIn1) >= UQ_4_12(2.0) && RandomPercentage(RNG_AI_SWITCH_SE_DEFENSIVE, percentChance))
-                    return SetSwitchinAndSwitch(battler, i);
-            }
-        }
-    }
-
-    return FALSE;
-}
-
 static bool32 CanMonSurviveHazardSwitchin(u32 battler)
 {
     u32 battlerIn1, battlerIn2;
@@ -1190,20 +1111,12 @@ bool32 ShouldSwitch(u32 battler)
         return TRUE;
 
     // Removing switch capabilites under specific conditions
-    // These Functions prevent the "FindMonWithFlagsAndSuperEffective" from getting out of hand.
-    // We don't use FindMonWithFlagsAndSuperEffective with AI_FLAG_SMART_SWITCHING, so we can bail early.
     if (AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_SMART_SWITCHING)
         return FALSE;
     if (CanUseSuperEffectiveMoveAgainstOpponents(battler))
         return FALSE;
     if (AreStatsRaised(battler))
         return FALSE;
-
-    // Default Function
-    // Can prompt switch if AI has a pokemon in party that resists current opponent & has super effective move
-    if (FindMonWithFlagsAndSuperEffective(battler, MOVE_RESULT_DOESNT_AFFECT_FOE, 50)
-        || FindMonWithFlagsAndSuperEffective(battler, MOVE_RESULT_NOT_VERY_EFFECTIVE, 33))
-        return TRUE;
 
     return FALSE;
 }
