@@ -16130,7 +16130,7 @@ static const struct TrainerMon sParty_Roark[] = {
     .ability = ABILITY_SAND_STREAM,
             //hp,atk,def,spatk,spdef,speed
     .ev = TRAINER_PARTY_EVS( 6, 252, 252, 0, 0, 0 ),
-    .moves = {MOVE_ROCK_TOMB, MOVE_METAL_BURST, MOVE_METAL_CLAW, MOVE_NONE}
+    .moves = {MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_ROAR, MOVE_STEALTH_ROCK}
     },
     {
     .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
