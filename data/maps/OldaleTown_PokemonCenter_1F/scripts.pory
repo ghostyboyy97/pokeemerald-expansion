@@ -257,7 +257,7 @@ script OldDaleTown_PokemonCenter_EventScript_SecondNurse_ChangeNature{
 	dynmultipush("Serious       Neutral         ", NATURE_SERIOUS)	
 
 	} 
-	if(var(VAR_NATURE_ORDER) == 2)
+	elif(var(VAR_NATURE_ORDER) == 2)
 	{
     dynmultipush("Adamant       {COLOR RED}{SHADOW LIGHT_RED}+Atk{COLOR DARK_GRAY}{SHADOW LIGHT_GRAY}/{COLOR BLUE}{SHADOW LIGHT_BLUE}-SpAtk", NATURE_ADAMANT)
     dynmultipush("Modest        {COLOR RED}{SHADOW LIGHT_RED}+SpAtk{COLOR DARK_GRAY}{SHADOW LIGHT_GRAY}/{COLOR BLUE}{SHADOW LIGHT_BLUE}-Atk   ", NATURE_MODEST)
