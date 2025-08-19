@@ -652,9 +652,22 @@ static u8 RToRun_ProcessInput(u8 selection)
 
 static u8 NatureOrder_ProcessInput(u8 selection)
 {
-    if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
+    if (JOY_NEW(DPAD_RIGHT))
     {
-        selection ^= 1;
+        if (selection < 2)
+            selection++;
+        else
+            selection = 0;
+        sArrowPressed = TRUE;
+        // Update the Nature Order variable
+        VarSet(VAR_NATURE_ORDER, selection);
+    }
+    if (JOY_NEW(DPAD_LEFT))
+    {
+        if (selection > 0)
+            selection--;
+        else
+            selection = 2;
         sArrowPressed = TRUE;
         // Update the Nature Order variable
         VarSet(VAR_NATURE_ORDER, selection);
@@ -707,14 +720,24 @@ static void RToRun_DrawChoices(u8 selection)
 
 static void NatureOrder_DrawChoices(u8 selection)
 {
-    u8 styles[2];
+    u8 styles[3];
+    s32 widthAlpha, widthStat, widthFreq, xStat, gap;
 
     styles[0] = 0;
     styles[1] = 0;
+    styles[2] = 0;
     styles[selection] = 1;
 
     DrawOptionMenuChoice(gText_NatureOrderAlphabetical, 104, YPOS_NATURE_ORDER, styles[0]);
-    DrawOptionMenuChoice(gText_NatureOrderStat, GetStringRightAlignXOffset(FONT_NORMAL, gText_NatureOrderStat, 198), YPOS_NATURE_ORDER, styles[1]);
+
+    widthAlpha = GetStringWidth(FONT_NORMAL, gText_NatureOrderAlphabetical, 0);
+    widthStat = GetStringWidth(FONT_NORMAL, gText_NatureOrderStat, 0);
+    widthFreq = GetStringWidth(FONT_NORMAL, gText_NatureOrderFreq, 0);
+
+    gap = ((198 - 104 - widthAlpha - widthStat - widthFreq) / 2) + 1;
+    xStat = 104 + widthAlpha + gap;
+    DrawOptionMenuChoice(gText_NatureOrderStat, xStat, YPOS_NATURE_ORDER, styles[1]);
+    DrawOptionMenuChoice(gText_NatureOrderFreq, GetStringRightAlignXOffset(FONT_NORMAL, gText_NatureOrderFreq, 198), YPOS_NATURE_ORDER, styles[2]);
 }
 
 

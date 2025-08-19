@@ -296,6 +296,7 @@ extern const u8 gText_RToRun[];
 extern const u8 gText_NatureOrder[];
 extern const u8 gText_NatureOrderAlphabetical[];
 extern const u8 gText_NatureOrderStat[];
+extern const u8 gText_NatureOrderFreq[];
 extern const u8 gText_SmallDot[];
 extern const u8 gText_LargeDot[];
 extern const u8 gText_PageNav[];

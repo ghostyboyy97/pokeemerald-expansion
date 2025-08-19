@@ -1276,6 +1276,7 @@ const u8 gText_HPBarSpeedSlow[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Slow");
 const u8 gText_HPBarSpeedFast[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Fast");
 const u8 gText_NatureOrderAlphabetical[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Alpha");
 const u8 gText_NatureOrderStat[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Stat");
+const u8 gText_NatureOrderFreq[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Freq");
 const u8 gText_BattleSpeed[] = _("BATTLE SPEED");
 const u8 gText_BattleSpeed1x[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}1x");
 const u8 gText_BattleSpeed2x[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}2x");
