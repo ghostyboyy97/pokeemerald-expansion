@@ -1565,6 +1565,7 @@ static void Task_PCMainMenu(u8 taskId)
     switch (task->tState)
     {
     case STATE_LOAD:
+        ClearOverworldDialogueFlag();
         CreateMainMenu(task->tSelectedOption, &task->tWindowId);
         LoadMessageBoxAndBorderGfx();
         DrawNonOverworldDialogueFrame(0, FALSE);
