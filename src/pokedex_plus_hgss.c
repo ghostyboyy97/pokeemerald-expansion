@@ -195,6 +195,7 @@ static const u8 sText_Stats_eggGroup_DITTO[] = _("DITTO");
 static const u8 sText_Stats_eggGroup_DRAGON[] = _("DRAGON");
 static const u8 sText_Stats_eggGroup_NO_EGGS_DISCOVERED[] = _("---");
 static const u8 sText_Stats_eggGroup_UNKNOWN[] = _("???");
+static const u8 sText_Stats_Abilities_Button[] = _("{SELECT_BUTTON}");
 static const u8 sText_Dex_SEEN[] = _("SEEN");
 static const u8 sText_Dex_OWN[] = _("OWN");
 
@@ -1371,7 +1372,8 @@ static const struct WindowTemplate sInfoScreen_WindowTemplates[] =
 #define WIN_STATS_MOVES_BOTTOM 8
 #define WIN_STATS_ABILITIES 9
 #define WIN_STATS_LEFT_UNUSED 10
-#define WIN_STATS_END WIN_STATS_LEFT_UNUSED
+#define WIN_STATS_ABILITY_LABEL 11
+#define WIN_STATS_END WIN_STATS_ABILITY_LABEL
 static const struct WindowTemplate sStatsScreen_WindowTemplates[] =
 {
     [WIN_STATS_TOPBAR] =
@@ -1474,6 +1476,18 @@ static const struct WindowTemplate sStatsScreen_WindowTemplates[] =
         .paletteNum = 0,
         .baseBlock = 1 + 60 + 40 + 48 + 96 + 24 + 72 + 72 + 36 + 144,
     },
+
+    [WIN_STATS_ABILITY_LABEL] =
+    {
+        .bg = 2,
+        .tilemapLeft = 26,
+        .tilemapTop = 12,
+        .width = 4,
+        .height = 2,
+        .paletteNum = 15,
+        .baseBlock = 1 + 60 + 40 + 48 + 96 + 24 + 72 + 72 + 36 + 144 + 48,
+    },
+
     DUMMY_WIN_TEMPLATE
 };
 
@@ -6036,6 +6050,15 @@ static void PrintStatsScreen_Abilities(u8 taskId)
         }
 
         ability1 = sPokedexView->sPokemonStats.ability1;
+
+        if (ability1 != ABILITY_NONE && ability1 != ability0)
+        {
+            u8 x = GetStringRightAlignXOffset(FONT_SMALL, sText_Stats_Abilities_Button, 4) + 3;
+            u8 y = 3;
+            AddTextPrinterParameterized3(WIN_STATS_ABILITY_LABEL, 0, x, y, sStatsPageNavigationTextColor, 0, sText_Stats_Abilities_Button);
+            PutWindowTilemap(WIN_STATS_ABILITY_LABEL);
+            CopyWindowToVram(WIN_STATS_ABILITY_LABEL, COPYWIN_FULL);
+        }
         if (ability1 != ABILITY_NONE && ability1 != ability0 && gTasks[taskId].data[7])
         {
             PrintStatsScreenTextSmallWhite(WIN_STATS_ABILITIES, gAbilitiesInfo[ability1].name, abilities_x, abilities_y);
@@ -6044,6 +6067,9 @@ static void PrintStatsScreen_Abilities(u8 taskId)
     }
     else //Hidden abilities
     {
+        FillWindowPixelBuffer(WIN_STATS_ABILITY_LABEL, PIXEL_FILL(0));
+        ClearWindowTilemap(WIN_STATS_ABILITY_LABEL);
+        CopyWindowToVram(WIN_STATS_ABILITY_LABEL, COPYWIN_FULL);
         abilityHidden = sPokedexView->sPokemonStats.abilityHidden;
         PrintStatsScreenTextSmallWhite(WIN_STATS_ABILITIES, gAbilitiesInfo[abilityHidden].name, abilities_x, abilities_y);
         PrintStatsScreenTextSmall(WIN_STATS_ABILITIES, gAbilitiesInfo[abilityHidden].description, abilities_x, abilities_y + 14);
