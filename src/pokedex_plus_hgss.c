@@ -5062,6 +5062,7 @@ static void Task_LoadStatsScreen(u8 taskId)
             FreeMonIconPalettes(); //Free space for new pallete
             LoadMonIconPalettePersonality(species, personality); //Loads pallete for current mon
             gTasks[taskId].data[6] = CreateMonIcon(species, SpriteCB_MonIcon, 18, 31, 4, personality); //Create pokemon sprite
+            gTasks[taskId].data[7] = 0; // Ability to show
             gSprites[gTasks[taskId].data[4]].oam.priority = 0;
         }
         gMain.state++;
@@ -5178,6 +5179,12 @@ static void Task_HandleStatsScreenInput(u8 taskId)
 
         PlaySE(SE_PC_OFF);
         return;
+    }
+    if (JOY_NEW(SELECT_BUTTON) && gTasks[taskId].data[5] == 0)
+    {
+        gTasks[taskId].data[7] = !gTasks[taskId].data[7];
+        FillWindowPixelBuffer(WIN_STATS_ABILITIES, PIXEL_FILL(0));
+        PrintStatsScreen_Abilities(taskId);
     }
 
     //Change moves
@@ -6022,14 +6029,17 @@ static void PrintStatsScreen_Abilities(u8 taskId)
     if (gTasks[taskId].data[5] == 0)
     {
         ability0 = sPokedexView->sPokemonStats.ability0;
-        PrintStatsScreenTextSmallWhite(WIN_STATS_ABILITIES, gAbilitiesInfo[ability0].name, abilities_x, abilities_y);
-        PrintStatsScreenTextSmall(WIN_STATS_ABILITIES, gAbilitiesInfo[ability0].description, abilities_x, abilities_y + 14);
+        if (!gTasks[taskId].data[7])
+        {
+            PrintStatsScreenTextSmallWhite(WIN_STATS_ABILITIES, gAbilitiesInfo[ability0].name, abilities_x, abilities_y);
+            PrintStatsScreenTextSmall(WIN_STATS_ABILITIES, gAbilitiesInfo[ability0].description, abilities_x, abilities_y + 14);
+        }
 
         ability1 = sPokedexView->sPokemonStats.ability1;
-        if (ability1 != ABILITY_NONE && ability1 != ability0)
+        if (ability1 != ABILITY_NONE && ability1 != ability0 && gTasks[taskId].data[7])
         {
-            PrintStatsScreenTextSmallWhite(WIN_STATS_ABILITIES, gAbilitiesInfo[ability1].name, abilities_x, abilities_y + 30);
-            PrintStatsScreenTextSmall(WIN_STATS_ABILITIES, gAbilitiesInfo[ability1].description, abilities_x, abilities_y + 44);
+            PrintStatsScreenTextSmallWhite(WIN_STATS_ABILITIES, gAbilitiesInfo[ability1].name, abilities_x, abilities_y);
+            PrintStatsScreenTextSmall(WIN_STATS_ABILITIES, gAbilitiesInfo[ability1].description, abilities_x, abilities_y + 14);
         }
     }
     else //Hidden abilities
