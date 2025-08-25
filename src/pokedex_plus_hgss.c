@@ -1501,7 +1501,7 @@ static const struct WindowTemplate sStatsScreen_WindowTemplates[] =
         .width = 7,
         .height = 2,
         .paletteNum = 0,
-        .baseBlock = 1 + 60 + 40 + 48 + 96 + 24 + 72 + 72 + 36 + 144 + 48 + 48,
+        .baseBlock = 1 + 60 + 40 + 48 + 96 + 24 + 72 + 72 + 36 + 144 + 48 + 20,
     },
 
     DUMMY_WIN_TEMPLATE
