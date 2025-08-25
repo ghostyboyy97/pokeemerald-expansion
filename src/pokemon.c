@@ -7470,23 +7470,14 @@ bool32 IsRegionalForm(u16 speciesId)
     if (!P_REGIONAL_FORMS)
         return FALSE;
         
-    u32 left = 0;
-    u32 right = ARRAY_COUNT(sRegionalFormSpecies) - 1;
-    
-    while (left <= right)
-    {
-        u32 mid = (left + right) / 2;
-        u32 midSpecies = sRegionalFormSpecies[mid];
+    const struct SpeciesInfo *species = &gSpeciesInfo[speciesId];
         
-        if (midSpecies == SPECIES_NONE)
-            return FALSE;
-            
-        if (midSpecies == speciesId)
+    if (species->isAlolanForm ||
+        species->isGalarianForm ||
+        species->isHisuianForm ||
+        species->isPaldeanForm)
+    {
             return TRUE;
-        else if (midSpecies < speciesId)
-            left = mid + 1;
-        else
-            right = mid - 1;
     }
     
     return FALSE;
@@ -7497,15 +7488,17 @@ bool32 HasRegionalForm(u16 speciesId)
     if (!P_REGIONAL_FORMS)
         return FALSE;
     
-    u32 targetNatDex = SpeciesToNationalPokedexNum(speciesId);
+    const struct SpeciesInfo *species = &gSpeciesInfo[speciesId];
+
+    if (!species->formSpeciesIdTable)
+        return FALSE;
     
-    for (u32 i = 0; i < ARRAY_COUNT(sRegionalFormSpecies) - 1; i++)
+    u32 i = 0;
+    while (species->formSpeciesIdTable[i] != FORM_SPECIES_END)
     {
-        if (sRegionalFormSpecies[i] == SPECIES_NONE)
-            break;
-            
-        if (SpeciesToNationalPokedexNum(sRegionalFormSpecies[i]) == targetNatDex)
+        if (IsRegionalForm(species->formSpeciesIdTable[i]))
             return TRUE;
+        i++;
     }
     
     return FALSE;
