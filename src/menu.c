@@ -336,38 +336,23 @@ static inline void *GetWindowFunc_DialogueFrame(void)
 }
 
 
-void DrawNonOverworldDialogueFrame(u8 windowId, bool8 copyToVram)
+void DrawDialogueFrame(u8 windowId, bool8 copyToVram)
 {
     CallWindowFunction(windowId, GetWindowFunc_DialogueFrame());
     FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
     PutWindowTilemap(windowId);
     if (copyToVram == TRUE)
         CopyWindowToVram(windowId, COPYWIN_FULL);
+    SetOverworldDialogueFlag(TRUE);
 }
 
 
-void SetOverworldDialogueFlag()
+void SetOverworldDialogueFlag(bool32 val)
 {
-    if (!gMain.activeOverworldDialog)
-    {
-        gMain.activeOverworldDialog = TRUE;
-    }
+
+    gMain.activeOverworldDialog = val;
 }
 
-void ClearOverworldDialogueFlag()
-{
-    if (gMain.activeOverworldDialog)
-    {
-        gMain.activeOverworldDialog = FALSE;
-    }
-   
-}
-
-void DrawDialogueFrame(u8 windowId, bool8 copyToVram)
-{
-    DrawNonOverworldDialogueFrame(windowId, copyToVram);
-    SetOverworldDialogueFlag();
-}
 
 void DrawStdWindowFrame(u8 windowId, bool8 copyToVram)
 {
@@ -385,7 +370,7 @@ void ClearDialogWindowAndFrame(u8 windowId, bool8 copyToVram)
     ClearWindowTilemap(windowId);
     if (copyToVram == TRUE)
         CopyWindowToVram(windowId, COPYWIN_FULL);
-    ClearOverworldDialogueFlag();
+    SetOverworldDialogueFlag(FALSE);
 }
 
 void ClearStdWindowAndFrame(u8 windowId, bool8 copyToVram)
@@ -850,7 +835,7 @@ void ClearDialogWindowAndFrameToTransparent(u8 windowId, bool8 copyToVram)
     ClearWindowTilemap(windowId);
     if (copyToVram == TRUE)
         CopyWindowToVram(windowId, COPYWIN_FULL);
-    ClearOverworldDialogueFlag();
+    SetOverworldDialogueFlag(FALSE);
 }
 
 static void WindowFunc_ClearDialogWindowAndFrameNullPalette(u8 bg, u8 tilemapLeft, u8 tilemapTop, u8 width, u8 height, u8 paletteNum)
