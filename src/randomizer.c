@@ -1128,29 +1128,36 @@ static inline bool32 IsAbilityIllegal(u16 ability)
     return FALSE;
 }
 
+
 // Given a species and an abilityNum, returns a replacement for that ability.
 u16 RandomizeAbility(u16 species, u8 abilityNum, u16 originalAbility)
 {
+
     if (RandomizerFeatureEnabled(RANDOMIZE_ABILITIES))
     {
-        struct Sfc32State state;
-        u16 result;
-        u32 seed;
+        u8 actualAbilityNum = abilityNum;
+        // If the ability slot is ABILITY_NONE, find the last valid ability slot
+        if (gSpeciesInfo[species].abilities[abilityNum] == ABILITY_NONE && abilityNum > 0)
+        {
+            // Search backwards from the current slot to find the last valid ability
+            for (s8 i = abilityNum - 1; i >= 0; i--)
+            {
+                if (gSpeciesInfo[species].abilities[i] != ABILITY_NONE)
+                {
+                    actualAbilityNum = i;
+                    break;
+                }
+            }
+        }
 
-        //if (!ShouldRandomizeItem(itemId))
-        //    return abilityNum;
-
-        // Seed the generator using the species and the original abilityNum 
-        seed = ((u32)species) << 8;
-        seed |= abilityNum;
-
-        state = RandomizerRandSeed(RANDOMIZER_REASON_ABILITIES, seed, species);
+        // Seed the generator using the species and the actual ability slot
+        u32 seed = ((u32)species << 8) | actualAbilityNum;
+        struct Sfc32State state = RandomizerRandSeed(RANDOMIZER_REASON_ABILITIES, seed, species);
 
         // Randomize abilities
-        result = sRandomizerAbilityWhitelist[RandomizerNextRange(&state, ABILITY_WHITELIST_SIZE)];
-
-        return result;
+        return sRandomizerAbilityWhitelist[RandomizerNextRange(&state, ABILITY_WHITELIST_SIZE)];
     }
+
     return originalAbility;
 }
 
