@@ -195,6 +195,11 @@ static const u8 sText_Stats_eggGroup_DITTO[] = _("DITTO");
 static const u8 sText_Stats_eggGroup_DRAGON[] = _("DRAGON");
 static const u8 sText_Stats_eggGroup_NO_EGGS_DISCOVERED[] = _("---");
 static const u8 sText_Stats_eggGroup_UNKNOWN[] = _("???");
+static const u8 sText_Stats_Abilities_Button[] = _("{SELECT_BUTTON} TOGGLE");
+static const u8 sText_Stats_Abilities_1[] = _("Ability 1");
+static const u8 sText_Stats_Abilities_2[] = _("Ability 2");
+static const u8 sText_Stats_Abilities_Hidden[] = _("Hidden Ability");
+
 static const u8 sText_Dex_SEEN[] = _("SEEN");
 static const u8 sText_Dex_OWN[] = _("OWN");
 
@@ -1371,7 +1376,9 @@ static const struct WindowTemplate sInfoScreen_WindowTemplates[] =
 #define WIN_STATS_MOVES_BOTTOM 8
 #define WIN_STATS_ABILITIES 9
 #define WIN_STATS_LEFT_UNUSED 10
-#define WIN_STATS_END WIN_STATS_LEFT_UNUSED
+#define WIN_STATS_ABILITY_BUTTON 11
+#define WIN_STATS_ABILITY_LABEL 12
+#define WIN_STATS_END WIN_STATS_ABILITY_LABEL
 static const struct WindowTemplate sStatsScreen_WindowTemplates[] =
 {
     [WIN_STATS_TOPBAR] =
@@ -1474,6 +1481,29 @@ static const struct WindowTemplate sStatsScreen_WindowTemplates[] =
         .paletteNum = 0,
         .baseBlock = 1 + 60 + 40 + 48 + 96 + 24 + 72 + 72 + 36 + 144,
     },
+
+    [WIN_STATS_ABILITY_BUTTON] =
+    {
+        .bg = 2,
+        .tilemapLeft = 21,
+        .tilemapTop = 18,
+        .width = 10,
+        .height = 2,
+        .paletteNum = 15,
+        .baseBlock = 1 + 60 + 40 + 48 + 96 + 24 + 72 + 72 + 36 + 144 + 48,
+    },
+
+    [WIN_STATS_ABILITY_LABEL] =
+    {
+        .bg = 2,
+        .tilemapLeft = 12,
+        .tilemapTop = 18,
+        .width = 7,
+        .height = 2,
+        .paletteNum = 0,
+        .baseBlock = 1 + 60 + 40 + 48 + 96 + 24 + 72 + 72 + 36 + 144 + 48 + 20,
+    },
+
     DUMMY_WIN_TEMPLATE
 };
 
@@ -4479,6 +4509,17 @@ static void PrintStatsScreenTextSmall(u8 windowId, const u8* str, u8 left, u8 to
 
     AddTextPrinterParameterized4(windowId, 0, left, top, 0, 0, color, 0, str);
 }
+
+static void PrintStatsScreenTextSmallNarrower(u8 windowId, const u8* str, u8 left, u8 top)
+{
+    u8 color[3];
+    color[0] = TEXT_COLOR_TRANSPARENT;
+    color[1] = TEXT_DYNAMIC_COLOR_6;
+    color[2] = TEXT_COLOR_LIGHT_GRAY;
+
+    AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROWER, left, top, 0, 0, color, 0, str);
+}
+
 static void PrintStatsScreenTextSmallWhite(u8 windowId, const u8* str, u8 left, u8 top)
 {
     u8 color[3];
@@ -4488,6 +4529,16 @@ static void PrintStatsScreenTextSmallWhite(u8 windowId, const u8* str, u8 left, 
 
     AddTextPrinterParameterized4(windowId, 0, left, top, 0, 0, color, 0, str);
 }
+static void PrintStatsScreenTextSmallNarrowerWhite(u8 windowId, const u8* str, u8 left, u8 top)
+{
+    u8 color[3];
+    color[0] = TEXT_COLOR_TRANSPARENT;
+    color[1] = TEXT_COLOR_WHITE;
+    color[2] = TEXT_DYNAMIC_COLOR_6;
+
+    AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROWER, left, top, 0, 0, color, 0, str);
+}
+
 
 //Type Icon
 static void SetSpriteInvisibility(u8 spriteArrayId, bool8 invisible)
@@ -5062,6 +5113,7 @@ static void Task_LoadStatsScreen(u8 taskId)
             FreeMonIconPalettes(); //Free space for new pallete
             LoadMonIconPalettePersonality(species, personality); //Loads pallete for current mon
             gTasks[taskId].data[6] = CreateMonIcon(species, SpriteCB_MonIcon, 18, 31, 4, personality); //Create pokemon sprite
+            gTasks[taskId].data[7] = 0; // Ability to show
             gSprites[gTasks[taskId].data[4]].oam.priority = 0;
         }
         gMain.state++;
@@ -5161,6 +5213,7 @@ static void Task_HandleStatsScreenInput(u8 taskId)
         PrintStatsScreen_Moves_Bottom(taskId);
 
         FillWindowPixelBuffer(WIN_STATS_ABILITIES, PIXEL_FILL(0));
+        FillWindowPixelBuffer(WIN_STATS_ABILITY_LABEL, PIXEL_FILL(0));
         PrintStatsScreen_Abilities(taskId);
     }
     if (JOY_NEW(B_BUTTON))
@@ -5178,6 +5231,21 @@ static void Task_HandleStatsScreenInput(u8 taskId)
 
         PlaySE(SE_PC_OFF);
         return;
+    }
+    if (JOY_NEW(SELECT_BUTTON) && gTasks[taskId].data[5] == 0)
+    {
+        u16 ability0 = sPokedexView->sPokemonStats.ability0;
+        u16 ability1 = sPokedexView->sPokemonStats.ability1;
+
+        if (ability1 != ABILITY_NONE && ability1 != ability0)
+        {
+        gTasks[taskId].data[7] = !gTasks[taskId].data[7];
+        FillWindowPixelBuffer(WIN_STATS_ABILITIES, PIXEL_FILL(0));
+        FillWindowPixelBuffer(WIN_STATS_ABILITY_LABEL, PIXEL_FILL(0));
+
+        PrintStatsScreen_Abilities(taskId);
+        }
+        
     }
 
     //Change moves
@@ -6022,21 +6090,39 @@ static void PrintStatsScreen_Abilities(u8 taskId)
     if (gTasks[taskId].data[5] == 0)
     {
         ability0 = sPokedexView->sPokemonStats.ability0;
-        PrintStatsScreenTextSmallWhite(WIN_STATS_ABILITIES, gAbilitiesInfo[ability0].name, abilities_x, abilities_y);
-        PrintStatsScreenTextSmall(WIN_STATS_ABILITIES, gAbilitiesInfo[ability0].description, abilities_x, abilities_y + 14);
+        if (!gTasks[taskId].data[7])
+        {
+            PrintStatsScreenTextSmallWhite(WIN_STATS_ABILITIES, gAbilitiesInfo[ability0].name, abilities_x, abilities_y);
+            PrintStatsScreenTextSmallNarrower(WIN_STATS_ABILITIES, gAbilitiesInfo[ability0].description, abilities_x, abilities_y + 14);
+            PrintStatsScreenTextSmallNarrowerWhite(WIN_STATS_ABILITY_LABEL, sText_Stats_Abilities_1, 6, 0);
+        }
 
         ability1 = sPokedexView->sPokemonStats.ability1;
+
         if (ability1 != ABILITY_NONE && ability1 != ability0)
         {
-            PrintStatsScreenTextSmallWhite(WIN_STATS_ABILITIES, gAbilitiesInfo[ability1].name, abilities_x, abilities_y + 30);
-            PrintStatsScreenTextSmall(WIN_STATS_ABILITIES, gAbilitiesInfo[ability1].description, abilities_x, abilities_y + 44);
+            u8 x = GetStringCenterAlignXOffset(FONT_SMALL, sText_Stats_Abilities_Button, 10);
+            u8 y = 0;
+            AddTextPrinterParameterized3(WIN_STATS_ABILITY_BUTTON, FONT_SMALL, x, y, sStatsPageNavigationTextColor, 0, sText_Stats_Abilities_Button);
+            PutWindowTilemap(WIN_STATS_ABILITY_BUTTON);
+            CopyWindowToVram(WIN_STATS_ABILITY_BUTTON, COPYWIN_FULL);
+        }
+        if (ability1 != ABILITY_NONE && ability1 != ability0 && gTasks[taskId].data[7])
+        {
+            PrintStatsScreenTextSmallWhite(WIN_STATS_ABILITIES, gAbilitiesInfo[ability1].name, abilities_x, abilities_y);
+            PrintStatsScreenTextSmallNarrower(WIN_STATS_ABILITIES, gAbilitiesInfo[ability1].description, abilities_x, abilities_y + 14);
+            PrintStatsScreenTextSmallNarrowerWhite(WIN_STATS_ABILITY_LABEL, sText_Stats_Abilities_2, 6, 0);
         }
     }
     else //Hidden abilities
     {
+        FillWindowPixelBuffer(WIN_STATS_ABILITY_BUTTON, PIXEL_FILL(0));
+        ClearWindowTilemap(WIN_STATS_ABILITY_BUTTON);
+        CopyWindowToVram(WIN_STATS_ABILITY_BUTTON, COPYWIN_FULL);
         abilityHidden = sPokedexView->sPokemonStats.abilityHidden;
         PrintStatsScreenTextSmallWhite(WIN_STATS_ABILITIES, gAbilitiesInfo[abilityHidden].name, abilities_x, abilities_y);
-        PrintStatsScreenTextSmall(WIN_STATS_ABILITIES, gAbilitiesInfo[abilityHidden].description, abilities_x, abilities_y + 14);
+        PrintStatsScreenTextSmallNarrower(WIN_STATS_ABILITIES, gAbilitiesInfo[abilityHidden].description, abilities_x, abilities_y + 14);
+        PrintStatsScreenTextSmallNarrowerWhite(WIN_STATS_ABILITY_LABEL, sText_Stats_Abilities_Hidden, 6, 0);
     }
 }
 
