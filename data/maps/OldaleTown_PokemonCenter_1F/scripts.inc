@@ -1298,7 +1298,7 @@ FeatureAvailableAfterMoveTutor::
 
 VersionNumber::
 # 641 "data/maps/OldaleTown_PokemonCenter_1F/scripts.pory"
-	.string "Version: 1.3$"
+	.string "Version: 1.3.1$"
 
 EasyMode::
 # 646 "data/maps/OldaleTown_PokemonCenter_1F/scripts.pory"
