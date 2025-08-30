@@ -237,6 +237,7 @@ static void SortItemsInBag(u8 pocket, u8 type);
 static void MergeSort(struct ItemSlot* array, u32 low, u32 high, s8 (*comparator)(struct ItemSlot*, struct ItemSlot*));
 static void Merge(struct ItemSlot* array, u32 low, u32 mid, u32 high, s8 (*comparator)(struct ItemSlot*, struct ItemSlot*));
 static s8 CompareItemsAlphabetically(struct ItemSlot* itemSlot1, struct ItemSlot* itemSlot2);
+static s8 CompareTMsHMsAlphabetically(struct ItemSlot* itemSlot1, struct ItemSlot* itemSlot2);
 static s8 CompareItemsByMost(struct ItemSlot* itemSlot1, struct ItemSlot* itemSlot2);
 static s8 CompareItemsById(struct ItemSlot*, struct ItemSlot*);
 
@@ -1173,7 +1174,6 @@ void UpdatePocketItemList(u8 pocketId)
     struct BagPocket *pocket = &gBagPockets[pocketId];
     switch (pocketId)
     {
-    case TMHM_POCKET:
     case BERRIES_POCKET:
         SortBerriesOrTMHMs(pocket);
         break;
@@ -2941,6 +2941,7 @@ static void SortItemsInBag(u8 pocket, u8 type)
 {
     struct ItemSlot* itemMem;
     u16 itemAmount;
+    bool32 isTMsHMsPocket = FALSE;
 
     switch (pocket)
     {
@@ -2963,6 +2964,7 @@ static void SortItemsInBag(u8 pocket, u8 type)
     case TMHM_POCKET:
         itemMem = gSaveBlock1Ptr->bagPocket_TMHM;
         itemAmount = BAG_TMHM_COUNT;
+        isTMsHMsPocket = TRUE;
         break;
     case MEGA_STONES_POCKET:
         itemMem = gSaveBlock1Ptr->bagPocket_MegaStones;
@@ -2981,7 +2983,10 @@ static void SortItemsInBag(u8 pocket, u8 type)
         MergeSort(itemMem, 0, itemAmount - 1, CompareItemsByMost);
         break;
     default:
-        MergeSort(itemMem, 0, itemAmount - 1, CompareItemsAlphabetically);
+        if(isTMsHMsPocket)
+            MergeSort(itemMem, 0, itemAmount - 1, CompareTMsHMsAlphabetically);
+        else
+            MergeSort(itemMem, 0, itemAmount - 1, CompareItemsAlphabetically);
         break;
     }
 }
@@ -3037,6 +3042,59 @@ static s8 CompareItemsAlphabetically(struct ItemSlot* itemSlot1, struct ItemSlot
 
     name1 = ItemId_GetName(item1);
     name2 = ItemId_GetName(item2);
+
+    for (i = 0; ; ++i)
+    {
+        if (name1[i] == EOS && name2[i] != EOS)
+            return -1;
+        else if (name1[i] != EOS && name2[i] == EOS)
+            return 1;
+        else if (name1[i] == EOS && name2[i] == EOS)
+            return 0;
+
+        if (name1[i] < name2[i])
+            return -1;
+        else if (name1[i] > name2[i])
+            return 1;
+    }
+
+    return 0; //Will never be reached
+}
+
+static s8 CompareTMsHMsAlphabetically(struct ItemSlot* itemSlot1, struct ItemSlot* itemSlot2)
+{
+
+    u16 item1 = itemSlot1->itemId;
+    u16 item2 = itemSlot2->itemId;
+
+    bool16 isHM1 = (item1 >= ENUM_HM_START_);
+    bool16 isHM2 = (item2 >= ENUM_HM_START_);
+
+    if (item1 == ITEM_NONE)
+        return 1;
+    else if (item2 == ITEM_NONE)
+        return -1;
+
+    // Place all TMs before all HMs
+    if (!isHM1 && isHM2)
+        return -1;
+    if (isHM1 && !isHM2)
+        return 1;
+
+    u16 move1 = ItemIdToBattleMoveId(item1);
+    u16 move2 = ItemIdToBattleMoveId(item2);
+
+    int i;
+    const u8 *name1;
+    const u8 *name2;
+
+    if (move1 == MOVE_NONE)
+        return 1;
+    else if (move2 == MOVE_NONE)
+        return -1;
+
+    name1 = GetMoveName(move1);
+    name2 = GetMoveName(move2);
 
     for (i = 0; ; ++i)
     {
