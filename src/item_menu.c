@@ -1168,7 +1168,6 @@ void UpdatePocketItemList(u8 pocketId)
     struct BagPocket *pocket = &gBagPockets[pocketId];
     switch (pocketId)
     {
-    case TMHM_POCKET:
     case BERRIES_POCKET:
         SortBerriesOrTMHMs(pocket);
         break;
