@@ -1353,7 +1353,7 @@ Route111_Text_RouteSign113:
 # 677 "data/maps/Route111/scripts.pory"
 Route111_Text_OldLadysRestStopSign:
 # 678 "data/maps/Route111/scripts.pory"
-	.string "TAKE THE EGG I HAVE$"
+	.string "Nurse Here$"
 # 679 "data/maps/Route111/scripts.pory"
 
 # 680 "data/maps/Route111/scripts.pory"

@@ -143,6 +143,7 @@ static bool32 PrintLMenuActions(s8 *pIndex, u32 count);
 static bool32 InitLMenuStep(void);
 static void CreateLMenuTask(TaskFunc followupFunc);
 static void HideLMenuWindow(void);
+static void HideLMenuWindowPC(void);
 static void HideLMenuWindowAutoRun(void);
 static void HideLMenuWindowFollowers(void);
 static void HideLMenuWindowTimeChanger(void);
@@ -748,22 +749,32 @@ static bool8 ShouldCallbackFadeToBlack(void)
         return FALSE;
     if(gMenuCallback2 == LMenuPokeVial2Callback)
         return FALSE;
+    if(gMenuCallback2 == LMenuPCCallback)
+        return FALSE;
     
     return TRUE;
 }
 
-
-
 static bool8 LMenuPCCallback(void)
 {
-    if (!gPaletteFade.active)
-    {
-        PlayRainStoppingSoundEffect();
-		EnterPokeStorage(2);
-        return TRUE;
-    }
+    HideLMenuPC(); // Hide start menu
+    return TRUE;
+}
 
-    return FALSE;
+void HideLMenuPC(void)
+{
+    PlaySE(SE_SELECT);
+    HideLMenuWindowPC();
+}
+
+static void HideLMenuWindowPC(void)
+{
+    ClearStdWindowAndFrame(GetLMenuWindowId(), TRUE);
+    RemoveLMenuWindow();
+    RemoveLMenuTimeWindow();
+    ScriptUnfreezeObjectEvents();
+    UnlockPlayerFieldControls();
+    ScriptContext_SetupScript(EventScript_PCLMenu);
 }
 
 

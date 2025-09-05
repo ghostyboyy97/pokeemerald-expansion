@@ -253,7 +253,7 @@ static const u16 sRandomizerAbilityWhitelist[] =
     ABILITY_ICE_SCALES,
     ABILITY_RIPEN,
     //ABILITY_ICE_FACE,
-    //ABILITY_POWER_SPOT,
+    ABILITY_POWER_SPOT,
     //ABILITY_MIMICRY,
     ABILITY_SCREEN_CLEANER,
     ABILITY_STEELY_SPIRIT,
@@ -329,7 +329,8 @@ static const u16 sRandomizerAbilityWhitelist[] =
     ABILITY_BAD_COMPANY,
     ABILITY_BULL_RUSH,
     ABILITY_QUILL_RUSH,
-    ABILITY_BONE_ZONE
+    ABILITY_BONE_ZONE,
+    ABILITY_PARASITIC_WASTE,
 };
 
 #define ABILITY_WHITELIST_SIZE     (NELEMS(sRandomizerAbilityWhitelist))

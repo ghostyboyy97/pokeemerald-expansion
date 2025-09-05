@@ -356,6 +356,17 @@ const struct SpriteTemplate gSkyAttackBirdSpriteTemplate =
     .callback = AnimSkyAttackBird,
 };
 
+const struct SpriteTemplate gGlaiveRushSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_DRAGON_ASCENT,
+    .paletteTag = ANIM_TAG_DRAGON_ASCENT,
+    .oam = &gOamData_AffineNormal_ObjNormal_64x64,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimSkyAttackBird,
+};
+
 // same as AnimEllipticalGust but centered on targets in a double battle
 static void AnimEllipticalGustCentered(struct Sprite *sprite)
 {
@@ -1027,6 +1038,10 @@ void AnimBounceBallLand(struct Sprite *sprite)
     }
 }
 
+// args[0] - initial x offset
+// args[1] - initial y offset
+// args[2] - initial delay before anim
+// args[3] - quadratic delta to sprite y
 static void AnimDiveBall(struct Sprite *sprite)
 {
     InitSpritePosToAnimAttacker(sprite, TRUE);
@@ -1066,6 +1081,7 @@ static void AnimDiveBall_Step2(struct Sprite *sprite)
         DestroyAnimSprite(sprite);
 }
 
+// args[0] - attacker or target
 static void AnimDiveWaterSplash(struct Sprite *sprite)
 {
     u32 matrixNum;

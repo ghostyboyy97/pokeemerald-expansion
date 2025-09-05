@@ -174,7 +174,8 @@
     F(STEEL_BEAM) \
     F(DRACO_BARRAGE) \
     F(HEAVY_SLAM) \
-    F(GRAVITY)
+    F(GRAVITY) \
+    F(MISTY_EXPLOSION)
 
 #define FOREACH_HM(F) \
     F(CUT) \

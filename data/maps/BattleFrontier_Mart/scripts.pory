@@ -18,6 +18,7 @@ BattleFrontier_Mart_EventScript_Clerk::
 BattleFrontier_Mart_Pokemart:
 	.2byte ITEM_TM_STEEL_BEAM
 	.2byte ITEM_TM_DRACO_BARRAGE
+	.2byte ITEM_TM_MISTY_EXPLOSION
 	.2byte ITEM_NONE
 	release
 	end

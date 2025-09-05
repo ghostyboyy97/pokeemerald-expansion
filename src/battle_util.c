@@ -2366,6 +2366,7 @@ u8 DoBattlerEndTurnEffects(void)
         case ENDTURN_POISON:  // poison
             if ((gBattleMons[battler].status1 & STATUS1_POISON)
              && IsBattlerAlive(battler)
+             && ability != ABILITY_TOXIC_BOOST
              && !IsMagicGuardProtected(battler, ability))
             {
                 if (ability == ABILITY_POISON_HEAL)
@@ -2394,6 +2395,7 @@ u8 DoBattlerEndTurnEffects(void)
         case ENDTURN_BAD_POISON:  // toxic poison
             if ((gBattleMons[battler].status1 & STATUS1_TOXIC_POISON)
               && IsBattlerAlive(battler)
+              && ability != ABILITY_TOXIC_BOOST
               && !IsMagicGuardProtected(battler, ability))
             {
                 if (ability == ABILITY_POISON_HEAL)
@@ -2425,6 +2427,7 @@ u8 DoBattlerEndTurnEffects(void)
         case ENDTURN_BURN:  // burn
             if ((gBattleMons[battler].status1 & STATUS1_BURN)
              && IsBattlerAlive(battler)
+             && ability != ABILITY_FLARE_BOOST
              && !IsMagicGuardProtected(battler, ability))
             {
                 gBattleMoveDamage = GetNonDynamaxMaxHP(battler) / (B_BURN_DAMAGE >= GEN_7 ? 16 : 8);
@@ -6104,7 +6107,7 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                 effect++;
             }
             break;
-        case ABILITY_GRIPPER:
+        case ABILITY_THE_GRIPPER:
             if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
              && IsBattlerAlive(gBattlerTarget)
              && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
@@ -8964,7 +8967,12 @@ static inline u32 CalcMoveBasePower(struct DamageCalculationData *damageCalcData
             basePower *= 2;
         break;
     case EFFECT_BOLT_BEAK:
-        if (GetBattlerTurnOrderNum(battlerAtk) < GetBattlerTurnOrderNum(battlerDef)
+        if(AI_DATA->aiCalcInProgress)
+        {
+            if (AI_IsFaster(battlerAtk, battlerDef, move, AI_DATA->lastUsedMove[battlerDef], CONSIDER_PRIORITY))
+                basePower *= 2;
+        }
+        else if (GetBattlerTurnOrderNum(battlerAtk) < GetBattlerTurnOrderNum(battlerDef)
             || gDisableStructs[battlerDef].isFirstTurn == 2)
             basePower *= 2;
         break;
@@ -9763,7 +9771,7 @@ static inline u32 CalcDefenseStat(struct DamageCalculationData *damageCalcData, 
     }
 
     // Self-destruct / Explosion cut defense in half
-    if (B_EXPLOSION_DEFENSE < GEN_5 && gMovesInfo[gCurrentMove].effect == EFFECT_EXPLOSION)
+    if (B_EXPLOSION_DEFENSE < GEN_5 && gMovesInfo[move].effect == EFFECT_EXPLOSION)
         defStat /= 2;
 
     // critical hits ignore positive stat changes
@@ -10276,9 +10284,24 @@ static inline s32 DoMoveDamageCalcVars(struct DamageCalculationData *damageCalcD
         dmg *= DMG_ROLL_PERCENT_HI - RandomUniform(RNG_DAMAGE_MODIFIER, 0, DMG_ROLL_PERCENT_HI - DMG_ROLL_PERCENT_LO);
         dmg /= 100;
     }
+    else // Apply rest of modifiers in the ai function
+    {
+        if (dmg == 0)
+            dmg = 1;
+        return dmg;
+    }
 
-    if (GetActiveGimmick(battlerAtk) == GIMMICK_TERA)
-        DAMAGE_APPLY_MODIFIER(GetTeraMultiplier(battlerAtk, damageCalcData->moveType));
+    dmg = ApplyModifiersAfterDmgRoll(dmg, damageCalcData, typeEffectivenessModifier, abilityAtk, abilityDef, holdEffectAtk, holdEffectDef, fromAiCode);
+
+    if (dmg == 0)
+        dmg = 1;
+    return dmg;
+}
+
+s32 ApplyModifiersAfterDmgRoll(s32 dmg, struct DamageCalculationData *damageCalcData, uq4_12_t typeEffectivenessModifier, u32 abilityAtk, u32 abilityDef, u32 holdEffectAtk, u32 holdEffectDef, bool8 fromAiCode)
+{
+    if (GetActiveGimmick(damageCalcData->battlerAtk) == GIMMICK_TERA)
+        DAMAGE_APPLY_MODIFIER(GetTeraMultiplier(damageCalcData->battlerAtk, damageCalcData->moveType));
     else
         DAMAGE_APPLY_MODIFIER(GetSameTypeAttackBonusModifier(damageCalcData, abilityAtk));
     DAMAGE_APPLY_MODIFIER(typeEffectivenessModifier);
@@ -10286,8 +10309,6 @@ static inline s32 DoMoveDamageCalcVars(struct DamageCalculationData *damageCalcD
     DAMAGE_APPLY_MODIFIER(GetZMaxMoveAgainstProtectionModifier(damageCalcData));
     DAMAGE_APPLY_MODIFIER(GetOtherModifiers(damageCalcData, typeEffectivenessModifier, abilityAtk, abilityDef, holdEffectAtk, holdEffectDef, fromAiCode, dmg));
 
-    if (dmg == 0)
-        dmg = 1;
     return dmg;
 }
 
@@ -11621,6 +11642,25 @@ u32 GetBattlerMoveTargetType(u32 battler, u32 move)
     return gMovesInfo[move].target;
 }
 
+// Checks if the move can trigger parasitic waste
+bool32 CanTriggerParasiticWaste(u32 battler, u32 move)
+{
+    bool32 IsParasiticWasteEffect =
+        gMovesInfo[move].argument == MAX_EFFECT_EFFECT_SPORE_FOES ||
+        gMovesInfo[move].argument == MAX_EFFECT_POISON_PARALYZE_FOES ||
+        gMovesInfo[move].argument == MAX_EFFECT_POISON_FOES ||
+        MoveHasAdditionalEffect(move, MOVE_EFFECT_POISON) ||
+        MoveHasAdditionalEffect(move, MOVE_EFFECT_TOXIC);
+
+    if (IsParasiticWasteEffect &&
+        gBattleMons[battler].ability == ABILITY_PARASITIC_WASTE)
+    {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 bool32 CanTargetBattler(u32 battlerAtk, u32 battlerDef, u16 move)
 {
     if (gMovesInfo[move].effect == EFFECT_HIT_ENEMY_HEAL_ALLY
@@ -11752,9 +11792,18 @@ bool32 MoveHasAdditionalEffect(u32 move, u32 moveEffect)
     u32 i;
     for (i = 0; i < gMovesInfo[move].numAdditionalEffects; i++)
     {
-        if (gMovesInfo[move].additionalEffects[i].moveEffect == moveEffect
-         && gMovesInfo[move].additionalEffects[i].self == FALSE)
+        // rapid spin needs special handling because self == true for it, smh
+        if (moveEffect == MOVE_EFFECT_RAPID_SPIN)
+        {
+            if (gMovesInfo[move].additionalEffects[i].moveEffect == moveEffect)
+                return TRUE;
+        }
+        else
+        {
+            if (gMovesInfo[move].additionalEffects[i].moveEffect == moveEffect
+            && gMovesInfo[move].additionalEffects[i].self == FALSE)
             return TRUE;
+        }
     }
     return FALSE;
 }
@@ -12046,4 +12095,23 @@ bool32 DoesDestinyBondFail(u32 battler)
         && !(gBattleStruct->lastMoveFailed & (1u << battler)))
         return TRUE;
     return FALSE;
+}
+
+bool32 HasWeatherEffect(void)
+{
+    for (u32 battler = 0; battler < gBattlersCount; battler++)
+    {
+        if (!IsBattlerAlive(battler))
+            continue;
+
+        u32 ability = GetBattlerAbility(battler);
+        switch (ability)
+        {
+        case ABILITY_CLOUD_NINE:
+        case ABILITY_AIR_LOCK:
+            return FALSE;
+        }
+    }
+
+    return TRUE;
 }

@@ -525,6 +525,7 @@ static void InitItemStorageMenu(u8 taskId, u8 var)
 static void ItemStorageMenuPrint(const u8 *textPtr)
 {
     DrawDialogueFrame(0, FALSE);
+    SetOverworldDialogueFlag(FALSE);
     AddTextPrinterParameterized(0, FONT_NORMAL, textPtr, 0, 1, 0, 0);
 }
 
@@ -579,6 +580,7 @@ static void ItemStorage_ReshowAfterBagMenu(void)
 {
     LoadMessageBoxAndBorderGfx();
     DrawDialogueFrame(0, TRUE);
+    SetOverworldDialogueFlag(FALSE);
     InitItemStorageMenu(CreateTask(ItemStorage_HandleReturnToProcessInput, 0), 1);
     FadeInFromBlack();
 }
@@ -1248,6 +1250,7 @@ static void ItemStorage_ReturnToMenuSelect(u8 taskId)
     if (!IsDma3ManagerBusyWithBgCopy())
     {
         DrawDialogueFrame(0, FALSE);
+        SetOverworldDialogueFlag(FALSE);
 
         // Select Withdraw/Toss by default depending on which was just exited
         if (!tInTossMenu)

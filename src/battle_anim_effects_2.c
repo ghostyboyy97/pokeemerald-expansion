@@ -2579,7 +2579,7 @@ static void AnimPencil_Step(struct Sprite *sprite)
             sprite->y -= 1;
             sprite->data[2]++;
             if (sprite->data[2] % 10 == 0)
-                PlaySE12WithPanning(SE_M_SKETCH, sprite->data[6]);
+                PlaySE12WithPanning((gAnimMoveIndex == MOVE_DOODLE) ? SE_M_REVERSAL : SE_M_SKETCH, sprite->data[6]);
         }
         sprite->data[4] += sprite->data[3];
         if (sprite->data[4] > 31)
@@ -3129,6 +3129,8 @@ static void AnimHealBellMusicNote(struct Sprite *sprite)
     SetMusicNotePalette(sprite, gBattleAnimArgs[5], gBattleAnimArgs[6]);
 }
 
+// args[0] - initial x offset
+// args[1] - initial y offset
 void AnimMagentaHeart(struct Sprite *sprite)
 {
     if (++sprite->data[0] == 1)

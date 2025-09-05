@@ -786,7 +786,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_MOLD_BREAKER] =
     {
         .name = _("Mold Breaker"),
-        .description = COMPOUND_STRING("Moves hit through abilities."),
+        .description = COMPOUND_STRING("Moves ignore most\nabilities."),
         .aiRating = 7,
     },
 
@@ -1628,7 +1628,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_COMATOSE] =
     {
         .name = _("Comatose"),
-        .description = COMPOUND_STRING("Acts as if asleep."),
+        .description = COMPOUND_STRING("This Pokémon cannot be statused,\nand is considered to be asleep."),
         .aiRating = 6,
         .cantBeCopied = TRUE,
         .cantBeSwapped = TRUE,
@@ -1932,7 +1932,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_SCREEN_CLEANER] =
     {
         .name = _("Screen Cleaner"),
-        .description = COMPOUND_STRING("Screens are remove\non entry."),
+        .description = COMPOUND_STRING("Screens are removed\non entry."),
         .aiRating = 3,
     },
 
@@ -2517,11 +2517,18 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .aiRating = 7,
     },
 
-    [ABILITY_GRIPPER] =
+    [ABILITY_THE_GRIPPER] =
     {
-        .name = _("GRIPPER"),
+        .name = _("THE GRIPPER"),
         .description = COMPOUND_STRING("Contact moves prevent the\nfoe from escaping."),
         .aiRating = 7,
+    },
+
+    [ABILITY_PARASITIC_WASTE] =
+    {
+        .name = _("Parasitic Waste"),
+        .description = COMPOUND_STRING("Attacks that poison drain instead."),
+        .aiRating = 6,
     },
 
     

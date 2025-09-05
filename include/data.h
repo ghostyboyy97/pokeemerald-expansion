@@ -250,7 +250,19 @@ static inline const bool32 IsTrainerDoubleBattle(u16 trainerId)
 
 static inline const u8 GetTrainerPartySizeFromId(u16 trainerId)
 {
-    return gTrainers[SanitizeTrainerId(trainerId)].partySize;
+    u8 partySizeToUse = gTrainers[SanitizeTrainerId(trainerId)].partySize;
+    const struct Trainer *trainer = GetTrainerStructFromId(trainerId);
+    u16 partyIndexToUse = 0;
+
+    if (trainer->partyPickerFunction != NULL)
+    {
+        partyIndexToUse = trainer->partyPickerFunction(trainer);
+        if(partyIndexToUse > 0)
+        {
+            partySizeToUse = trainer->additionalPartySizes[partyIndexToUse - 1];
+        }
+    }
+    return partySizeToUse;
 }
 
 static inline const bool32 DoesTrainerHaveMugshot(u16 trainerId)
@@ -270,7 +282,27 @@ static inline const u16 *GetTrainerItemsFromId(u16 trainerId)
 
 static inline const struct TrainerMon *GetTrainerPartyFromId(u16 trainerId)
 {
-    return gTrainers[SanitizeTrainerId(trainerId)].party;
+    const struct Trainer *trainer = GetTrainerStructFromId(trainerId);
+    u16 partyIndexToUse = 0;
+    const struct TrainerMon *partyData;
+
+    if (trainer->partyPickerFunction != NULL)
+    {
+        partyIndexToUse = trainer->partyPickerFunction(trainer);
+        if(partyIndexToUse > 0)
+        {
+            partyData = trainer->additionalParties[partyIndexToUse - 1];
+        }
+        else
+        {
+            partyData = trainer->party;
+        }
+    }
+    else
+    {
+        partyData = trainer->party;
+    }
+    return partyData;
 }
 
 static inline const bool32 GetTrainerAIFlagsFromId(u16 trainerId)

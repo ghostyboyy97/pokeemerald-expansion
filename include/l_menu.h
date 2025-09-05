@@ -7,6 +7,7 @@ void ShowReturnToFieldLMenu(void);
 void Task_ShowLMenu(u8 taskId);
 void ShowLMenu(void);
 void HideLMenu(void);
+void HideLMenuPC(void);
 void HideLMenuAutoRun(void);
 void HideLMenuFollowers(void);
 void HideLMenuTimeChanger(void);
