@@ -1,42 +1,3 @@
-<<<<<<< HEAD:.github/ISSUE_TEMPLATE/04_overworld_or_script_issues.yaml
-name: 🌎 Overworld or script issues 🌎
-description: Overworld objects (NPCs, rocks, grass, etc) not looking or behaving as expected.
-labels: ["bug", "status: unconfirmed", "category: overworld-or-script"]
-body:
-  - type: markdown
-    attributes:
-      value: |
-        Please fill in all required fields with as many details as possible.
-  - type: textarea
-    id: description
-    attributes:
-      label: Description
-      description: |
-        Describe the issue you are experiencing.
-        Attach images/videos if possible.
-      placeholder: |
-        Please enter a description of the issue. Here you can also attach log screenshots, gifs or a video
-    validations:
-      required: true
-  - type: dropdown
-    id: version
-    attributes:
-      label: Version
-      description: What version of Emerald Imperium are you playing?
-      options:
-        - 1.0
-        - beta
-    validations:
-      required: true
-  - type: input
-    id: contact
-    attributes:
-      label: Discord contact info
-      description: Provide your Discord tag here so we can contact you in case we need more details. Be sure to join the Discord server ([here](https://discord.gg/XJkctHqR)).
-      placeholder: ex. iriv24#8479
-    validations:
-      required: false
-=======
 name: 🙏 Feature Request 🙏
 description: Do you want a feature to be added to the Expansion? Let us know!
 labels: ["feature-request"]
@@ -75,4 +36,3 @@ body:
       placeholder: ex. Lunos#4026
     validations:
       required: false
->>>>>>> b2c5a82003f451ab9cc13d74d48e2e76a7c7caaa:.github/ISSUE_TEMPLATE/03_feature_requests.yaml

@@ -41,20 +41,6 @@ body:
     id: version
     attributes:
       label: Version
-<<<<<<< HEAD
-      description: What version of Emerald Imperium are you playing?
-      options:
-        - 1.0
-        - beta
-    validations:
-      required: true
-  - type: input
-    id: contact
-    attributes:
-      label: Discord contact info
-      description: Provide your Discord tag here so we can contact you in case we need more details. Be sure to join the Discord server ([here](https://discord.gg/XJkctHqR)).
-      placeholder: ex. iriv24#8479
-=======
       description: What version of pokeemerald-expansion are you using?
       options:
         - 1.13.1 (Latest release)
@@ -81,6 +67,5 @@ body:
       label: Discord contact info
       description: Provide your Discord tag here so we can contact you in case we need more details. Discussion around **`pokeemerald-expansion`** happens in our [Discord server](https://discord.gg/6CzjAG6GZk).
       placeholder: ex. Lunos#4026
->>>>>>> b2c5a82003f451ab9cc13d74d48e2e76a7c7caaa
     validations:
       required: false
