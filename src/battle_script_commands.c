@@ -2969,7 +2969,8 @@ void StealTargetItem(u8 battlerStealer, u8 battlerItem)
     BtlController_EmitSetMonData(battlerItem, BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[gBattlerTarget].item), &gBattleMons[battlerItem].item);  // remove target item
     MarkBattlerForControllerExec(battlerItem);
 
-    gBattleStruct->choicedMove[battlerItem] = 0;
+    if (gBattleMons[gBattlerTarget].ability != ABILITY_GORILLA_TACTICS && gBattleMons[gBattlerTarget].ability != ABILITY_SAGE_POWER)
+        gBattleStruct->choicedMove[gBattlerTarget] = MOVE_NONE;
 
     TrySaveExchangedItem(battlerItem, gLastUsedItem);
 }
@@ -5706,7 +5707,7 @@ static bool32 TryKnockOffBattleScript(u32 battlerDef)
             gLastUsedItem = gBattleMons[battlerDef].item;
             gBattleMons[battlerDef].item = 0;
             if (gBattleMons[battlerDef].ability != ABILITY_GORILLA_TACTICS && gBattleMons[battlerDef].ability != ABILITY_SAGE_POWER)
-                gBattleStruct->choicedMove[battlerDef] = 0;
+                gBattleStruct->choicedMove[battlerDef] = MOVE_NONE;
             CheckSetUnburden(battlerDef);
 
             // In Gen 5+, Knock Off removes the target's item rather than rendering it unusable.
@@ -14498,8 +14499,10 @@ static void Cmd_tryswapitems(void)
             BtlController_EmitSetMonData(gBattlerTarget, BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[gBattlerTarget].item), &gBattleMons[gBattlerTarget].item);
             MarkBattlerForControllerExec(gBattlerTarget);
 
-            gBattleStruct->choicedMove[gBattlerTarget] = MOVE_NONE;
-            gBattleStruct->choicedMove[gBattlerAttacker] = MOVE_NONE;
+            if (gBattleMons[gBattlerTarget].ability != ABILITY_GORILLA_TACTICS && gBattleMons[gBattlerTarget].ability != ABILITY_SAGE_POWER)
+                gBattleStruct->choicedMove[gBattlerTarget] = MOVE_NONE;
+            if (gBattleMons[gBattlerAttacker].ability != ABILITY_GORILLA_TACTICS && gBattleMons[gBattlerAttacker].ability != ABILITY_SAGE_POWER)
+                gBattleStruct->choicedMove[gBattlerAttacker] = MOVE_NONE;
 
             gBattlescriptCurrInstr = cmd->nextInstr;
 
