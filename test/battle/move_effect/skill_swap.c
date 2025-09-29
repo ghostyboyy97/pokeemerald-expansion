@@ -3,7 +3,7 @@
 
 ASSUMPTIONS
 {
-    ASSUME(gMovesInfo[MOVE_SKILL_SWAP].effect == EFFECT_SKILL_SWAP);
+    ASSUME(GetMoveEffect(MOVE_SKILL_SWAP) == EFFECT_SKILL_SWAP);
 }
 
 SINGLE_BATTLE_TEST("Skill Swap swaps user and target's abilities")
@@ -20,7 +20,7 @@ SINGLE_BATTLE_TEST("Skill Swap swaps user and target's abilities")
     } THEN {
         EXPECT_EQ(player->ability, ABILITY_BLAZE);
         EXPECT_EQ(opponent->ability, ABILITY_TELEPATHY);
-    } 
+    }
 }
 
 DOUBLE_BATTLE_TEST("Skill Swap only swaps user's ability with target's ability")

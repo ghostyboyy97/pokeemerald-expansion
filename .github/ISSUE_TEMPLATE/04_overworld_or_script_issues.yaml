@@ -1,3 +1,4 @@
+<<<<<<< HEAD:.github/ISSUE_TEMPLATE/04_overworld_or_script_issues.yaml
 name: 🌎 Overworld or script issues 🌎
 description: Overworld objects (NPCs, rocks, grass, etc) not looking or behaving as expected.
 labels: ["bug", "status: unconfirmed", "category: overworld-or-script"]
@@ -35,3 +36,43 @@ body:
       placeholder: ex. iriv24#8479
     validations:
       required: false
+=======
+name: 🙏 Feature Request 🙏
+description: Do you want a feature to be added to the Expansion? Let us know!
+labels: ["feature-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill in all fields with as many details as possible.
+        Once your feature request is posted, make sure you and your collaborators are added to `CREDITS.md` by [tagging the bot on GitHub](https://github.com/rh-hideout/pokeemerald-expansion/wiki/CREDITS.md-Frequently-Asked-Questions). EVERY contribution matters, even requesting issues!
+
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Behavior Description
+      description: |
+        What is the current behavior? What behavior would you expect your feature request to provide? What other information can you provide to help your feature get implemented?
+      placeholder: |
+        Provide as much context as possible. 
+    validations:
+      required: true
+  - type: textarea
+    id: media
+    attributes:
+      label: Images / Video 
+      description: |
+        Have other projects or games solved this problem? Do you have images or video to show this happening?
+      placeholder: |
+        Here you can also attach logs, screenshots, gifs or a video.
+    validations:
+      required: false
+  - type: input
+    id: contact
+    attributes:
+      label: Discord contact info
+      description: Provide your Discord tag here so we can contact you in case we need more details. Discussion around **pokeemerald-expansion** happens in our [Discord server](https://discord.gg/6CzjAG6GZk).
+      placeholder: ex. Lunos#4026
+    validations:
+      required: false
+>>>>>>> b2c5a82003f451ab9cc13d74d48e2e76a7c7caaa:.github/ISSUE_TEMPLATE/03_feature_requests.yaml
