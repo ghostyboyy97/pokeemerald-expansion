@@ -571,7 +571,7 @@ static bool32 FindMonThatAbsorbsOpponentsMove(u32 battler)
     bool32 isOpposingBattlerChargingOrInvulnerable = (IsSemiInvulnerable(opposingBattler, incomingMove) || IsTwoTurnNotSemiInvulnerableMove(opposingBattler, incomingMove));
     s32 i, j;
     bool32 playerIsChoiceLocked = (predictedMove == gBattleStruct->choicedMove[opposingBattler]);
-    DebugPrintf("test if absorb found");
+
     if (!(AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_SMART_SWITCHING))
         return FALSE;
     if (gBattleStruct->prevTurnSpecies[battler] != gBattleMons[battler].species) // AI mon has changed, player's behaviour no longer reliable; note to override this if using AI_FLAG_PREDICT_MOVE
@@ -584,8 +584,6 @@ static bool32 FindMonThatAbsorbsOpponentsMove(u32 battler)
 
     if (IsMoldBreakerTypeAbility(opposingBattler, AI_DATA->abilities[opposingBattler]))
         return FALSE;
-
-    DebugPrintf("error cases passed");
 
     // Don't switch if mon could OHKO
     for (i = 0; i < MAX_MON_MOVES; i++)
@@ -1138,14 +1136,8 @@ bool32 ShouldSwitch(u32 battler)
         return FALSE;
     if (FindMonThatAbsorbsOpponentsMove(battler))
     {
-        DebugPrintf("absorber found, check 1v1");
-        if (!canAIWin1V1) {
-            DebugPrintf("absorber wins 1v1");
-            return TRUE;
-        } else {
-            DebugPrintf("absorber doesn't win 1v1");
-        }
-            
+        if (!canAIWin1V1) 
+            return TRUE;  
     }
     if (ShouldSwitchIfTruant(battler))
         return TRUE;
@@ -1950,7 +1942,7 @@ static inline bool32 IsFreeSwitch(enum SwitchType switchType, u32 battlerSwitchi
 
     // Post KO check has to be last because the GetMostSuitableMonToSwitchInto call in OpponentHandleChoosePokemon assumes a KO rather than a forced switch choice
     if (switchType == SWITCH_AFTER_KO)
-            return TRUE;
+        return TRUE;
     else
         return FALSE;
 }
