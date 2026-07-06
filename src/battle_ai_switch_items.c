@@ -201,6 +201,7 @@ bool32 CanBattlerWin1v1(u32 hitsToKOAI, u32 hitsToKOPlayer, bool32 isBattlerFirs
 
 bool32 CanAIWin1V1(u32 battlerAtk, u32 battlerDef)
 {
+    // battlerAtk = AI mon, battlerDef = playerMon
     s32 i;
     s32 damageTaken;
     u32 aiMove, aiMoveEffect, playerMove;
@@ -242,8 +243,8 @@ bool32 CanAIWin1V1(u32 battlerAtk, u32 battlerDef)
         }
     }
 
-    hitsToKoAI = GetNoOfHitsToKOBattler(battlerAtk, battlerDef, bestPlayerMoveIndex, AI_DEFENDING_NORMAL, CONSIDER_ENDURE);
-    hitsToKoAIPriority = GetNoOfHitsToKOBattler(battlerAtk, battlerDef, bestPlayerPriorityMoveIndex, AI_DEFENDING_NORMAL, CONSIDER_ENDURE);
+    hitsToKoAI = GetNoOfHitsToKOBattler(battlerDef, battlerAtk, bestPlayerMoveIndex, AI_DEFENDING_NORMAL, CONSIDER_ENDURE);
+    hitsToKoAIPriority = GetNoOfHitsToKOBattler(battlerDef, battlerAtk, bestPlayerPriorityMoveIndex, AI_DEFENDING_NORMAL, CONSIDER_ENDURE);
 
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
@@ -264,7 +265,7 @@ bool32 CanAIWin1V1(u32 battlerAtk, u32 battlerDef)
         // Once we can win a 1v1 we don't need to track this, but want to run the rest of the function to keep the runtime the same regardless of when we find the winning move
         if (!canBattlerWin1v1)
         {
-            hitsToKoPlayer = GetNoOfHitsToKOBattler(battlerDef, battlerAtk, i, AI_ATTACKING_IN_SWITCHIN_CALC, CONSIDER_ENDURE);
+            hitsToKoPlayer = GetNoOfHitsToKOBattler(battlerAtk, battlerDef, i, AI_ATTACKING_IN_SWITCHIN_CALC, CONSIDER_ENDURE);
             isBattlerFirst         = AI_IsFaster(battlerAtk, battlerDef, aiMove, bestPlayerMove, CONSIDER_PRIORITY);
             isBattlerFirstPriority = AI_IsFaster(battlerAtk, battlerDef, aiMove, bestPlayerPriorityMove, CONSIDER_PRIORITY);
             canBattlerWin1v1 = CanBattlerWin1v1(hitsToKoAI, hitsToKoPlayer, isBattlerFirst) && CanBattlerWin1v1(hitsToKoAIPriority, hitsToKoPlayer, isBattlerFirstPriority);
@@ -570,7 +571,7 @@ static bool32 FindMonThatAbsorbsOpponentsMove(u32 battler)
     bool32 isOpposingBattlerChargingOrInvulnerable = (IsSemiInvulnerable(opposingBattler, incomingMove) || IsTwoTurnNotSemiInvulnerableMove(opposingBattler, incomingMove));
     s32 i, j;
     bool32 playerIsChoiceLocked = (predictedMove == gBattleStruct->choicedMove[opposingBattler]);
-
+    DebugPrintf("test if absorb found");
     if (!(AI_THINKING_STRUCT->aiFlags[battler] & AI_FLAG_SMART_SWITCHING))
         return FALSE;
     if (gBattleStruct->prevTurnSpecies[battler] != gBattleMons[battler].species) // AI mon has changed, player's behaviour no longer reliable; note to override this if using AI_FLAG_PREDICT_MOVE
@@ -583,6 +584,8 @@ static bool32 FindMonThatAbsorbsOpponentsMove(u32 battler)
 
     if (IsMoldBreakerTypeAbility(opposingBattler, AI_DATA->abilities[opposingBattler]))
         return FALSE;
+
+    DebugPrintf("error cases passed");
 
     // Don't switch if mon could OHKO
     for (i = 0; i < MAX_MON_MOVES; i++)
@@ -1135,8 +1138,14 @@ bool32 ShouldSwitch(u32 battler)
         return FALSE;
     if (FindMonThatAbsorbsOpponentsMove(battler))
     {
-        if (!canAIWin1V1)
+        DebugPrintf("absorber found, check 1v1");
+        if (!canAIWin1V1) {
+            DebugPrintf("absorber wins 1v1");
             return TRUE;
+        } else {
+            DebugPrintf("absorber doesn't win 1v1");
+        }
+            
     }
     if (ShouldSwitchIfTruant(battler))
         return TRUE;
