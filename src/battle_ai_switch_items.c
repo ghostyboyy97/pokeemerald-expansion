@@ -271,6 +271,7 @@ bool32 CanAIWin1V1(u32 battlerAtk, u32 battlerDef)
             canBattlerWin1v1 = CanBattlerWin1v1(hitsToKoAI, hitsToKoPlayer, isBattlerFirst) && CanBattlerWin1v1(hitsToKoAIPriority, hitsToKoPlayer, isBattlerFirstPriority);
         }
     }
+
     return canBattlerWin1v1;
 }
 
