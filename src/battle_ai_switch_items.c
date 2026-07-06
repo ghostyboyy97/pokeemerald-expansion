@@ -693,9 +693,9 @@ static bool32 FindMonThatAbsorbsOpponentsMove(u32 battler)
             // Found a mon
             if (absorbingTypeAbilities[j] == monAbility)
             {
-                if (playerIsChoiceLocked || RandomPercentage(RNG_AI_SWITCH_ABSORBING, SHOULD_SWITCH_ABSORBS_MOVE_PERCENTAGE))
+                if (playerIsChoiceLocked || isOpposingBattlerChargingOrInvulnerable || RandomPercentage(RNG_AI_SWITCH_ABSORBING, SHOULD_SWITCH_ABSORBS_MOVE_PERCENTAGE))
                     return SetSwitchinAndSwitch(battler, i);
-            }     
+            }
         }
     }
     return FALSE;
